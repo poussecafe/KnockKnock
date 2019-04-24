@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" 
+layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+    <title>낙낙-카테고리 방찾기</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<style>
+  tr{
+ 	height : 40px;
+  	}
+  .jb-th-10{
+   	visibility: hidden;
+  	width : 48px;
+  }
+  .jb-th-0{
+   	visibility: hidden;
+  }
+  .jb-th-1{
+  	width : 120px;
+  }
+  .jb-th-2{
+  	width : 65px;
+  }
+  .jb-th-3{
+  	width : 70px;
+  }
+
+ #jumbotronId { 
+	padding: 0rem;
+    margin-bottom: 0rem;
+    background-color: white;
+    border-radius: 1rem;
+ 	font-family: 'Jua', sans-serif;
+ 	margin-top: 80px;
+ 	
+ }
+ #img{
+ 	height: 92px;
+ 	width: 140px;
+	float: left; 
+	margin: 0; 
+	padding: 0;
+	line-height: 0; 
+ }
+ #bangTable:after{
+ 	content:"";
+ 	display : block;
+ 	width : 240px;
+ 	border-bottom: 3px solid #2eca6a;
+ }
+
+ #checkboxField{
+ 	border: 1px solid #2eca6a;
+    border-radius: 10px;
+    padding : 2% 5%;
+    margin : 10px 15px;
+    width : 297px;
+ }
+ #branchTheme{
+ 	margin : 0px 15px;
+ }
+ #branchPet{
+ 	margin : 0px 15px;
+ }
+ #branchType{
+ 	margin : 0px 15px;
+ }
+ #branchGender{
+ 	margin : 0px 15px;
+ }
+#address{
+	border-radius: .25rem;
+	border:2px solid  #2eca6a;
+	
+}
+#categoryRoomSearch{
+  color: #2eca6a;
+  border: 2px solid #2eca6a;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.030em;
+  background-color:white;
+  font-size:15px;
+ }
+ #branchLine:after {
+	content:"";
+ 	display : block;
+ 	width : 48px;
+ 	border-bottom: 2px solid #2eca6a;
+}
+
+#mapmarker{
+	color:#2eca6a;
+}
+
+#address{
+	 border: 2px solid #2eca6a;
+	 border-radius: 5px;
+}
+
+</style>
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css">
+
+</head>
+<body>
+	<!-- 전체 레이아웃 -->
+	<div layout:fragment="content" class="container">
+		<div class="jumbotron" id="jumbotronId">
+		 <h1 class="my-4 text-center text-lg-left" id="bang"><strong><span style="color:#2eca6a">지점별 테마에</span> 낙낙!</strong></h1>
+		 <h2 class="my-4 text-center text-lg-left" id="bang"><strong>지점을<span style="color:#2eca6a">&nbsp;찾아</span>&nbsp;보세요</strong></h2>
+			<div class="row">
+				<div class="col-4" id="checkField">			   
+			<!-- 체크박스 -->
+				<div id="checkboxField">
+				<!-- 주소 검색 -->				
+				<div class="" id="search">
+<!-- 					<h7><strong>세부주소를 찾아봐요!</strong></h7> -->
+						<div id="categorySearch" class="form-group">
+							<i class="fas fa-map-marker-alt" id='mapmarker'></i>&nbsp;<input placeholder="주소 및 위치" type="text" name="address"  id="address"/>
+							<button id="categoryRoomSearch" class="btn btn-outline-success">찾기</button>
+						</div>					
+				</div><!-- 주소검색 end-->
+				
+				<div class="themeCheckbox">
+					<label class="field-title"><h5 style="color:#2eca6a"><strong>&nbsp;테마</strong></h5></label>
+					<div  th:each="theme : ${themeLists}" th:name="branchTheme" th:id="branchTheme">
+							<div class="branchTheme">
+							<input type="checkbox" th:value="${theme}" th:id="${theme}" th:name="branchTheme"><span  th:text="${theme}" th:for="${theme}"></span>
+							</div>
+					</div>
+				</div>
+				<br>
+			<!-- 성별 checkbox -->
+				<div class="genderCheckbox">
+					<label class="field-title"><h5 style="color:#2eca6a"><strong>&nbsp;성별 </strong></h5></label>
+					<div  th:each="genderCheck : ${genderCheckbox}" th:name="branchGender" th:id="branchGender">
+							<div class="branchGender">
+							<input type="checkbox" th:value="${genderCheck}" th:id="${genderCheck}" th:name="branchGender"><span  th:text="${genderCheck}" th:for="${genderCheck}"></span>
+							</div>
+					</div>
+				</div>
+				<br>
+			<!-- 반려동물유무 checkbox -->
+				<div class="petCheckbox">										
+					<label class="field-title"><h5 style="color:#2eca6a"><strong>&nbsp;반려동물</strong></h5></label>
+					<div th:each="pet : ${pet}" th:name="branchPet" th:id="branchPet">
+						<div class="branchPet">
+							<input type="checkbox" th:value="${pet}" th:id="${pet}" th:name="branchPet"><span th:text="${pet}" th:for="${pet}"></span>
+						</div>
+					</div>
+				</div>
+				<br>
+			<!-- 주택유형 checkbox -->
+				<div class="branchTypeCheckbox">										
+					<label class="field-title"><h5 style="color:#2eca6a"><strong>&nbsp;주택유형</strong></h5></label>
+					<div th:each="branchType : ${branchType}" th:name="branchType" th:id="branchType">
+						<div class="branchType">
+							<input type="checkbox" th:value="${branchType}" th:id="${branchType}" th:name="branchType"><span th:text="${branchType}" th:for="${branchType}"></span>
+						</div>
+					</div>
+					</div>
+				</div>
+				<br>					
+			</div>
+		<div class="col-7">	
+		<div class="table-responsive"  id="categoryGallery" style="width:700px;">
+			<h3 class="my-4 text-center text-lg-left" id="bangTable"><strong>입주가능<span style="color:#2eca6a">&nbsp;지점</span>&nbsp;목록</strong></h3>
+			<table class="table-responsive" id="roomTable">
+				<tr  class="text-center">
+					<th class="jb-th-10" id="branchNumberLine">지점번호</th>
+					<th class="jb-th-0">지점 이미지</th>
+					<th class="jb-th-1">주소</th>
+					<th class="jb-th-2">지점테마</th>
+					<th class="jb-th-2">성별</th>
+					<th class="jb-th-2">주차장</th>
+					<th class="jb-th-3">엘리베이터</th>
+					<th class="jb-th-3">반려동물</th>
+					<th class="jb-th-3">주택유형</th>
+				</tr>
+			
+			  <tbody id="branchDetailVDTOs">			  
+				<tr  class="text-center" th:each="branchDetailVDTO : ${lists}">
+					<td valign="top" id="branchLine" th:text="${branchDetailVDTO.branchNumber}+호점"></td>
+ 	 				<td><a th:href="@{'/roomDetailView/?branchNumber='+${branchDetailVDTO.branchNumber}}" id=''>
+ 	 				<img class='img-responsive img-thumbnail' th:src="'/images/branch/'+${branchDetailVDTO.branchNumber}+'/mainImage.jpg'" alt="branchImg" id='img'>
+  	 				</a></td>
+					<td class="td-1" th:text="${branchDetailVDTO.address}"></td>
+					<td th:text="${branchDetailVDTO.theme}"></td>
+					<td th:text="${branchDetailVDTO.gender}"></td>
+					<td th:text="${branchDetailVDTO.isParking}"></td>
+					<td th:text="${branchDetailVDTO.isElevator}"></td>
+					<td th:text="${branchDetailVDTO.pet}"></td>
+					<td th:text="${branchDetailVDTO.branchType}"></td>				
+				</tr>
+			  </tbody>
+			 </table>
+			</div>	
+	  	   </div>
+		  </div>
+		 </div>
+		<script>
+		
+		//카테고리바 체크디자인용
+		window.onload = function(){
+			$('#categoryFindingRoomNav').addClass('active').css('color','#2eca6a');
+		}
+		
+			var categoryRoom = {
+
+				address : $("#address").val(),
+				searchCategory : [],
+				genderCategory: [],
+				petCategory: [],
+				branchTypeCategory: [],
+				refreshGrid : function(data) {
+					//todo grid refresh
+				},
+
+				sendToServer : function(searchCategory, genderCategory, petCategory, branchTypeCategory) {
+					var that = this;
+					var datas = {
+						"address" : $("#address").val(),
+						"searchKeyWord" : searchCategory,
+						"genderCategory" : genderCategory,
+						"petCategory" : petCategory,
+						"branchTypeCategory" : branchTypeCategory
+					};
+			
+					console.log(datas+" 8888 "+JSON.stringify(datas)+"  "+searchCategory+", "+genderCategory+", "+petCategory+",  "+branchTypeCategory);	
+					$.ajax({
+						url : "categoryRoomSearch",
+						/* type : 'GET', */
+						type : 'POST',
+						contentType:"application/json", 
+						datatype : "json",
+						async : false,
+						data : JSON.stringify(datas),
+						success : function(branchDetailVDTOs) {
+					
+							//기존의 테이블 삭제	
+							$('#branchDetailVDTOs tr').remove();
+							//each를 통해 테이블 출력
+							$.each(branchDetailVDTOs, function(key, branchDetailVDTO) {
+								console.log(key + ", " + branchDetailVDTO.theme);
+								console.log(key +", "+branchDetailVDTO.pet);
+								
+								<!--새로 표시할 콘텐츠 집어넣기-->
+								$('#branchDetailVDTOs').append(
+										"<tr class='text-center' style='width: 30px;'>"
+										+"<td valign='top' id='branchLine' class='branchNumber'>"+branchDetailVDTO.branchNumber+"호점"+"</td>"
+										+"<td class='branchImage'><a href='/roomDetailView/?branchNumber="+branchDetailVDTO.branchNumber+"' class='' id=''>"
+	 									+"<img class='img-thumbnail' src="+"'/images/branch/"+branchDetailVDTO.branchNumber+"/mainImage.jpg'"+" alt='' id='img'/></a></td>"
+										+"<td class='address'>"+branchDetailVDTO.address+"</td>"
+										+"<td class='theme'>"+branchDetailVDTO.theme+"</td>"
+										+"<td class='gender'>"+branchDetailVDTO.gender+"</td>"
+										+"<td class='monthlyRent'>"+branchDetailVDTO.isParking+"</td>"
+										+"<td class='allowNumber'>"+branchDetailVDTO.isElevator+"</td>"
+										+"<td class='allowNumber'>"+branchDetailVDTO.pet+"</td>"
+										+"<td class='allowNumber'>"+branchDetailVDTO.branchType+"</td>"
+										+"</tr>");
+							});
+ 						},//success end
+						error : function(jqXHR, textStatus, errorThrown) {
+
+						}//error  end
+					});//ajax  end
+				},//sendToServer  end
+
+				//a very basic method
+				//관심사 체크박스 이벤트 바인드
+				themeCheckboxEventBind : function(target) {
+					var that = this;
+				
+					 $(target).change(function(e) { 
+							that.searchCategory=[];
+							
+						$("input[name='branchTheme']:checked").each(function(i){
+							that.searchCategory[i] = $(this).val();
+						});
+						
+							that.sendToServer(that.searchCategory,that.genderCategory,that.petCategory,that.branchTypeCategory);
+						
+					 }); 
+				},
+				
+				//성별 이벤트 바인드
+				genderCheckboxEventBind : function(target) {
+					var that = this;
+				
+					 $(target).change(function(e) { 
+							that.genderCategory=[];
+							
+						$("input[name='branchGender']:checked").each(function(i){
+							that.genderCategory[i] = $(this).val();
+						});
+						
+							that.sendToServer(that.searchCategory,that.genderCategory,that.petCategory,that.branchTypeCategory);
+						
+					 }); 
+				},
+				
+				//반려동물 유무 이벤트 바인드
+				petCheckboxEventBind : function(target) {
+					var that = this;
+				
+					 $(target).change(function(e) { 
+							that.petCategory=[];
+							
+						$("input[name='branchPet']:checked").each(function(i){
+							that.petCategory[i] = $(this).val();
+						});
+
+							that.sendToServer(that.searchCategory,that.genderCategory,that.petCategory,that.branchTypeCategory);
+						
+					 }); 
+				},
+				
+				//주택유형 이벤트 바인드
+				branchTypeCheckboxEventBind : function(target) {
+					var that = this;
+				
+					 $(target).change(function(e) { 
+							that.branchTypeCategory=[];
+							
+						$("input[name='branchType']:checked").each(function(i){
+							that.branchTypeCategory[i] = $(this).val();
+						});
+							that.sendToServer(that.searchCategory,that.genderCategory,that.petCategory,that.branchTypeCategory);
+					 }); 
+				},//branchType end
+				
+				searchInputEventBind : function(target) {
+					var that = this;
+					
+					$(target).on('click',function(e) {
+// 						that.searchCategory.push($(e.target).val());
+
+						that.sendToServer(that.searchCategory,that.genderCategory,that.petCategory,that.branchTypeCategory);4
+					});
+				}
+			};//var categoryRoom end
+			
+			$.noConflict();
+			
+			$(document).ready(function() {
+				categoryRoom.themeCheckboxEventBind(".themeCheckbox");
+				categoryRoom.genderCheckboxEventBind(".genderCheckbox");
+				categoryRoom.petCheckboxEventBind(".petCheckbox");
+				categoryRoom.branchTypeCheckboxEventBind(".branchTypeCheckbox");
+				categoryRoom.searchInputEventBind("#categoryRoomSearch");
+			});
+		
+		</script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<title>諛⑹씠誘몄� �벑濡�</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<style>
+.roomInfo input {
+	width: 20px;
+}
+
+body {
+	font-family: 'Jua', sans-serif;
+}
+
+.sidenav {
+	width: 200px;
+	position: fixed;
+	z-index: 1;
+	top: 130px;
+	left: 60px;
+	background: #eee;
+	overflow-x: hidden;
+	padding: 8px 0;
+	margin-right: 30px
+}
+
+.sidenav a {
+	padding: 6px 8px 6px 16px;
+	text-decoration: none;
+	font-size: 25px;
+	color: #2196F3;
+	display: block;
+}
+
+.sidenav a:hover {
+	color: #064579;
+}
+
+.main {
+	margin-left: 90px; /* Same width as the sidebar + left position in px */
+	padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+	.sidenav {
+		padding-top: 15px;
+	}
+	.sidenav a {
+		font-size: 18px;
+	}
+}
+
+#profileContainer {
+	margin-left: 400px;
+}
+
+#suvContainer{
+	width:50%;
+	height:50%;
+}
+
+</style>
+<body>
+	<div layout:fragment="content" class="container" id='suvContainer'>
+		<div class="jumbotron">
+			<h1>諛� �씠誘몄� �벑濡� �럹�씠吏�</h1>
+			<h1 th:text="${branchNumber}+'�샇�젏'" id='branchNumber'></h1>
+		</div>
+		<br />
+		<form action="branchRegistComplete" method="post" enctype="multipart/form-data" id='form'>
+			<div class="row">
+				<div class="col-md-2">
+					<h3>愿�由� 硫붾돱</h3>
+					<div class="sidenav">
+						<a th:href="@{adminEventListView}">�씠踰ㅽ듃愿�由�</a><br> <a
+							th:href="@{adminMemberSearchView}">�쉶�썝愿�由�</a><br> <a
+							th:href="@{adminVisitList}">諛⑸Ц臾몄쓽愿�由�</a><br> <a
+							th:href="@{adminBranchRegistView}">吏��젏�벑濡�</a><br>
+					</div>
+				</div>
+				<div class="col-md-10" >
+					<div class="form-group">
+						<h4>吏��젏�궗吏�1</h4>
+						<input type="file" name="imageBranch" class="form-control" placeholder="嫄곗떎">
+						<h4>吏��젏�궗吏�2</h4>
+						<input type="file" name="imageBranch" class="form-control" placeholder="遺��뿄">
+						<h4>吏��젏�궗吏�3</h4>
+						<input type="file" name="imageBranch" class="form-control" placeholder="�솕�옣�떎">
+						<h4>吏��젏�궗吏�4</h4>
+						<input type="file" name="imageBranch" class="form-control" placeholder="湲고�">
+						
+						<h4>諛� �궗吏�</h4>
+						<table class="roomInfo" id='roomInfo'>
+							<tr>
+								<td>諛� �궗吏�1</td>
+								<td><input type="file" name="imageRoom" class="form-control" placeholder="�삁)101"></td>
+							</tr>
+							<tr>
+								<td>諛� �궗吏�2</td>
+								<td><input type="file" name="imageRoom" class="form-control" placeholder="�삁)101"></td>
+							</tr>
+							<tr>
+								<td>諛� �궗吏�3</td>
+								<td><input type="file" name="imageRoom" class="form-control" placeholder="�삁)101"></td>
+							</tr>
+							<tr>
+								<td>諛� �궗吏�4</td>
+								<td><input type="file" name="imageRoom" class="form-control" placeholder="�삁)101"></td>
+							</tr>
+							<tr>
+								<td>諛� �궗吏�5</td>
+								<td><input type="file" name="imageRoom" class="form-control" placeholder="�삁)101"></td>
+							</tr>
+							<tr>
+								<td>諛� �궗吏�6</td>
+								<td><input type="file" name="imageRoom" class="form-control" placeholder="�삁)101"></td>
+							</tr>
+							<tr>
+								<td>諛� �궗吏�7</td>
+								<td><input type="file" name="imageRoom" class="form-control" placeholder="�삁)101"></td>
+							</tr>
+							<tr>
+								<td>諛� �궗吏�8</td>
+								<td><input type="file" name="imageRoom" class="form-control" placeholder="�삁)101"></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<button type="submit" class="btn btn-default">�셿猷�</button>
+				<a class="upload" href="javascript:uploadProfileShot();">吏��젏�궗吏꾨벑濡�</a>
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> 
+			</div>
+		</form>
+
+		<script>
+
+		$("#uploadProfileShot").change(function(){
+			readURL(this);
+		})
+
+		
+		
+		</script>
+	</div>
+</body>
+</html>
+

@@ -1,0 +1,276 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+
+<head>
+<!-- 1:1문의하기 관련 메타정보-->
+<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width"/>
+<title>Login Demo - Kakao JavaScript SDK</title>
+<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+<style>
+
+#title{
+	color: black;
+	font-size:30px;
+	text-align:center;
+	font-weight:bolder;
+	font-family: 'Jua', sans-serif;
+}
+#defaultbox {
+	margin: 0;
+	padding: 10px 300px 5px;
+}
+
+.accordion {
+	border: 1px solid #2eca6a;
+	background-color:white;
+	border-radius: 1rem;
+	color: black;
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	border: none;
+	text-align: left;
+	outline: none;
+	font-size: 25px;
+	transition: 0.4s;
+	font-weight:bolder;
+}
+
+.accordion:hover {
+	color:#2eca6a;
+}
+
+#moreQ:hover{
+	color:#0404B4;
+}
+
+.panel {
+	padding: 0 18px;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.2s ease-out;
+}
+
+#accordian{
+	border:2px solid #2eca6a;
+	padding: 2rem 1rem;
+    margin-bottom: 10rem;
+    margin-top: 7rem;
+    border-radius: 1rem;
+}
+
+#kakao{
+	padding: 100px;
+	margin-left: 100px;
+	background-color:#2eca6a;
+	color:white;
+	border-radius: 1rem;
+	padding: 1rem 1rem;
+	border:1px solid #2eca6a;
+	position: fixed;
+	text-align: center;
+	right: 75px;
+	width: 150px;
+	height: 100px;
+}
+
+#moreQ{
+	color:white;
+	font-size:20px;
+	text-align:center;
+}
+
+#FAQBody{
+	font-family: 'Jua', sans-serif;
+}
+
+p{
+	font-size:25px;
+}
+</style>
+</head>
+<body id='FAQBody'>
+	<div layout:fragment="content" class="container" >
+	
+	<div class="row">
+			<div class="col-md-11">
+		<div id="accordian">
+		<h1 style="font-size:45px;" id='title'>궁금한 점이 있으신가요 <span id='q1'>?</span><span id='q2'>?</span></h1>
+		<br /><br />
+		<button class="accordion">1. 입주신청 과정은 어떻게 되나요?</button>
+		<div class="panel">
+			<p>입주하고 싶은 셰어 하우스가 있으면 해당 지점의 상세 페이지에서 방문신청을 합니다. 지점 방문 후 계약의사가 있을 시 지점을 재방문하여
+			입주 계약서를 작성합니다. 자세한 내용은 입주 안내 카테고리에서 확인해주세요.</p>
+		</div>
+
+		<button class="accordion">2. 보증금은 언제 반환되나요?</button>
+		<div class="panel">
+			<p>보증금은 퇴실 시 시행하는 하우스 매니저의 시설 점검 후 3일 내에 반환해드립니다. 다만 다음의 두
+				가지 사유에 해당할 경우 패널티 금액을 보증금에서 차감한 잔여액만 반환됩니다. <br />
+				① 임대료가 1개월 이상 체납되는
+				경우 체납 임대료 + 연체료<br />
+				② 입주자 과실로 시설/기물이 파손되는 경우 복구 비용</p>
+		</div>
+
+		<button class="accordion">3. 퇴실 절차는 어떻게 되나요?</button>
+		<div class="panel">
+			<p>KnockKnock은 현재 입주자 분께 계약 종료일로부터 2개월 전에 재계약 의사를 문의 드리며 재계약 의사가 없으실 경우
+			 계약 종료일에 하우스 매니저의 시설 점검을 후 시설에 이상이 없을 시 퇴실하게 됩니다. 퇴실 시 열쇠는 반납하셔야 하며
+			  보증금은 계약 종료일로부터 3 일 이내에 돌려드립니다.</p>
+		</div>
+
+		<button class="accordion">4. 입주 시 지켜야 할 규정이 있나요?</button>
+		<div class="panel">
+			<p>계약 사항에 위배되지 않는한 KnockKnock은 입주자분들의 개인 생활에 관여하지 않습니다. 다만 같은 지점에
+				거주하는 낙낙인들은 입주 후 협의 하에 ‘주거규칙 가이드라인’을 만들어 원활한 셰어 라이프를 지켜나갑니다.</p>
+		</div>
+
+		<button class="accordion">5. 입주 후 추가 수납공간 및 기타 시설이 필요할 경우 어떻게
+			하나요?</button>
+		<div class="panel">
+			<p>계약 전 방문 신청, 지점 방문을 통해 수납공간과 시설에 대해 충분히 숙지한 뒤 계약이 진행되므로 KnockKnock은 입주
+				후 추가 시설 또는 기타 물품 (수납장, 정수기 등)에 대한 지원을 진행하지 않습니다. 이 점 양해 부탁 드립니다.</p>
+		</div>
+
+		<button class="accordion">6. 입주 시 꼭 챙겨야 하는 물건이 있나요?</button>
+		<div class="panel">
+			<p>기본적인 가전 제품과 가구만 준비되어 있으므로 그 외의 물품은 모두 개인적으로 준비하셔야 합니다. 개인식기
+				(수저, 그릇, 조리기구) 침구 (매트리스 커버, 이불, 베개) 개인 스탠드, 멀티탭, 빨래 건조대는 공용으로 2~4개가
+				준비되어 있습니다.</p>
+		</div>
+
+		<button class="accordion">7. 반려동물/애완동물을 키울 수 있나요?</button>
+		<div class="panel">
+			<p>반려동물 동반입주가 가능한 지점에서는 키울 수 있으나 크기가 너무 크거나 위험성이 있는 동물의 경우엔 동반입주가 거절될 수 있으니
+				참고 부탁드립니다.</p>
+		</div>
+
+		<button class="accordion">8. 계약기간은 어떻게 되나요?</button>
+		<div class="panel">
+			<p>KnockKnock은 거주자 커뮤니티 형성과 셰어하우스
+				문화 정착을 위해 6개월 단위로 거주 계약을 진행하고 있습니다. 현재로서는 6개월 미만의 단기 계약은 불가능합니다. 향후 지원
+				여부를 검토 중이니 지원이 가능할 시 공지드리도록 하겠습니다.</p>
+		</div>
+
+		<button class="accordion">9. 입주일은 어떻게 정해지나요?</button>
+		<div class="panel">
+			<p>입주일은 하우스 매니저와의 일정 조율을 통해 정해지나, 통상 입주 가능일로부터 7일 이내에 입주 가능하신 분이
+				희망 지점 입주에 유리합니다. 계약서를 작성 하고 나면 3일 이내에 보증금을 납부하셔야 하며 월세는 입주 3일 전까지
+				납부해야 합니다. 위 사항을 지키지 못 하실 경우 계약은 통보 없이 자동으로 취소되오니 이 점 양해 부탁 드립니다.</p>
+		</div>
+
+		<button class="accordion">10. 입주기간을 연장할 수 있나요?</button>
+		<div class="panel">
+			<p>입주기간은 초기 계약과 마찬가지로 6개월 단위로 연장하게 됩니다. 재계약을 원하실 경우 계약 종료일로부터 두
+				달 전에 하우스 매니저께 재계약 의사를 밝혀주셔야 하며 재계약은 입주자 간 상호 만족도 조사와 담당자 소견을 바탕으로
+				결정됩니다.</p>
+		</div>
+
+		<button class="accordion">11. 보증금은 납부하였으나 아직 입주 전 입니다. 만약 현
+			상황에서 계약 취소 시 어떻게 되나요?</button>
+		<div class="panel">
+			<p>입주 전 계약을 해지하는 경우 계약시작일까지 남은 기간에 따라 다른 액수의 보증금이 차감됩니다. 자세한 사항은
+				계약서를 참조하시기 바랍니다.</p>
+		</div>
+
+		<button class="accordion">12. 보증금과 월세는 얼마인가요?</button>
+		<div class="panel">
+			<p>임대료는 지점에 따라, 방의 종류에 따라 다르기 때문에 입주를 희망하시는 지점의 상세 정보 페이지에서 해당 정보를 확인해주시는 것이 가장
+				정확합니다. 보증금도 지점에 따라 달라지며 통상 보증금은 입주를 희망하시는 방 월세의 2개월 분 금액으로 책정됩니다(예를 들어
+				월세가 40만원인 방에 입주 하시면 보증금은 80만원입니다).</p>
+		</div>
+
+		<button class="accordion">13. 단기 입주가 가능한가요?</button>
+		<div class="panel">
+			<p>KnockKnock은 초기 입주 시 6개월 계약을 원칙으로 하고 있습니다. 6개월 미만의 단기 입주계약은 불가하며, 3~6개월
+				사이의 계약을 원하시는 경우 실제 계약 가능 여부는 운영진이 판단하여 진행합니다.</p>
+		</div>
+
+		<button class="accordion">14. 입주할 수 있는 나이 제한이 있나요?</button>
+		<div class="panel">
+			<p>보다 빠르고 친밀한 커뮤니티 형성을 위해 입주하시는 분들의 연령을 20세부터 35세까지로 정하고 있습니다.</p>
+		</div>
+
+		<button class="accordion">15. 입주 및 계약 문의는 어디로 해야하나요?</button>
+		<div class="panel">
+			<p>입주/계약문의는 전화(010-1234-5678) 및 이메일(knockknockwebpage@gmail.com)로
+				영업시간(오전10시-오후6시)내에 문의하실 수 있습니다. 입주/계약에 대한 궁금하신 점은 홈페이지의 FAQ를 통해 확인
+				하실 수 있으니 문의하시기 전에 FAQ를 확인해주세요. 그 외 카카오톡 1:1 문의도 가능하니 편하신 방법으로 연락주세요.</p>
+		</div>
+
+		<button class="accordion">16. 2인실 가격 기준은 어떻게 되나요?</button>
+		<div class="panel">
+			<p>홈페이지에 안내 되어있는 2인실 가격은 1인 가격 기준입니다. 예를 들어 2인실인데 보증금 96만원/임대료
+				41만원/관리비3만원/공과금 5만원이라고 명시되어 있을 경우 해당 금액 모두 1인이 부담하는 비용입니다.</p>
+		</div>
+
+		<button class="accordion">17. 지점 내 관리 직원이 상주하나요?</button>
+		<div class="panel">
+			<p>아니오. 지점 내에는 KnockKnock 직원이 상주하고 있지 않습니다.</p>
+		</div>
+
+			</div> <!-- // accordion -->
+		</div> <!-- // 11 -->
+		<div class="col-md-1">
+			<div id='kakao' style="bottom:300px;">
+				<div id="plusfriend-addfriend-button"></div>
+		   		 <a href="http://developers.kakao.com/logout"></a>
+		   		 <div id="plusfriend-chat-button"></div>
+		   		 <a href="javascript:void plusFriendChat()" id='moreQ'>1:1 문의하기</a>
+			</div>
+		</div>
+	</div> 
+		
+		
+<script>
+			//카테고리바 체크디자인용
+			window.onload = function(){
+				$('#toFAQNav').addClass('active').css('color','#2eca6a');
+			}
+			
+			setInterval(function() {
+				$("#q1").css('color','#2eca6a');
+				$("#q2").css('color','#0404B4');
+				$("#q1").fadeOut(400).fadeIn(400);
+				$("#q2").fadeIn(400).fadeOut(400);
+			}, 500); 
+			
+			//어코디언기능
+			var acc = document.getElementsByClassName("accordion");
+			var i;
+
+			for (i = 0; i < acc.length; i++) {
+				acc[i].addEventListener("click", function() {
+					this.classList.toggle("active");
+					var panel = this.nextElementSibling;
+					if (panel.style.maxHeight) {
+						panel.style.maxHeight = null;
+					} else {
+						panel.style.maxHeight = panel.scrollHeight + "px";
+					}
+				});
+			}
+			
+		//이니셜라이즈하기(api키입력)
+        Kakao.init('fe0f67edf84937ead9247f35d816960d');
+		
+    	//플러스친구(친추)
+        Kakao.PlusFriend.createAddFriendButton({
+          container: '#plusfriend-addfriend-button',
+          plusFriendId: '_TPrWj' // 플러스친구 홈 URL에 명시된 id로 설정합니다.
+        });
+		
+		//플러스친구(채팅하기)
+        function plusFriendChat(){
+          Kakao.PlusFriend.chat({
+            plusFriendId: '_TPrWj' // 플러스친구 홈 URL에 명시된 id로 설정합니다.
+          });
+        }
+		</script>
+	</div>
+</body>
+</html>

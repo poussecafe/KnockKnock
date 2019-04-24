@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<title>계약 등록 페이지</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<style>
+h1, h2, h3, h4, h5, h6{
+	font-family: 'Jua', sans-serif;
+}
+
+body{
+	font-family: 'Jua', sans-serif;
+	margin-top:80px;
+}
+
+.sidenav {
+	width: 200px;
+	position: fixed;
+	z-index: 1;
+	top: 130px;
+	left: 60px;
+	background: #eee;
+	overflow-x: hidden;
+	padding: 8px 0;
+	margin-right: 40px;
+}
+
+#sidenav{
+	background-color:white;
+	border: 1px solid #2eca6a;
+	color:#2eca6a;
+	font-weight:bolder;
+	border-radius: 1rem;
+
+}
+
+.sidenav a {
+	padding: 10px 10px 10px 16px;
+	text-decoration: none;
+	font-size: 30px;
+	color: #2eca6a;
+	display: block;
+}
+
+.sidenav a:hover {
+	color: #064579;
+}
+
+#title{
+	color:#2eca6a;
+	font-size:larger;
+	font-weight:bolder;
+	margin-bottom:30px;
+}
+
+label{
+	width: 100px;
+}
+</style>
+
+</head>
+<body>
+	<div layout:fragment="content" class="container">
+		<div class="row">
+			<div class="col-md-2">
+				<div class="sidenav">
+					<a th:href="@{adminEventListView}">이벤트관리</a><br>
+					<a th:href="@{adminMemberSearchView}">회원관리</a><br>
+					<a th:href="@{adminVisitList}">방문문의관리</a><br>
+					<a th:href="@{adminBranchRegistView}">지점등록</a><br>
+				</div>
+			</div>
+			<div class="col-md-10">
+				<h1 id='title'>계약정보 등록</h1>
+				<form action="adminContractRegist" method="post">
+					<label>회원번호</label><span th:text="${memberNumber}"></span><br />
+					<label>계약일</label><input type="Date" class="form-control" name="contractDate"><br />
+					<label>계약기간</label><input type="number" class="form-control" name="period"><br />
+					<label>계약지점</label><input type="number" class="form-control" name="branchNumber"><br />
+					<label>계약방 호수</label><input type="number" class="form-control" name="roomNumber"><br />
+					<label>비상연락번호</label><input type="text" class="form-control" name="emergencyNumber"><br />
+					<label>반려동물여부</label><select name="isPet" class="form-control">
+												<option value="예">예</option>
+												<option value="아니오">아니오</option>
+											</select><br />
+					<label>회원은행명</label><input type="text" class="form-control" name="bankName"><br />
+					<label>회원예금주</label><input type="text" class="form-control" name="depositor"><br />
+					<label>회원계좌번호</label><input type="text" class="form-control" name="memberAccount"><br />
+					<label>주민등록번호</label><input type="text" class="form-control" name="idNumber"><br />
+					<label>메모</label><input type="text" class="form-control" name="memo"><br />
+					<input type="hidden" name="memberNumber" th:value="${memberNumber}">
+					<input type="submit" class="btn btn-success" style="float: right;" value="등록">
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

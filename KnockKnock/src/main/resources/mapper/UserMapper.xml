@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.knockknock.mapper.UserMapper">
+	<select id="findBySocial" resultType="MemberDTO">
+		SELECT 
+		EMAIL email,
+		MEMBER_NUMBER memberNumber,
+		NICKNAME nickname,
+		GRADE grade
+		FROM MEMBER
+		WHERE EMAIL = #{email}
+	</select>
+	
+	<insert id="signUp">
+		INSERT INTO MEMBER
+		(MEMBER_NUMBER, NICKNAME, GENDER, BIRTH, GRADE, EMAIL, PASSWORD, NAME,JOIN_TIME)
+		VALUES
+		(0, 'DEFAULT', '기본', now(), 'NORMAL', #{email}, 'FACEBOOK', #{name}, now())
+	</insert>
+</mapper>

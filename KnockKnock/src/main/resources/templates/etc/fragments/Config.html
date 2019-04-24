@@ -1,0 +1,204 @@
+<head th:fragment="Config" 
+xmlns:th="http://www.w3.org/1999/xhtml"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+profile="http://www.w3.org/2005/10/profile">
+  <meta charset="utf-8">
+  <title>KnockKnock 樂樂</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+  <!-- gallery meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- about CSRF -->
+  <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+  <!-- default header name is X-CSRF-TOKEN -->
+  <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+  <!-- 제이쿼리아이콘 -->
+  <link rel="stylesheet" th:href="@{https://use.fontawesome.com/releases/v5.7.2/css/all.css}" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <!-- Favicons -->
+  <link th:href="@{/img/favicon.png}" rel="icon" type="text/css">
+  <link th:href="@{/img/apple-touch-icon.png}" rel="apple-touch-icon" type="text/css">
+  <!-- Google Fonts -->
+  <link th:href="@{https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700}" rel="stylesheet" type="text/css">
+  <!-- Bootstrap CSS File -->
+  <link th:href="@{/lib/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+  <!-- Libraries CSS Files -->
+  <link th:href="@{/lib/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css">
+  <link th:href="@{/lib/animate/animate.min.css}" rel="stylesheet" type="text/css">
+  <link th:href="@{/lib/ionicons/css/ionicons.min.css}" rel="stylesheet" type="text/css">
+  <link th:href="@{/lib/owlcarousel/assets/owl.carousel.min.css}" rel="stylesheet" type="text/css">
+  <!-- Gallery Bootstrap core CSS -->
+  <link th:href="@{/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+  <!-- Gallery Custom styles for this template -->
+  <link th:href="@{/css/thumbnail-gallery.css}" rel="stylesheet" type="text/css">
+  <!-- Main Stylesheet File -->
+  <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+  <!-- 구글폰트 -->
+  <link th:href="@{https://fonts.googleapis.com/css?family=Jua}" rel="stylesheet">
+  <link th:href="@{https://fonts.googleapis.com/css?family=Sunflower:300}" rel="stylesheet">
+  <!-- 이미지로딩 에러방지 -->
+  <link rel="icon" type="image/png" th:href="@{http://example.com/myicon.png}">
+  
+  
+<style>
+	.map_wrap, .map_wrap * {margin:0;padding:0;font-family:'Malgun Gothic',dotum,'돋움',sans-serif;font-size:12px;}
+	.map_wrap a, .map_wrap a:hover, .map_wrap a:active{color:#000;text-decoration: none;}
+	.map_wrap {position:relative;width:100%;height:500px;}
+	#menu_wrap {position:absolute;top:0;left:0;bottom:0;width:250px;margin:10px 0 30px 10px;padding:5px;overflow-y:auto;background:rgba(255, 255, 255, 0.7);z-index: 1;font-size:12px;border-radius: 10px;}
+	.bg_white {background:#fff;}
+	#menu_wrap hr {display: block; height: 1px;border: 0; border-top: 2px solid #5F5F5F;margin:3px 0;}
+	#menu_wrap .option{text-align: center;}
+	#menu_wrap .option p {margin:10px 0;}  
+	#menu_wrap .option button {margin-left:5px;}
+	#placesList li {list-style: none;}
+	#placesList .item {position:relative;border-bottom:1px solid #888;overflow: hidden;cursor: pointer;min-height: 65px;}
+	#placesList .item span {display: block;margin-top:4px;}
+	#placesList .item h5, #placesList .item .info {text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
+	#placesList .item .info{padding:10px 0 10px 55px;}
+	#placesList .info .gray {color:#8a8a8a;}
+	#placesList .info .jibun {padding-left:26px;background:url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;}
+	#placesList .info .tel {color:#009900;}
+	#placesList .item .markerbg {float:left;position:absolute;width:36px; height:37px;margin:10px 0 0 10px;background:url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;}
+	#placesList .item .marker_1 {background-position: 0 -10px;}
+	#placesList .item .marker_2 {background-position: 0 -56px;}
+	#placesList .item .marker_3 {background-position: 0 -102px}
+	#placesList .item .marker_4 {background-position: 0 -148px;}
+	#placesList .item .marker_5 {background-position: 0 -194px;}
+	#placesList .item .marker_6 {background-position: 0 -240px;}
+	#placesList .item .marker_7 {background-position: 0 -286px;}
+	#placesList .item .marker_8 {background-position: 0 -332px;}
+	#placesList .item .marker_9 {background-position: 0 -378px;}
+	#placesList .item .marker_10 {background-position: 0 -423px;}
+	#placesList .item .marker_11 {background-position: 0 -470px;}
+	#placesList .item .marker_12 {background-position: 0 -516px;}
+	#placesList .item .marker_13 {background-position: 0 -562px;}
+	#placesList .item .marker_14 {background-position: 0 -608px;}
+	#placesList .item .marker_15 {background-position: 0 -654px;}
+	#pagination {margin:10px auto;text-align: center;}
+	#pagination a {display:inline-block;margin-right:10px;}
+	#pagination .on {font-weight: bold; cursor: default;color:#777;}
+
+	/*로그인,회원가입 버튼*/
+	#nav-log{
+		font-size:20px;
+		color:black;
+	}
+	
+	#nav-log:hover{
+		color:highlight;
+	}
+
+	#suvNav,#navbarDefault,#knockknock,#allContent{
+		font-family: 'Jua', sans-serif;
+	}
+	
+	#suvNav{
+		width:173px;
+	}
+
+	@media (min-width: 992px)
+	.navbar-expand-lg .navbar-nav {
+    	width: 527px;
+	}
+	
+	footer{
+		margin-top:40px;
+	}
+	
+	input[name='simpleAddress']{
+		border:3px solid #2eca6a;
+		text-align:center;
+	}
+	
+	#branchNumberName1, #branchNumberName2, #branchNumberName3{
+		font-size:20px;
+		border-right:4px solid #2eca6a;
+		border-left:4px solid #2eca6a;
+		padding:4px;
+		color : white;
+	}
+
+	#suvtitle1{
+		padding:5px;
+		color:#2eca6a;
+		border-bottom:3px solid #2eca6a;
+		border-radius:0.5rem;
+	}
+	
+	#suvtitle2{
+		padding:5px;
+		color: #2eca6a;
+		border-bottom:3px solid #2eca6a;
+		border-radius:0.5rem;
+	}
+	
+	#suvtitle3{
+		padding:5px;
+		color: #2eca6a;
+		border-bottom:3px solid #2eca6a;
+		border-radius:0.5rem;
+	}
+	
+	#howtojoin{
+		background-color:#2eca6a;
+		color:white;
+		padding:10px;
+		border-radius:1rem;
+		opacity:0.8;
+	}
+	
+	#findingAllRoom{
+		background-color:#2eca6a;
+		color:white;
+		padding:10px;
+		border-radius:1rem;
+		opacity:0.8;
+	}
+	
+	#findingAllRoom:hover{
+		background-color:white;
+		color:#2eca6a;
+		padding:10px;
+		border-radius:1rem;
+		border:1px solid #2eca6a;
+		opacity:0.8;
+	}
+	
+	#simpleRoomSearch:hover{
+		background-color:white;
+		color:#2eca6a;
+		padding:10px;
+		border-radius:1rem;
+		border:1px solid #2eca6a;
+		opacity:0.8;
+	}
+	
+	.color-text-a{
+		color:white;
+	}
+	
+</style>
+<!-- JavaScript Libraries -->
+	  <!-- 스윗얼럿 -->
+	  <script th:src="@{https://unpkg.com/sweetalert/dist/sweetalert.min.js}"></script>
+	  <!-- jQuery -->
+	  <script th:src="@{/lib/jquery/jquery.min.js}"></script>
+	  <script th:src="@{/lib/jquery/jquery-migrate.min.js}"></script>
+	  <script th:src="@{/lib/popper/popper.min.js}"></script>
+	  <script th:src="@{/lib/bootstrap/js/bootstrap.min.js}"></script>
+	  <script th:src="@{/lib/easing/easing.min.js}"></script>
+	  <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+	  <script th:src="@{/lib/scrollreveal/scrollreveal.min.js}"></script>
+	  <!-- Contact Form JavaScript File -->
+	  <script th:src="@{/contactform/contactform.js}"></script>
+	  <!-- Template Main Javascript File -->
+	  <script th:src="@{/js/main.js}"></script>
+	  <!-- about gallery script -->
+	  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+      <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+      <!-- map -->
+      <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d4bcec44279a03821440e0f867851605&libraries=services"></script>
+</head>

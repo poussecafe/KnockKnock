@@ -1,0 +1,203 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<title>이벤트 글</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-type" content="application/x-www-form-urlencoded; charset=UTF-8"/>
+
+<style>
+
+h1, h2, h3, h4, h5, h6{
+	font-family: 'Jua', sans-serif;
+}
+
+body{
+	font-family: 'Jua', sans-serif;
+	margin-top:80px;
+}
+
+.sidenav {
+	width: 200px;
+	position: fixed;
+	z-index: 1;
+	top: 130px;
+	left: 60px;
+	background: #eee;
+	overflow-x: hidden;
+	padding: 8px 0;
+	margin-right: 40px;
+}
+
+#sidenav{
+	background-color:white;
+	border: 2px solid #2eca6a;
+	color:#2eca6a;
+	font-weight:bolder;
+	border-radius: 1rem;
+
+}
+.main {
+  margin-left: 30px;
+  padding: 0px 10px;
+}
+.sidenav a {
+	padding: 10px 10px 10px 16px;
+	text-decoration: none;
+	font-size: 30px;
+	color: #2eca6a;
+	display: block;
+}
+
+.sidenav a:hover {
+	color: #064579;
+}
+
+
+.btn {
+	border-radius: 3px;
+	font-weight: 100;
+	border-color: transparent;
+	background: #2eca6a;
+	color: #fff;
+	cursor: pointer;
+}
+
+#title{
+	color:#2eca6a;
+	font-size:larger;
+	font-weight:bolder;
+	margin-bottom:30px;
+}
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 3; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 30px;
+	border: 1px solid #888;
+	width: 30%;
+	border-top-width: 0px;
+}
+th {
+	font-size: 20px;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="container">
+		<!-- Modal -->
+		<div class="modal" id="myModal">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">이벤트 취소하기</h4>
+						<button type="button" class="close" th:text="X"></button>
+					</div>
+					<div class="modal-body">
+						<p>이벤트 취소 사유를 적어주세요.</p>
+						<form action="adminEventCancel">
+							<input type="hidden" name="writingNumber" th:value="${eventView.writingNumber}">
+							<input type="text" name="cancelReason" value=""><br />
+
+							<button type="submit" class="btn btn-default" th:text="완료"></button>
+							<button type="button" class="btn btn-default" data-dismiss="modal" th:text="취소"></button>
+
+						</form>
+					</div>
+				</div>
+		</div>
+		<div class="row">
+			<div class="col-md-1">
+				<div class="sidenav">
+					<a th:href="@{adminEventListView}">이벤트 관리</a><br>
+					<a th:href="@{adminMemberSearchView}">회원 관리</a><br>
+					<a th:href="@{adminVisitList}">방문 문의 관리</a><br>
+					<a th:href="@{adminBranchRegistView}">지점 등록</a><br>
+				</div>
+			</div>
+			<div class="col-md-11">
+			<div class="main">
+				<h2 th:text="${eventView.title}"></h2>
+				<label style="width: 100px;">작성자</label><span th:text="${eventView.nickname}"></span><br />
+				<label style="width: 100px;">조회수</label><span th:text="${eventView.hit}"></span><br />
+				<label style="width: 100px;">작성시간</label><span th:text="${eventView.writeTime}"></span><br />
+				<label style="width: 100px;">이벤트 모집기간</label><span th:text="${eventView.acceptStartTime}"></span>
+				<label> ~ </label><span th:text="${eventView.acceptEndTime}"></span><br />
+				<label style="width: 100px;">이벤트 기간</label><span th:text="${eventView.eventStartTime}"></span>
+				<label> ~ </label><span th:text="${eventView.eventEndTime}"></span><br />
+				<label style="width: 100px;">모집인원</label><span th:text="${eventView.recruitNumber}"></span>
+				<label> / </label><span th:text="${eventView.recruitMaxNumber}"></span><br />
+				<span th:if="${eventView.cancelReason}!=null"><label style="width: 100px;">이벤트취소 이유</label><span th:text="${eventView.cancelReason}"></span><br /></span>
+				<label>신청한 인원</label>
+				<table class="table table-striped" style="width: 80%;">
+					<tr>
+						<th>회원번호</th>
+						<th>닉네임</th>
+						<th>이름</th>
+						<th>성별</th>
+					</tr>
+					<tr th:each="list : ${joinMember}">
+						<td th:text="${list.memberNumber}"></td>
+						<td th:text="${list.nickname}"></td>
+						<td th:text="${list.name}"></td>
+						<td th:text="${list.gender}"></td>
+					</tr>
+				</table><br />
+				<span th:if="${imgPath}!=null"><img th:src="${imgPath}" style="width: 80%;"></span>
+				<br /><br />
+				<div th:utext="${eventView.content}"></div>
+				<br />
+				<input type="button" th:if="${eventView.cancelReason}==null" class="btn btn-default" data-toggle="modal" data-target="#myModal" value="이벤트취소">
+
+				<form name="myForm" action="adminEventDelete" style="display: inline;">
+					<input type="hidden" name="writingNumber" th:value="${eventView.writingNumber}">
+					<input type="submit" class="btn btn-dafault" value="이벤트 삭제">
+				</form>
+				<form name="myForm" action="adminEventModifyView" style="display: inline;">
+					<input type="hidden" name="writingNumber" th:value="${eventView.writingNumber}">
+					<input type="submit" class="btn btn-dafault" value="이벤트 수정">
+				</form>
+				<form name="myForm" action="adminEventListView" style="display: inline;">
+					<input type="submit" class="btn btn-dafault" value="목록으로">
+				</form>
+			</div>
+			</div>
+		</div>
+		<script>
+			var modal = document.getElementById('myModal');
+			//취소하기 클릭시 모달창 생성
+			$("#cancelBtn").click(function(){
+				modal.style.display = "block";
+			});
+			
+			//모달창에서 x버튼 클릭시 모달 종료
+		 	$(".close").click(function(){
+				modal.style.display = "none";
+		 	});
+			
+		 	//모달창 생성된 상태에서 윈도우 클릭시 모달창 종료
+			$(window).click(function(event) {
+				if (event.target == modal) {
+					modal.style.display = "none";
+				}
+			});
+			//모달창에서 취소버튼 클릭시 모달 종료
+			$("#closeModal").click(function(){
+				modal.style.display = "none";
+			});
+		</script>
+	</div>
+</body>
+</html>

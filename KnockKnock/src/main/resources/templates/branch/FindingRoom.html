@@ -1,0 +1,475 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" 
+layout:decorate="~{etc/fragments/Main_layout}">
+
+<head>
+
+<title>낙낙-방찾기</title>
+
+<style>
+
+body{
+	font-family: 'Jua', sans-serif;
+}
+
+#jumbotronId{
+    padding: 2rem 1rem;
+    margin-bottom: 0rem;
+    background-color: white;
+}
+
+.label {margin-bottom: 96px;}
+.label * {display: inline-block;vertical-align: top;}
+.label .left {background: url("http://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png") no-repeat;display: inline-block;height: 24px;overflow: hidden;vertical-align: top;width: 7px;}
+.label .center {background: url(http://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png) repeat-x;display: inline-block;height: 24px;font-size: 12px;line-height: 24px;}
+.label .right {background: url("http://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png") -1px 0  no-repeat;display: inline-block;height: 24px;overflow: hidden;width: 6px;}
+
+.img-fluid img-thumbnail{
+  	position: relative;
+    height: 100px;
+    border: 0px solid #2eca6a;
+}
+
+#theme{
+ 	position: absolute;
+    top:60%;
+    left:82%;
+    transform: translate(-50%, -50%);                                                                   
+    font-size:17px;
+    font-family: 'Jua', sans-serif;
+    font-weight:bolder;
+    color: white;
+    z-index: 2;
+    text-align: center;
+    background-color:#2eca6a;
+    padding:2%;
+    color:white;
+}
+#option_wrap{
+	display:inline;	
+	position:absolute;
+	float:left;
+	padding:25px 14px;
+	border:2px solid  #2eca6a;
+	border-radius: 1rem;
+	height: 470px;
+	width:20%;
+	font-family: 'Jua', sans-serif;	 
+}
+#map_wrap{
+	display:inline;
+	float:right;
+	border-bottom:2px solid #2eca6a;
+	margin-bottom:10px;
+	height:480px;
+	font-family: 'Jua', sans-serif;
+}
+#map{
+	display:inline;
+	float:right;
+	border-radius: 1rem;
+	font-family: 'Jua', sans-serif;
+}
+
+#roomSearch,#roomPay{
+  color: #2eca6a;
+  border: 2px solid #2eca6a;
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.030em;
+  background-color:white;
+  font-size:15px;
+}
+
+#roomSearch:hover,#roomPay:hover{
+	color:white;
+	background-color:#2eca6a;
+}
+
+.field-title{
+  color: #2eca6a;
+  text-transform: uppercase;
+  letter-spacing: 0.030em;
+  background-color:white;
+  font-size:20px;
+}
+
+#bang{
+	font-size:30px;
+	font-family: 'Jua', sans-serif;
+}
+
+#container{
+	border-top:10px;
+}
+
+#branchNumber{
+	font-weight: bolder;
+	border-bottom:2px solid #2eca6a;
+}
+
+#img{
+	background-color:white;
+	width:350px;
+	height:250px;
+}
+
+#addressList{
+	font-family: 'Jua', sans-serif;
+}
+
+#searchAddress{
+	width:70%;
+	border-radius: .25rem;
+	border:2px solid  #2eca6a;
+}
+
+/*더보기*/
+.col-xs-6 {
+    display: none;
+}
+.col-xs-6.active {
+    display: block;
+}
+.is_comp.col-xs-6:after {
+    display: none;
+}
+.btn-wrap, .lists, .main {
+    display: block;
+}
+.main {
+    max-width: 640px;
+    margin: 0 auto;
+}
+.text-lg-left {
+    margin-bottom: 4rem;
+}
+.text-lg-left {
+    padding: 20px;
+}
+.text-lg-left:nth-child(2n) {
+    color: #fff;
+}
+.btn-wrap {
+    text-align: center;
+}
+
+#js-btn-wrap,#hi{
+	color: #2eca6a;
+	border: 2px solid #2eca6a;
+	border-radius: 2rem;
+	text-transform: uppercase;
+	letter-spacing: 0.030em;
+	background-color:white;
+	font-size:30px;
+	margin-bottom:20px;
+}
+
+.button{
+	width:100%;
+
+}
+
+#img:hover{
+	opacity:0.6;
+}
+
+#hoho{
+	font-family: 'Sunflower', sans-serif;
+	font-size:14px;
+}
+
+#hoho:hover{
+	color:#2eca6a;
+	font-size:16px;
+	font-weight: bolder;
+}
+
+#checkbox8,#checkbox9{
+	width:25%;
+	border-radius: .25rem;
+    border: 2px solid #2eca6a;
+}
+
+
+#mapmarker,#calculator{
+	color:#2eca6a;
+}
+
+#reset{
+	text-align: right;
+}
+
+#nothing{
+	font-size:50px;
+}
+
+.swal-button--confirm{
+	background-color:#2eca6a;
+	color:white;
+}
+</style>
+    
+</head>
+<body>
+<!-- container -->
+<div layout:fragment="content" class="container">
+	<!-- 옵션박스 -->
+    <div class="jumbotron" id='jumbotronId' style="margin-top:40px;">
+    	<!-- 맵 -->
+		<div class="map_wrap" id="map_wrap">
+			<div id="map" style="width:70%;height:98%;position:relative;overflow:hidden;margin-left:20px"></div><br>
+		</div>
+    	<div class="option_wrap" id="option_wrap">
+    		<div id='reset'>
+    		</div><br>
+			<div id="a1">
+				<i class="fas fa-map-marker-alt" id='mapmarker'></i>&nbsp;<input type="text" name="address" id='searchAddress' placeholder="주소 및 위치">
+				<input type="submit" value="찾기" name='roomSearch' id='roomSearch'/>
+			</div>
+			<br>
+			<div class="genderField" style="width:80%;">
+	              <label class="field-title"><strong>성별</strong></label>
+	              <div name="gender" id="gender">
+	                <div class="checkbox" style="float: left; width: 50%;"><input type="checkbox" value="남" id="checkbox1" name="gender"><label for="checkbox1">&nbsp;남성전용</label></div>
+	                <div class="checkbox" style="float: left; width: 50%;"><input type="checkbox" value="여" id="checkbox2" name="gender"><label for="checkbox2">&nbsp;여성전용</label></div>
+	              	<div class="checkbox" style="float: left; width: 50%;"><input type="checkbox" value="공용" id="checkbox3" name="gender"><label for="checkbox3">&nbsp;남녀공용</label></div>
+	              </div>
+	        </div>
+	        <br><br><br>
+	        <div class="petField" style="width:80%;">
+	              <label class="field-title"><strong>반려동물</strong></label>
+	              <div name="pet" id="pet">
+	                <div class="checkbox" style="float: left; width: 50%;"><input type="checkbox" value="가능" id="checkbox4" name="pet"><label for="checkbox4">&nbsp;가능</label></div>
+	                <div class="checkbox" style="float: left; width: 50%;"><input type="checkbox" value="불가능" id="checkbox5" name="pet"><label for="checkbox5">&nbsp;불가능</label></div>
+	              </div>
+	        </div>
+	        <br>
+	        <div class="branchThemeField" style="width:80%;">
+	              <label class="field-title"><strong>테마</strong></label>
+	              <div name="branchTheme" id="branchTheme">
+	                <div class="checkbox" style="float: left; width: 50%;"><input type="checkbox" value="있음" id="checkbox6" name="branchTheme"><label for="checkbox6">&nbsp;있음</label></div>
+	                <div class="checkbox" style="float: left; width: 50%;"><input type="checkbox" value="없음" id="checkbox7" name="branchTheme"><label for="checkbox7">&nbsp;없음</label></div>
+	              </div>
+	        </div>
+	        <br><br>
+			<div>
+				 <label class="field-title" ><strong>월세</strong></label>
+				 <div>
+				 <i class="fa fa-calculator" id='calculator'></i>
+					<input type="text" id="checkbox8" name="branchPay" placeholder="최저가"><label for="checkbox8"></label>
+					-
+					<input type="text" id="checkbox9" name="branchPay" placeholder="최대가"><label for="checkbox9">&nbsp;</label>
+					<input type="button" value="찾기" name='roomPay' id='roomPay'/>
+				 </div>
+	        </div>
+	        <br><br>
+		</div>
+    </div>
+    <br /><br /><br /><br />
+	<!--지점목록 출력 -->
+    <div class="container" id="container"> <!-- 더페 ID=js-load/CLASS=main -->
+      <h1 class="my-4 text-center text-lg-left" id="bang"><strong><span style="color:#2eca6a">입주가능</span> 방 목록</strong></h1>
+	      <div class='row text-center text-lg-left' id='allGallery'><!-- 더페UI / class=lists-->
+	      	<!-- thymeleaf gallery-->
+	        <div th:each='dto:${lists}' class='col-lg-3 col-md-4 col-xs-6' name='list' id='list'><!-- 더페LI / class=lists__item js-load -->
+	          <a th:href="@{'/roomDetailView/?branchNumber='+${dto.branchNumber}}" class='d-block mb-4 h-100' id='gallery'>
+	            <img class='img-fluid img-thumbnail' th:src="'/images/branch/'+${dto.branchNumber}+'/mainImage.jpg'" alt="" id='img'>
+	          	<span th:text="${dto.branchNumber}+'호점'" name='branchNumber' id='branchNumber'/><br>
+				<i class="fas fa-map-marker-alt" id='mapmarker'></i>&nbsp;<span th:text='${dto.address}' name='addressList' id='addressList'/><br>
+				<span th:text='${dto.theme}' name='theme' id='theme'/>
+			    <i class="fa fa-calculator" id='calculator'></i><span th:text="${dto.monthlyRent}+'원'" name='monthlyRent' id='monthlyRent'/>
+	          </a>
+	        </div>
+	        <!-- /.thymeleaf gallery-->
+	      </div>
+	      <!-- 더보기 페이징 -->
+	      <div id="js-btn-wrap" class="btn-wrap" onclick="morePage();"><a href="javascript:;" class="button">방을 더 보고 싶어요</a></div>
+  	</div>
+	<!--지점목록 출력-->
+<script>
+
+//제이쿼리 충돌방지 문법 체인지
+$.noConflict();
+
+//맵생성 컨테이너
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = {
+        center: new daum.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+        level: 9 // 지도의 확대 레벨
+    };  
+
+// 지도를 생성
+var map = new daum.maps.Map(mapContainer, mapOption); 
+//주소->좌표변환 객체 생성
+var geocoder = new daum.maps.services.Geocoder();
+//리스트 출력한 name="addressList"를 getElementsByName으로 받아서 addressList 변수에 대입
+var addressList = document.getElementsByName("addressList");
+//호점 배열담기
+var branchNumber = document.getElementsByName('branchNumber');
+//branchNumber 증가 변수
+var i=0;
+
+// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+var mapTypeControl = new daum.maps.MapTypeControl();
+
+// 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+// daum.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+map.addControl(mapTypeControl, daum.maps.ControlPosition.TOPRIGHT);
+
+// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+var zoomControl = new daum.maps.ZoomControl();
+map.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
+
+//갤러리,주소를 지도 위에 띄우기
+window.onload = function(){
+	searchMap();
+	jQuery('#findingRoomNav').addClass('active').css('color','#2eca6a');
+}
+
+//방검색,가격검색,체크박스 클릭시 멀티서치 호출
+jQuery("#roomSearch,.checkbox,#roomPay").on('click',multiSearch);
+
+//방검색시 주소를 갤러리,지도 위에 띄우기
+function searchMap(){
+	addressList.forEach(function(addr,i){
+		geocoder.addressSearch(addr.textContent, function(result, status){
+	    	if(status === daum.maps.services.Status.OK){
+		    	var coords = new daum.maps.LatLng(result[0].y, result[0].x);
+		    	
+		        // 결과값으로 받은 위치를 마커로 표시
+		        var marker = new daum.maps.Marker({
+		            map: map,
+		            position: coords
+		        });
+	
+		        //var customContent = "<div class ='label' id='ho'><span class='left'></span><span class='center'>"+branchNumber[i++].textContent+"</span><span class='right'></span></div>";
+		        var customContent = '<div class="label" id="ho"><span class="left"></span><span class="center"><a id="hoho" href="http://map.daum.net/link/map/낙낙 '+branchNumber[i].textContent + ','+result[0].y+','+result[0].x+'" target="_blank">'+branchNumber[i++].textContent+'</a></span><span class="right"></span></div>';
+		    	
+		    	// 인포윈도우로 장소에 대한 설명을 표시
+		    	var customOverlay = new daum.maps.CustomOverlay({
+		    	  	position : coords,
+		    	 	content : customContent
+		    	});
+			
+	    		customOverlay.setMap(map);
+	    		
+	    		//'검색'을 눌렀을 때,체크박스 클릭시 마커 삭제
+	    		jQuery("#roomSearch,.checkbox,#roomPay").on('click',function(){
+			        i=0;
+			    	marker.setMap(null);
+			    	customOverlay.setMap(null);
+			    });
+
+	        
+	    	}//if end
+	    	map.setCenter(coords);
+		});	
+	});
+}
+
+function multiSearch(){
+		var address = jQuery("#searchAddress").val();
+		var content = "";
+		var genderCheckbox = new Array();
+		var petCheckbox = new Array();
+		var themeCheckbox = new Array();
+		var minRent = jQuery("#checkbox8").val();
+		var maxRent = jQuery("#checkbox9").val();
+		
+		jQuery("input[name='gender']:checked").each(function(i){
+			genderCheckbox.push(jQuery(this).val());
+		});//checked end
+		jQuery("input[name='pet']:checked").each(function(i){
+			petCheckbox.push(jQuery(this).val());
+		});//checked end
+		jQuery("input[name='branchTheme']:checked").each(function(i){
+			themeCheckbox.push(jQuery(this).val());
+		});//checked end
+		
+		jQuery.ajax({
+			method : 'post',
+			url : '/roomSearch',
+			data : JSON.stringify({"address":address,"genderList":genderCheckbox,"petList":petCheckbox,"themeList":themeCheckbox,"minRent":minRent,"maxRent":maxRent}),
+			dataType : "json",
+			contentType: 'application/json',
+			async : true,
+			success : function(data){
+				jQuery("#allGallery").remove();
+				
+				if(data==""){
+					swal("원하시는 지점이 없어요.","다시 찾아주세요!");
+					content += "<h1 class='my-4 text-center text-lg-left' id='bang'><strong><span style='color:#2eca6a'>입주가능</span> 방 목록</strong></h1><div class='row text-center text-lg-left' id='allGallery'>"
+					+"<br><h1 id='nothing'>원하시는 지점이 없어요. 다시 찾아 주세요!</h1><br><br>"+"<img src='/images/errorhouse.png' style='width:10%; height:10%'><img src='/images/sad.png' style='width:10%; height:10%'>"
+					+ "</div>";
+					jQuery("#container").html(content);
+					return false;
+				}
+				
+				else{
+					content += "<h1 class='my-4 text-center text-lg-left' id='bang'><strong><span style='color:#2eca6a'>입주가능</span> 방 목록</strong></h1><div class='row text-center text-lg-left' id='allGallery'>"
+					for(i=0; i<data.length; i++){
+						content+=
+						"<div class='col-lg-3 col-md-4 col-xs-6' name='list' id='list'>"
+						+
+						"<a href='/roomDetailView/?branchNumber="+ data[i].branchNumber
+						+ "' class='d-block mb-4 h-100' id='gallery'>"
+						+"<img class='img-fluid img-thumbnail' src="+"'/images/branch/"+data[i].branchNumber+"/mainImage.jpg'" + " alt='' id='img'>" 
+						+"<span name='branchNumber' id='branchNumber'>" + data[i].branchNumber + "호점</span><br>"
+						+"<i class='fas fa-map-marker-alt' id='mapmarker'></i>"
+						+"<span name='addressList' id='addressList'>" + data[i].address + "</span><br>"
+						+"<span name='theme' id='theme'>"+data[i].theme+"</span>"
+						+"<i class='fa fa-calculator' id='calculator'></i>"
+						+"<span name='monthlyRent' id='monthlyRent'>"+data[i].monthlyRent+"원</span>"
+						+"</a></div>";
+					}
+					
+					content += "</div><div id='js-btn-wrap' class='btn-wrap'><a href='javascript:;' class='button'>방을 더 보고 싶어요</a></div>";
+					jQuery("#container").html(content);
+					//더보기
+					morePage();
+				}
+			},
+			error : function(data){
+				if(data==""){
+					swal("에러발생");
+					return false;
+				}
+			},
+			complete : function(data){
+				searchMap();
+			}
+		});
+	};
+//더보기페이징
+jQuery(window).on('load', function () {
+    load('#container', '4');
+    jQuery("#js-btn-wrap .button").on("click", function () {
+        load('#container', '4', '#js-btn-wrap');
+    })
+});
+ 
+function morePage(){ 
+	load('#container', '4');
+	jQuery("#js-btn-wrap .button").on("click", function () {
+	    load('#container', '4', '#js-btn-wrap');
+	}) 
+}
+ 
+function load(id, cnt, btn) {
+    var girls_list = id + " .col-xs-6:not(.active)";
+    var girls_length = $(girls_list).length;
+    var girls_total_cnt;
+    if (cnt < girls_length) {
+        girls_total_cnt = cnt;
+    } else {
+        girls_total_cnt = girls_length;
+        jQuery('.button').hide()
+    }
+    jQuery(girls_list + ":lt(" + girls_total_cnt + ")").addClass("active");
+}
+
+</script>
+</div>
+</body>
+</html>

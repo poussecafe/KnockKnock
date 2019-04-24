@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<title>지점 상세 정보</title>
+<meta charset="utf-8">
+<!-- from 성현 : 방문신청 에러 관련 -->
+<meta http-equiv="Content-type" content="application/x-www-form-urlencoded; charset=UTF-8"/>
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header"F
+	th:content="${_csrf.headerName}"/>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<style>
+
+#houseInfo{
+	font-family: 'Jua', sans-serif;
+}
+
+body {
+	padding-top: 114px;
+	/* font-family: 'Jua', sans-serif; */
+	
+}
+
+#navbar {
+	overflow: hidden;
+	background-color: #2eca6a;
+}
+
+#navbar1 {
+	overflow: hidden;
+	background-color: #2eca6a;
+	width: 160px;
+	padding:5px;
+}
+
+#navbar a {
+	float: left;
+	display: block;
+	color: #f2f2f2;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	font-size: 25px;
+}
+
+#navbar a:hover {
+	background-color: white;
+	color: #2eca6a;
+}
+
+#navbar a.active {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.sticky {
+	position: fixed;
+	top: 99.5px;
+	/* width: 100%; */
+	width: 1015px;
+	z-index: 2;
+}
+
+.sticky1 {
+	position: fixed;
+	top: 99.5px;
+	/* width: 100%; */
+	width: 200px;
+	z-index: 2;
+}
+
+.sticky+.content {
+	padding-top: 60px;
+}
+
+.fixed {
+	position: fixed;
+	border-radius: 25px;
+	color: #f2f2f2;
+	text-align: center;
+	bottom: 800;
+	right: 20px;
+	width: 180px;
+	height: 150px;
+	background-color: #2eca6a;
+}
+
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 3; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 50%;
+	border-top-width: 0px;
+}
+
+/* The Close Button */
+.close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+element.style {
+    width: 850px;
+    margin-left: 15px;
+}
+
+/* * {
+  box-sizing: border-box;
+}
+
+img {
+  vertical-align: middle;
+}
+
+/* Position the image container (needed to position the left and right arrows) */
+.container {
+	position: relative;
+}
+
+/* Hide the images by default */
+.mySlides {
+	display: none;
+}
+
+/* Add a pointer when hovering over the thumbnail images */
+.cursor {
+	cursor: pointer;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+	cursor: pointer;
+	position: absolute;
+	top: 40%;
+	width: auto;
+	padding: 16px;
+	margin-top: -50px;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+	border-radius: 0 3px 3px 0;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+	right: 0;
+	border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+	color: #f2f2f2;
+	font-size: 12px;
+	padding: 8px 12px;
+	position: absolute;
+	top: 0;
+}
+
+/* Container for image text */
+.caption-container {
+	text-align: center;
+	background-color: #222;
+	padding: 2px 16px;
+	color: white;
+}
+
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+/* Six columns side by side */
+.column {
+	float: left;
+	width: 16.66%;
+}
+
+/* Add a transparency effect for thumnbail images */
+.demo {
+	opacity: 0.6;
+}
+
+.active, .demo:hover {
+	opacity: 1;
+}
+
+#myBtn,#myBtn1,#roomInfoModify {
+	padding: 2px;
+	color:white;
+	background:#2eca6a;
+	margin: 3px;
+	width: 137px;
+	font-size:20px;
+}
+
+#myBtn:hover,#myBtn1:hover {
+	padding: 2px;
+	color:#2eca6a;
+	background:white;
+	border:1px solid #2eca6a;
+}
+
+.uploadResult ul li{
+list-style: none;
+padding: 10px;
+}
+
+.uploadResult ul li img{
+width:300px;
+}
+
+#carouselExampleControls{
+width: 850px;
+}
+
+h2[name="mouseEvent"]:hover {
+	color: #2eca6a;
+}
+
+button[name='aboutReview']{
+	background-color: #2eca6a;
+	color:white;
+}
+
+button[name='reviewInsertBtn']{
+	background-color: #2eca6a;
+	color:white;
+}
+
+button[name='aboutReview']:hover{
+	color:#2eca6a;
+	background:white;
+	border:1px solid #2eca6a;
+}
+
+button[name='reviewInsertBtn']:hover{
+	color:#2eca6a;
+	background:white;
+	border:1px solid #2eca6a;
+}
+
+.card {
+	float: left;
+	width:33%;
+	margin: 1em;
+}
+
+.clear {
+	clear:both;
+}
+
+#closeModal, #visitBooking {
+	border-radius: 3px;
+	font-weight: 100;
+	border-color: transparent;
+	background: #2eca6a;
+	color: #fff;
+	cursor: pointer;
+}
+
+
+#navbar1{
+background:white;
+border: 3px solid #2eca6a;
+border-radius:1rem;
+color:black;
+}
+
+#branchNumberText{
+	text-align:center;
+} 
+
+swal{
+	font-size:30px;
+}
+
+.swal-button {
+	background-color:#2eca6a;
+}
+
+#branchNumber{
+	color:#2eca6a;
+}
+
+hr{
+	position:absolute;
+	background-color:#2eca6a;
+	border: 3px solid #2eca6a;
+	color:#2eca6a;
+	width:89%;
+	text-align:left;
+}
+
+#map{
+	margin-right:0%;
+}
+
+#mapIndex{
+	font-size:70%;
+	opacity:0.8;
+}
+
+h2[name='mouseEvent']{
+	text-align:center;
+}
+
+h2[name='mouseEvent']:hover{
+	color:#2eca6a;
+}
+
+th {
+	font-size:20px;
+}
+
+.table, .table-striped{
+	text-align:center;
+
+}
+
+
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body id='houseInfo'>
+
+	<div layout:fragment="content" class="container">
+		<br />
+		<h1 style="float: left">낙낙 쉐어 하우스 &nbsp;</h1>
+		<h1 th:text="${details.branchNumber}" id='branchNumber'
+			style="float: left"></h1>
+		<h1 style="float: left">호점 &nbsp;</h1>
+		<button id="likeBranch" type="submit" style="border: 0; background: transparent">
+   			<img id="likeImage" src="/images/likeCancel.png" width="45" height="45" style="cursor: pointer;" alt="submit" />
+		</button>
+		<h4><span style="color:#2eca6a;">" 찜해두고 싶은 지점이 있으면 </span><span style="color:red; font-size:25px;">♥</span><span style="color:#2eca6a;">를 눌러주세요! "</span></h4>
+		<hr>
+		<br /> <br /> <br /> <br /> <br /> <br />
+		
+		<div id="carouselExampleControls1" class="carousel slide" data-ride="carousel">
+  		  <div class="carousel-inner">
+		    <div class="carousel-item active" th:each="main : ${mainImage}">
+		      <img class="d-block w-100" style="width:750px; height:530px;" th:src="'/images/branch/'+${details.branchNumber}+'/'+${main}" alt="First slide">
+		    </div>
+			 <div class="carousel-item" th:each="item : ${fileList}">
+			   <img class="d-block w-100" style="width:750px; height:530px;" th:src="'/images/branch/'+${details.branchNumber}+'/'+${item}" alt="none">
+			 </div>
+		  </div>
+		  <a class="carousel-control-prev" href="#carouselExampleControls1" role="button" data-slide="prev">
+		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Previous</span>
+		  </a>
+		  <a class="carousel-control-next" href="#carouselExampleControls1" role="button" data-slide="next">
+		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Next</span>
+		  </a>
+		</div>
+		
+		<br /> <br /> <br /> 
+
+		<div class="row">
+			<div class="col-md-11">
+
+				<div id="myModal" class="modal">
+					<div class="modal-content">
+						<form action="/visitBooking" method="post" id="visitBookingForm" >
+							<span class="close">&times;</span>
+							<h3 style="float: left">낙낙&nbsp;</h3>
+							<h3 th:text="${details.branchNumber}" 
+								style="float: left"></h3>
+							<h3 style="float: left">호점 방문 신청</h3>
+							<input type="hidden" name="branchNumber"
+								th:value="${details.branchNumber}"><br />
+							<p>방문을 원하는 날짜와 시간을 선택해주세요</p><br />
+							<input type="date" name="reservationTime" /><br /> <input type="text"
+								class="form-control" name="memo" placeholder="방문을 원하는 시간을 입력해주세요. ex)오후 4시 반" /><br />
+							<p>방문 신청 후 3일 이내 해당 지점 매니저가 확인 연락을 드립니다.</p>
+							<div class="row">
+								<div class="col-md-6">
+									<button type="button" class="btn btn-default" id="closeModal">취소</button>
+								</div>
+								<div class="col-md-6">
+									<button type="button" class="btn btn-default" id="visitBooking"
+										data-dismiss="modal">완료</button>
+										<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> 
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div id="navbar" name="navbar" class="w3-round-large">
+					<a href="#introduce" class="nb">지점 소개</a> <a href="#locationInfo"
+						class="nb">위치 정보</a> <a href="#roomInfo" class="nb">방 정보</a> <a
+						href="#detailInfo" class="nb">세부 정보</a> <a href="#review"
+						class="nb">리뷰</a>
+				</div>
+				
+		<script>		
+		$('a.nb').on('click', function() {
+			$('a.nb').removeClass('active');
+			$(this).addClass('active');
+		});
+		</script>
+				<div id="introduce" class="w3-container">
+					<br /> <br /> <br /> <br /> <br /> <br /> <br />
+					<h2 style="margin-bottom:0%;"><strong>지점 소개&emsp;</strong><img src="/images/houseinfo/welcome.png" style="width:4%; height:4%;"></h2>
+					<hr style="width:96.6%;">
+					<br />
+					<p th:utext="${details.branchComment}"></p>
+					<br />
+					<table class="table table-striped">
+						<tr>
+							<th>주소</th>
+							<th>최대 거주 인원</th>
+							<th>거주 유형</th>
+							<th>반려동물 동반입주</th>
+							<th>주차장 유무</th>
+							<th>엘리베이터 유무</th>
+						</tr>
+						<tr>
+							<td th:text="|*{details.address} *{details.addressDetail}|"
+								id='branchAddress'>주소</td>
+							<td th:text="${details.maximumResident}"></td>
+							<td th:text="${details.branchType}"></td>
+							<td th:text="${details.pet}"></td>
+							<td th:text="${details.isParking}"></td>
+							<td th:text="${details.isElevator}"></td>
+						</tr>
+						<tr>
+					</table>
+				</div>
+
+
+				<div id="locationInfo" class="w3-container">
+
+					<br /> <br /> <br /> <br /> <br /> <br /> <br />
+
+					<h2 style="margin-bottom:0%;"><strong>위치 정보&emsp;</strong><img src="/images/houseinfo/navigation.png" style="width:4%; height:4%;"></h2>
+					<hr style="width:96.6%;">
+					<br />
+					<div class="row" style="margin-top:15px;">
+						<div class="col-md-10" >
+							<div id="map" style="width: 830px; height: 500px;"></div>
+						</div>
+						<div class="col-md-2" id='mapIndex'>
+						<br /><br />
+							<h2 id="MT1" name="mouseEvent">대형마트</h2>
+							<h2 id="CS2" name="mouseEvent">편의점</h2>
+							<h2 id="PK6" name="mouseEvent">주차장</h2>
+							<h2 id="SW8" name="mouseEvent">지하철역</h2>
+							<h2 class="field-title" id="BK9" name="mouseEvent">은행</h2>
+							<h2 class="field-title" id="CT1" name="mouseEvent">문화시설</h2>
+							<h2 id="FD6" name="mouseEvent">음식점</h2>
+							<h2 id="CE7" name="mouseEvent">카페</h2>
+							<h2 id="HP8" name="mouseEvent">병원</h2>
+							<h2 id="PM9" name="mouseEvent">약국</h2>
+						</div>
+					</div>
+					<br />
+				</div>
+
+				<div id="roomInfo" class="w3-container">
+
+					<br /> <br /> <br /> <br /> <br /> <br /> <br />
+
+					<h2 style="margin-bottom:0%;"><strong>방 정보&emsp;</strong><img src="/images/houseinfo/bed.png" style="width:4%; height:4%;"></h2>
+					<hr style="width:96.6%;">
+					<br /> 
+						
+						<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+  		  <div class="carousel-inner" style="margin-top:10px;">
+		    <div class="carousel-item active">
+		      <img class="d-block w-100" style="width:750px; height:530px;" th:src="'/images/branch/'+${details.branchNumber}+'room/mainImage.jpg'" alt="First slide">
+		    </div>
+			 <div class="carousel-item" th:each="i : ${roomList}">
+			   <img class="d-block w-100" style="width:750px; height:530px;" th:src="'/images/branch/'+${details.branchNumber}+'room/'+${i}" alt="none">
+			 </div>
+		  </div>
+		  <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+		    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Previous</span>
+		  </a>
+		  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+		    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		    <span class="sr-only">Next</span>
+		  </a>
+		</div>
+						
+						 <br /> <br /> <br />
+					<table class="table table-striped">
+						<tr>
+							<th>호수</th>
+							<th>성별</th>
+							<th>정원</th>
+							<th>면적</th>
+							<th>보증금</th>
+							<th>월세</th>
+							<th>입주가능일</th>
+						</tr>
+						<tr th:each="roomInfo:${roomInfoList}">
+							<td th:text="${roomInfo.roomNumber}"></td>
+							<td th:text="${roomInfo.gender}"></td>
+							<td th:text="|*{roomInfo.allowNumber}인실|"></td>
+							<td th:text="${roomInfo.space}"></td>
+							<td th:text="${roomInfo.deposit}"></td>
+							<td th:text="${roomInfo.monthlyRent}"></td>
+							<td th:text="${roomInfo.rentableDate}"></td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="detailInfo" class="w3-container">
+
+					<br /> <br /> <br /> <br /> <br /> <br /> <br />
+
+					<h2 style="margin-bottom:0%;"><strong>세부 정보&emsp;</strong><img src="/images/houseinfo/detail.png" style="width:4%; height:4%;"></h2>
+					<hr style="width:96.6%;">
+					<br />
+
+					<h3 style="margin-top:10px;"><strong style="border-bottom:2px solid #2eca6a;">시설 정보</strong></h3>
+					<br />
+
+					<h4>공용 시설</h4>
+					<br />
+					<p th:text="${details.facility}"></p>
+
+					<br /> <br /> <br />
+
+					<div class="w3-container">
+						<h4>개별 시설</h4>
+						<br />
+						<table class="table table-striped">
+							<tr>
+								<th>호수</th>
+								<th>시설</th>
+							</tr>
+							<tr th:each="roomInfo:${roomInfoList}">
+								<td th:text="${roomInfo.roomNumber}"></td>
+								<td th:text="${roomInfo.facility}"></td>
+							</tr>
+						</table>
+					</div>
+
+
+					<br /> <br /> <br />
+
+					<h3><strong style="border-bottom:2px solid #2eca6a;">공동 생활 규칙</strong></h3>
+					<br />
+
+					<h4>기본 생활 규칙</h4>
+					<br />
+					<p>기본 생활 규칙은 낙낙 셰어 하우스의 모든 지점에 공통으로 적용되는 생활 규칙입니다.</p>
+					<br />
+					<p>1. 기본적으로 KnockKnock 입주민이 아닌 사람의 셰어 하우스 방문을 금지합니다.<br />
+					입주일과 퇴거일의 경우를 제외하고는 가족과 친구의 셰어 하우스 출입을 엄격하게 제한하니 이 점 꼭 확인바랍니다.
+					</p>
+					<p>2. 셰어 하우스의 모든 가구와 공용 시설을 소중하게 다뤄주세요. 가구나 시설 파손이 있을 경우 해당 가구, 시설의 복구 비용이 보증금에서 차감됩니다.</p>
+					<p>3. 모두가 잠자리에 들 시간인 오후 10시 이후로는 생활 소음이 나지 않도록 주의합니다.</p>
+					<p>4. KnockKnock의 모든 지점은 금연 구역입니다. 실내 흡연 적발 시 최거 조치를 받으실 수도 있으니 주의바랍니다.</p>
+					
+					<br />
+					<br />
+					<strong><h4 th:text="|*{details.branchNumber}호점의 생활 규칙|"></h4></strong> 
+					<br />
+					<p th:text="|*{details.branchNumber}호점에만 적용되는 생활 규칙입니다.|"></p>
+					<br />
+					<p th:utext="${details.rule}"></p>
+					<br /><br /><br />
+					<h3><strong style="border-bottom:2px solid #2eca6a;">입주민 정보</strong></h3>
+					<br />
+					<div th:each="memberInfo:${memberInfoList}">
+						<div class="card" style="width: 18rem;">
+						  <img class="card-img-top" th:src="${memberInfo.imageProfile}" style="width:286px;" th:alt="card-cap-image">
+						  <div class="card-body" style="border:1px solid #2eca6a;">
+						    <div class="card-text">
+								<div th:text="|닉네임: *{memberInfo.nickname}|" style="color:chocolate;"></div>
+								<div th:text="|성별: *{memberInfo.memberGender}|"  style="color:darkcyan;"></div>
+								<div th:text="|생일: *{memberInfo.birth}|"  style="color:cornflowerblue;"></div>
+								<div th:text="|관심사: *{memberInfo.favorite1}, *{memberInfo.favorite2}, *{memberInfo.favorite3}|"  style="color:darked;"></div>
+								<div th:text="|소개글: *{memberInfo.introduce}|"  style="color:black;"></div>
+						    </div>
+						  </div>
+						</div>
+					</div>
+					
+					<div class="clear"></div>
+					
+					<br /> <br /> <br />
+					<h3><strong style="border-bottom:2px solid #2eca6a;">반려 동물 정보</strong></h3>
+					<div th:each="petInfo:${petInfoList}">
+					<br />
+					<div>
+						<h4 th:if="${petInfo.animal}==null">있다, 사람만, 오직.</h4>
+						<h4 th:unless="${petInfo.animal}==null" th:text="${petInfo.animal}"></h4>
+					</div>
+					</div>
+				</div>
+
+				<div id="review" class="w3-container">
+					<br /> <br /> <br /> <br /> <br /> <br /> <br />
+					<h2 style="margin-bottom:0%;"><strong>리뷰&emsp;</strong><img src="/images/houseinfo/review.png" style="width:4%; height:4%;"></h2>
+					<hr style="width:96.6%;">
+					<br />
+					<div class="row" style="margin-top:5%;">
+						<div class="form-group">
+							<form name="reviewInsertForm">
+								<div class="input-group">
+									<input type="hidden" name="writingNumber">
+									<input type="hidden" name="branchNumber" th:value="${details.branchNumber}"> 
+									<input type="text" style="width: 950px; margin-left: 15px; border:1px solid #2eca6a;" class="form-control" id="content" name="reviewContent" placeholder="내용을 입력하세요.">
+									<span class="input-group-btn">
+										<button class="btn btn-default" type="button" name="reviewInsertBtn">등록</button> 
+									</span>
+								</div>
+							</form>
+
+						</div>
+							
+						<input type='hidden' th:value="${session.nickname}" id='sessionNickname'>
+						
+						<div class="container">
+							<div id="reviewList">
+							</div>
+							<!-- <input type="hidden" th:name="${_csrf.parameterName}"
+									th:value="${_csrf.token}"> -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-1">
+				<div id="navbar1" class="w3-round-large">
+					<br />
+					<h2 th:text="|낙낙 *{details.branchNumber}호점|" style="color:#2eca6a; font-size:35px" id='branchNumberText'></h2>
+					<button id="myBtn1" class='btn btn-default'
+						onclick="location.href='/toSharingGuide'">입주 안내</button><br />
+					<button id="myBtn" class='btn btn-default'>방문 신청</button>
+					<span sec:authorize = "hasAuthority('ADMIN')">
+					<a id="roomInfoModify" class='btn btn-default' th:href="@{'/adminBranchModifyView/?branchNumber='+${details.branchNumber}}">방 정보 수정</a>
+					</span>
+					<br />
+				</div>
+			</div>
+		</div>
+	
+		<br /> <br /> <br />
+
+		<script th:inline="javascript">
+		$(document).ready(function() { 
+			
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+
+			$(function() {
+				$(document).ajaxSend(function(e, xhr, options) {
+					xhr.setRequestHeader(header, token);
+				});
+			});
+			
+			var toggle = document.getElementById('likeImage');
+			var branchNumber1 = $("input[name='branchNumber']").val();
+			
+			 $(function(){
+			
+			 $.ajax({
+				type:'post',
+				url: '/getHeartStatus',
+				data: branchNumber1,
+				dataType:'json',
+				contentType: "application/json",
+				success: function(data){
+					
+					if(data.branchNumber!=null){
+						toggle.src='/images/like.png';
+					}
+			
+				},
+			}) 
+			})
+
+
+			$("#likeBranch").click(function(){
+				
+				if(toggle.src.match("Cancel")){
+					toggle.src="/images/like.png";
+					
+					if(confirm("해당 지점을 내 관심 지점으로 등록하시겠습니까?")){
+						$.ajax({
+			 				type:'post',  
+							url:'/likeBranch',
+			 				data: branchNumber1, 
+			                dataType:"text", 
+							contentType: "application/json",
+							success:function(response){
+								swal("내 관심 지점 등록이 완료되었습니다.");
+							}
+						}) 
+					} else {
+						return false;
+					} 
+					
+				} else {
+					toggle.src="/images/likeCancel.png";
+					
+					if(confirm("해당 지점을 관심 지점에서 삭제하시겠습니까?")){
+			        	
+			        	$.ajax({
+			        		type:'post',  
+							url:'/deleteLB',
+							data: branchNumber1,
+					        dataType:"text",
+					        contentType: "application/json",
+							success:function(data){
+								swal("관심 지점이 삭제되었습니다.");
+							},
+							error:function(data){
+								swal("에러 발생");
+							}
+						})
+			        	
+			        } else {
+			        	return false;
+			        }
+				}
+					
+			})
+			
+			});
+		
+		//
+		
+		window.onload = function(){
+			$('#categoryFindingRoomNav').addClass('active').css('color','#2eca6a');
+		}
+		
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+		$(function() {
+			$(document).ajaxSend(function(e, xhr, options) {
+				xhr.setRequestHeader(header, token);
+			});
+		});
+		
+		var nick =$("#sessionNickname").val();
+		
+			function showReviewList(){
+			var branchNumber1= $("input[name='branchNumber']").val();
+			inner="";
+	
+			$.ajax({
+ 				type:'post',  
+				url:'/reviewList',
+ 				data: branchNumber1,
+                dataType:"text", 
+				contentType: "application/json",
+				 success:function(result){
+					
+					$.each(JSON.parse(result), function(key, value) {
+						inner += '<div class="reviewArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+						inner += '<div class="reviewInfo'+value.writingNumber+'">'
+								+ '작성일자 : '
+								+ value.writeTime
+								+ ' / 작성자 : '
+								+ value.nickname;
+						
+						if(value.nickname==nick){
+						inner += '&nbsp&nbsp&nbsp&nbsp<button name="aboutReview" class="btn btn-default" onclick="reviewUpdate('
+								+ value.writingNumber
+								+ ',\''
+								+ value.content
+								+ '\');"> 수정 </button>';
+						inner += '&nbsp<button name="aboutReview" class="btn btn-default" onclick="deleteConfirm('
+								+ value.writingNumber
+								+ ');"> 삭제 </button> </div>';
+						}else{
+						inner += '</div>';	
+							
+						}
+						inner += '<div class="reviewContent'+value.writingNumber+'"> <p> 내용 : '
+								+ value.content
+								+ '</p>';
+						inner += '</div></div>'; 
+					});
+					
+					$("#reviewList").html(inner);
+				},
+				error:function(result){
+					inner+="<br /><h3>에러 발생</h3><br />"
+					$("#reviewList").html(inner);
+				}
+			});
+		
+		}; 
+		
+	 	$('[name=reviewInsertBtn]').click(function() {  
+	 		var branchNumber= $("input[name='branchNumber']").val();
+	 		var content = $("input[name='reviewContent']").val();
+		
+			$.ajax({
+				url : '/reviewInsert',
+				type : 'post',
+				data : JSON.stringify({
+						"branchNumber":branchNumber,
+						"content":content
+				}),
+				dataType : 'text',
+				contentType: "application/json",
+				success : function(data) {
+					if (data == 1) {
+						showReviewList();
+						$('[name=reviewContent]').val(''); 
+					}
+				}
+			});
+		})
+		
+		function reviewUpdate(writingNumber, content) {
+			var a = '';
+
+			a += '<div class="input-group">';
+			a += '<input type="text" class="form-control" name="content_'+writingNumber+'" value="'+content+'"/>';
+			a += '<span class="input-group-btn"><button class="btn btn-default" name="aboutReview" type="button" onclick="reviewUpdateProc('
+					+ writingNumber + ');">수정 완료</button> </span>';
+			a += '</div>';
+
+			$('.reviewContent' + writingNumber).html(a);
+		} 
+
+		function reviewUpdateProc(writingNumber) {
+			var updateContent = $('[name=content_' + writingNumber + ']').val();
+
+			$.ajax({
+				url : '/reviewUpdateProc',
+				type : 'post',
+				data : JSON.stringify({
+					'content' : updateContent,
+					'writingNumber' : writingNumber
+				}),
+				dataType : 'text',
+				contentType: "application/json",
+				success : function(data) {
+					if (data == 1)
+						showReviewList(); 
+				}
+			});
+		}
+
+		function deleteConfirm(writingNumber){
+			var msg = confirm("리뷰를 삭제하시겠습니까?");
+			if(msg==true){
+				reviewDelete(writingNumber);
+			} else { 
+				return false;
+			}
+		}
+		
+		function reviewDelete(writingNumber) {
+			$.ajax({
+				url : '/reviewDelete'+writingNumber,
+				type : 'post',
+				data : writingNumber,
+				dataType : 'text',
+				success : function(data) {
+					if (data == 1)
+						showReviewList(); 
+				}
+			});
+		} 
+		
+		$(document).ready(function() {
+			showReviewList();  
+		}); 
+		
+		
+			var modal = document.getElementById('myModal');
+
+			var btn = document.getElementById("myBtn");
+
+			var span = document.getElementsByClassName("close")[0];
+			
+			var closeModal = document.getElementById("closeModal");
+			var visitBooking = document.getElementById("visitBooking");
+			
+			btn.onclick = function() {
+					if(nick==""){
+						swal("먼저 로그인을 해주세요.").then((value)=>{
+						
+						var	form =$("#visitBookingForm");
+						form.action = "/login";
+						form.submit();
+						return false;
+						});
+					}
+				modal.style.display = "block";
+			}
+
+			span.onclick = function() {
+				modal.style.display = "none";
+			}
+
+			window.onclick = function(event) {
+				if (event.target == modal) {
+					modal.style.display = "none";
+				}
+			}
+		
+			closeModal.onclick = function(){
+				modal.style.display = "none";
+			}
+			
+	 		visitBooking.onclick = function(){
+	 			
+				var branchNumber= $("input[name='branchNumber']").val();
+				var reservationTime = $("input[name='reservationTime']").val();
+				var memo = $("input[name='memo']").val();
+				
+				 inner ="";
+				
+				$.ajax({
+					method:'post',
+					url: '/visitBooking',
+					data:
+						JSON.stringify({ 
+						"branchNumber":branchNumber,
+						"reservationTime":reservationTime,
+						"memo":memo 
+					}),
+					dataType: "text", 
+					contentType:"application/json",
+					success:function(data){
+						inner+="<div class='modal-content'><span id='modalx' class='close'>&times;</span><br /><h3>방문 신청이 완료되었습니다</h3><br /></div>"
+						$("#myModal").html(inner);
+					},
+					error:function(data){  
+						inner+="<div class='modal-content'><span id='modalx' class='close'>&times;</span><br /><h3>에러 발생</h3><br /></div>"
+						$("#myModal").html(inner);
+					}
+				});
+			};
+			
+			$(document).on("click", "#modalx", function(){
+				modal.style.display = "none";
+			});
+		</script>
+
+		<!-- <script type="text/javascript"
+			src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b497e483355c4a6cc558f83dcd637541&libraries=services"></script> -->
+
+		<script>
+		
+			var markers = [];		
+		
+			var mapContainer = document.getElementById('map'),  
+			
+			mapOption = {
+				center : new daum.maps.LatLng(33.450701, 126.570667), 
+				level : 3
+			};
+
+			var map = new daum.maps.Map(mapContainer, mapOption);
+
+			var imageSrc = '/images/hand.png',  
+   			imageSize = new daum.maps.Size(64, 69), 
+   			imageOption = {offset: new daum.maps.Point(27, 69)};
+			
+   			var markerImage = new daum.maps.MarkerImage(imageSrc, imageSize, imageOption);
+   			
+			var geocoder = new daum.maps.services.Geocoder();
+			
+			var branchAddress = document.getElementById("branchAddress");
+			
+			var branchNumber = document.getElementById("branchNumber");
+			
+			geocoder.addressSearch(branchAddress.textContent, function(result, status) {
+
+								if (status === daum.maps.services.Status.OK) {
+
+									var coords = new daum.maps.LatLng(
+											result[0].y, result[0].x);
+
+									var marker = new daum.maps.Marker({
+										map : map,
+										position : coords,
+										image:markerImage
+									});
+									
+			
+									var customContent = '<div style="width:150px;text-align:center;padding:6px 0;">낙낙 '+branchNumber.textContent+'호점<br><a href="http://map.daum.net/link/map/낙낙 '+branchNumber.textContent+'호점,'+result[0].y+','+result[0].x+'" style="color:blue" target="_blank">큰지도보기</a> <a href="http://map.daum.net/link/to/낙낙 '+branchNumber.textContent+'호점,'+result[0].y+','+result[0].x+'" style="color:blue" target="_blank">길찾기</a></div>';
+									
+									var infowindow = new daum.maps.InfoWindow(
+											{
+												content : customContent
+											});
+									
+									infowindow.open(map, marker);
+
+									map.setCenter(coords);
+								}
+							});
+			
+			var MT1 = document.getElementById("MT1");
+			var CS2 = document.getElementById("CS2");
+			var PK6 = document.getElementById("PK6");
+			var SW8 = document.getElementById("SW8");
+			var BK9 = document.getElementById("BK9");
+			var CT1 = document.getElementById("CT1");
+			var FD6 = document.getElementById("FD6");
+			var CE7 = document.getElementById("CE7"); 
+			var HP8 = document.getElementById("HP8");
+			var PM9 = document.getElementById("PM9");
+			
+				var infowindow1 = new daum.maps.InfoWindow({zIndex:1});
+			
+				var ps = new daum.maps.services.Places(map);
+
+				function placesSearchCB (data, status, pagination) {
+					if (status === daum.maps.services.Status.OK) {
+				        for (var i=0; i<data.length; i++) {
+				            displayMarker(data[i]);    
+				        }       
+				    }
+				}
+				
+				function displayMarker(place) {
+				    var marker1 = new daum.maps.Marker({
+				        map: map,
+				        position: new daum.maps.LatLng(place.y, place.x) 
+				    });
+			
+				    markers.push(marker1);
+		
+				daum.maps.event
+						.addListener(
+								marker1,
+								'mouseover',
+								function() {
+									infowindow1
+											.setContent('<div style="padding:5px;font-size:12px;">'
+													+ place.place_name
+													+ '</div>');
+									infowindow1.open(map, marker1);
+								});
+
+				daum.maps.event.addListener(marker1, 'mouseout', function() {
+					infowindow1.close();
+				});
+			}
+				
+				function hideMarkers(){
+				for (var i = 0; i < markers.length; i++) {
+					markers[i].setMap(null);
+				}
+				}
+
+			MT1.addEventListener('click', function() {
+
+				hideMarkers();
+
+				ps.categorySearch('MT1', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			CS2.addEventListener('click', function() {
+
+				hideMarkers();
+				
+				ps.categorySearch('CS2', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			PK6.addEventListener('click', function() {
+
+				hideMarkers();
+				
+				ps.categorySearch('PK6', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			SW8.addEventListener('click', function() {
+
+				hideMarkers();
+				
+				ps.categorySearch('SW8', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			BK9.addEventListener('click', function() {
+
+				hideMarkers();
+				
+				ps.categorySearch('BK9', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			CT1.addEventListener('click', function() {
+
+				hideMarkers();
+				
+				ps.categorySearch('CT1', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			FD6.addEventListener('click', function() {
+
+				hideMarkers();
+				
+				ps.categorySearch('FD6', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			CE7.addEventListener('click', function() {
+				
+				hideMarkers();
+				
+				ps.categorySearch('CE7', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			HP8.addEventListener('click', function() {
+
+				hideMarkers();
+				
+				ps.categorySearch('HP8', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+
+			PM9.addEventListener('click', function() {
+
+				hideMarkers();
+				
+				ps.categorySearch('PM9', placesSearchCB, {
+					useMapBounds : true
+				});
+
+			});
+		</script>
+
+		<script>
+			window.onscroll = function() {
+				myFunction()
+			};
+
+			var navbar = document.getElementById("navbar");
+			var navbar1 = document.getElementById("navbar1");
+
+			function myFunction() {
+				if (window.pageYOffset >= 792.799) { 
+					navbar.classList.add("sticky")
+					navbar1.classList.add("sticky1")
+				} else {
+					navbar.classList.remove("sticky");
+					navbar1.classList.remove("sticky1");
+				}
+			}
+		</script>
+</div>
+</body>
+</html>

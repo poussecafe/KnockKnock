@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" 
+layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+    <title>낙낙-내 방문문의 리스트</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<style>
+
+.class{
+	margin-top:200px;
+	margin-bottom:200px;
+	border-radius:20px;
+	border-right:7px solid #2eca6a;
+	border-left:7px solid #2eca6a;
+	padding:30px;
+	background:white;
+}
+
+#returnMain{
+	color:#2eca6a;
+	font-size:20px;
+	font-weight: bolder;
+}
+
+#allRegisterComplete{
+	font-family: 'Jua', sans-serif;
+}
+
+#knockknock{
+	color:#2eca6a;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div layout:fragment="content" class="container" id='allRegisterComplete'>
+    <div class="class">
+        <h1>회원가입이 완료되었어요. 이제 <strong id='knockknock'>KnockKnock</strong>과 함께하세요 !</h1>
+        <a href="/" id='returnMain'>메인화면으로 돌아가기</a>
+    </div>
+</div>
+
+
+</body>
+</html>
+

@@ -1,0 +1,633 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml"
+layout:decorate="~{etc/fragments/Main_layout}">
+<meta charset="utf-8">
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}" />
+<!-- default header name is X-CSRF-TOKEN -->
+<meta id="_csrf_header" name="_csrf_header"
+	th:content="${_csrf.headerName}"/>
+
+<body>
+<!-- / content replace start -->
+<div layout:fragment="content" id='allContent'>
+  <!--/ Carousel Star /-->
+  <div class="intro intro-carousel">
+    <div id="carousel" class="owl-carousel owl-theme">
+      <div class="carousel-item-a intro-item bg-image" th:style="'background-image: url(' + @{/img/slide-1.jpg} + ')'">
+        <div class="overlay overlay-a"></div>
+        <div class="intro-content display-table">
+          <div class="table-cell">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="intro-body">
+                    <p class="intro-title-top">
+                      <br></p>
+                    <h1 class="intro-title mb-4">
+                      <span class="color-b">간단하게 </span> 방을
+                      <br> 찾아봐요!</h1>
+                    <p class="intro-subtitle intro-price">
+                    	<input type='text' name='simpleAddress' placeholder="주소나 위치를 입력하세요">
+                      	<a href='/simpleRoomSearch' name='simpleRoomSearch' ><span class="price-a">검색</span></a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item-a intro-item bg-image" th:style="'background-image: url(' + @{/img/slide-2.jpg} + ')'">
+        <div class="overlay overlay-a"></div>
+        <div class="intro-content display-table">
+          <div class="table-cell">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="intro-body">
+                    <p class="intro-title-top">
+                      <br></p>
+                    <h1 class="intro-title mb-4">
+                      <span class="color-b">입주하는 방법이 </span>
+                      <br>궁금하세요?</h1>
+                    <p class="intro-subtitle intro-price">
+                      <a href="/toSharingGuide"><span class="price-a">바로가기</span></a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item-a intro-item bg-image" th:style="'background-image: url(' + @{/img/slide-3.jpg} + ')'">
+        <div class="overlay overlay-a"></div>
+        <div class="intro-content display-table">
+          <div class="table-cell">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="intro-body">
+                    <p class="intro-title-top">
+                      <br></p>
+                    <h1 class="intro-title mb-4">
+                      <span class="color-b">입주관련 </span> 궁금한 점이 
+                      <br> 있으세요?</h1>
+                    <p class="intro-subtitle intro-price">
+                      <a href="/toFAQ"><span class="price-a">바로가기</span></a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Carousel end /-->
+
+  <!--/ Services Star /-->
+  
+  		<section class="section-services section-t8" id='eachOther'>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="title-wrap d-flex justify-content-between">
+            <div class="title-box">
+              <h2 class="title-a" style="text-align: center" id='suvtitle1'>"우리 서로 KnockKnock"</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card-box-c foo">
+            <div class="card-header-c d-flex">
+              <div class="card-box-ico">
+                <span class="fa fa-gamepad"></span>
+              </div>
+              <div class="card-title-c align-self-center">
+                <h2 class="title-c">관심사</h2>
+              </div>
+            </div>
+            <div class="card-body-c">
+              <p class="content-c">
+               	 음악, 요리, 수영, 게임 등..서로의 관심사를 공유하고 관심사가 맞는 사람들끼리 KnockKnock 해보세요 ! 
+              </p>
+            </div>
+            <div class="card-footer-c">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card-box-c foo">
+            <div class="card-header-c d-flex">
+              <div class="card-box-ico">
+                <span class="fa fa-usd"></span>
+              </div>
+              <div class="card-title-c align-self-center">
+                <h2 class="title-c">쉐어하우스</h2>
+              </div>
+            </div>
+            <div class="card-body-c">
+              <p class="content-c">
+                	집구하기는 어렵고, 보증금과 월세는 나날이 오르고..KnockKnock 쉐어하우스로 해결해 보는 것은 어떤가요?
+              </p>
+            </div>
+            <div class="card-footer-c">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card-box-c foo">
+            <div class="card-header-c d-flex">
+              <div class="card-box-ico">
+                <span class="fa fa-home"></span>
+              </div>
+              <div class="card-title-c align-self-center">
+                <h2 class="title-c">테마</h2>
+              </div>
+            </div>
+            <div class="card-body-c">
+              <p class="content-c">
+                	테마가 있는 쉐어하우스가 있어요! 테마란 하우스 자체가 갖고 있는 관심사로, 테마에 맞는 인테리어와 장비, 소품 등이 준비되어 있어요!
+              </p>
+            </div>
+            <div class="card-footer-c">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Services End /-->
+
+  <!--/ Property Star /-->
+  <section class="section-property section-t8">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="title-wrap d-flex justify-content-between">
+            <div class="title-box">
+              <h2 class="title-a" id='suvtitle2'>"최근 등록된 쉐어하우스"</h2>
+            </div>
+            <div class="title-link">
+              <a th:href="@{findingRoom}" id='findingAllRoom'>모든 지점 보기
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="property-carousel" class="owl-carousel owl-theme">
+      	<!-- 쉐어하우스미리보기 첫번쨰 -->
+        <div class="carousel-item-b">
+          <div class="card-box-a card-shadow">
+            <div class="img-box-a">
+              <img th:src="'/images/branch/'+${mb1.branchNumber}+'/mainImage.jpg'" alt="" class="img-a img-fluid">
+            </div>
+            <div class="card-overlay">
+              <div class="card-overlay-a-content">
+                <div class="card-header-a">
+                  <h2 class="card-title-a">
+                  	<span th:text="${mb1.branchNumber}+'호점'" class='branchNumberName' id='branchNumberName1'></span><br>
+                    <a th:href="@{/property-single.html}"><span th:text="${mb1.address}"></span></a>
+                  </h2>
+                </div>
+                <div class="card-body-a">
+                  <div class="price-box d-flex">
+                    <span class="price-a">
+						<span th:text="'월세 '+${mb1.monthlyRent}+'원'"/>
+					</span>
+                  </div>
+                  <a href="#" class="link-a">추가정보
+                    <span class="ion-ios-arrow-forward"></span>
+                  </a>
+                </div>
+                <div class="card-footer-a">
+                  <ul class="card-info d-flex justify-content-around">
+                    <li>
+                      <h4 class="card-info-title">반려동물</h4>
+                      <span>
+                        <span th:text="${mb1.pet}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">최대거주인원</h4>
+                      <span>
+                      	<span th:text="${mb1.maximumResident}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">주차</h4>
+                      <span>
+                      	 <span th:text="${mb1.isParking}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">엘리베이터</h4>
+                      <span>
+                      	 <span th:text="${mb1.isElevator}"/>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 쉐어하우스미리보기 두번째 -->
+        <div class="carousel-item-b">
+          <div class="card-box-a card-shadow">
+            <div class="img-box-a">
+              <img th:src="'/images/branch/'+${mb2.branchNumber}+'/mainImage.jpg'" alt="" class="img-a img-fluid">
+            </div>
+            <div class="card-overlay">
+              <div class="card-overlay-a-content">
+                <div class="card-header-a">
+                  <h2 class="card-title-a"> 
+                  	<span th:text="${mb2.branchNumber}+'호점'" class='branchNumberName'  id='branchNumberName2'></span><br>
+                    <a th:href="@{/property-single.html}"><span th:text="${mb2.address}"></span></a>
+                  </h2>
+                </div>
+  				<div class="card-body-a">
+                  <div class="price-box d-flex">
+                    <span class="price-a">
+						<span th:text="'월세 '+${mb2.monthlyRent}+'원'"/>
+					</span>
+                  </div>
+                  <a href="#" class="link-a">추가정보
+                    <span class="ion-ios-arrow-forward"></span>
+                  </a>
+                </div>
+                <div class="card-footer-a">
+                  <ul class="card-info d-flex justify-content-around">
+                    <li>
+                      <h4 class="card-info-title">반려동물</h4>
+                      <span>
+                        <span th:text="${mb2.pet}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">최대거주인원</h4>
+                      <span>
+                      	<span th:text="${mb2.maximumResident}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">주차</h4>
+                      <span>
+                      	 <span th:text="${mb2.isParking}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">엘리베이터</h4>
+                      <span>
+                      	 <span th:text="${mb2.isElevator}"/>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 쉐어하우스미리보기 세번째 -->
+        <div class="carousel-item-b">
+          <div class="card-box-a card-shadow">
+            <div class="img-box-a">
+              <img th:src="'/images/branch/'+${mb3.branchNumber}+'/mainImage.jpg'" alt="" class="img-a img-fluid">
+            </div>
+            <div class="card-overlay">
+              <div class="card-overlay-a-content">
+                <div class="card-header-a">
+                  <h2 class="card-title-a">
+                  	<span th:text="${mb3.branchNumber}+'호점'" class='branchNumberName' id='branchNumberName3'></span><br>
+                    <a th:href="@{/property-single.html}"><span th:text="${mb3.address}"></span></a>
+                  </h2>
+                </div>
+             	<div class="card-body-a">
+                  <div class="price-box d-flex">
+                    <span class="price-a">
+						<span th:text="'월세 '+${mb3.monthlyRent}+'원'"/>
+					</span>
+                  </div>
+                  <a href="#" class="link-a">추가정보
+                    <span class="ion-ios-arrow-forward"></span>
+                  </a>
+                </div>
+                <div class="card-footer-a">
+                  <ul class="card-info d-flex justify-content-around">
+                    <li>
+                      <h4 class="card-info-title">반려동물</h4>
+                      <span>
+                        <span th:text="${mb3.pet}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">최대거주인원</h4>
+                      <span>
+                      	<span th:text="${mb3.maximumResident}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">주차</h4>
+                      <span>
+                      	 <span th:text="${mb3.isParking}"/>
+                      </span>
+                    </li>
+                    <li>
+                      <h4 class="card-info-title">엘리베이터</h4>
+                      <span>
+                      	 <span th:text="${mb3.isElevator}"/>
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Property End /-->
+
+  <!--/ Agents Star /-->
+  <section class="section-agents section-t8">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="title-wrap d-flex justify-content-between">
+            <div class="title-box">
+              <h2 class="title-a" id='suvtitle3'>"Welcome to KnockKnock!"</h2>
+            </div>
+            <!-- <div class="title-link">
+              <a href="agents-grid.html">All Agents
+                <span class="ion-ios-arrow-forward"></span>
+              </a>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      	<h3 id='howtojoin'>입주하는 방법, 어렵지 않아요. 낙낙에서 도와드릴게요!</h3>
+      	<br /><br />
+      <div class="row">
+      	<br />
+      	 <div class="col-md-3">
+	      	 <div class="row">
+		      	 <div class="col-md-10">
+		          <div class="card-box-d">
+		            <div class="card-img-d">
+		              <img th:src="@{/images/house.png}" alt="" class="img-d img-fluid">
+		            </div>
+		            <div class="card-overlay card-overlay-hover">
+		              <div class="card-header-d">
+		                <div class="card-title-d align-self-center">
+		                  <h2 class="title-d" style="font-size:20px;">
+		                    방문 신청 후 <br /> 지점 방문
+		                  </h2>
+		                </div>
+		              </div>
+		              <div class="card-body-d">
+		                <p class="content-d color-text-a" style="font-size:17px;">
+		                  입주를 원하는 지점에 방문 신청을 한 뒤 지점을 방문합니다.
+		                </p>
+		                <div class="info-agents color-a">
+		                </div>
+		              </div>
+		            </div>
+		          </div>
+		        </div>  
+	        <div class="col-md-2">
+		        <img th:src="@{/images/arrow.png}" style="width:50px; height:50px; margin-top: 62px;"/>
+	        </div>
+	        </div>
+        </div>
+        
+        <div class="col-md-3">
+        <div class="row">
+      	 <div class="col-md-10">
+        
+          <div class="card-box-d">
+            <div class="card-img-d">
+              <img th:src="@{/images/insured.png}" alt="" class="img-d img-fluid">
+            </div>
+            <div class="card-overlay card-overlay-hover">
+              <div class="card-header-d">
+                <div class="card-title-d align-self-center">
+                  <h3 class="title-d" style="font-size:20px;">
+                	    계약서 작성
+                  </h3>
+                </div>
+              </div>
+              <div class="card-body-d">
+                <p class="content-d color-text-a">
+                  방문한 지점이 마음에 들었다면 지점을 재방문해 입주 계약서를 작성합니다.
+                </p>
+                <div class="info-agents color-a">
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          <div class="col-md-2">
+	        <img th:src="@{/images/arrow.png}" style="width:50px; height:50px; margin-top: 62px;"/>
+        
+        </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+           <div class="row">
+      	 <div class="col-md-10">
+          <div class="card-box-d">
+            <div class="card-img-d">
+              <img th:src="@{/images/bribery.png}" alt="" class="img-d img-fluid">
+            </div>
+            <div class="card-overlay card-overlay-hover">
+              <div class="card-header-d">
+                <div class="card-title-d align-self-center">
+                  <h3 class="title-d" style="font-size:20px;">
+                    보증금/월세 납부
+                  </h3>
+                </div>
+              </div>
+              <div class="card-body-d">
+                <p class="content-d color-text-a">
+                보증금과 월세를 납부합니다(보증금은 계약서 작성 후 3일 이내, 월세는 입주일로부터 3일 전까지).
+                </p>
+                <div class="info-agents color-a">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+	    	<img th:src="@{/images/arrow.png}" style="width:50px; height:50px; margin-top: 62px;"/>
+        </div>
+        </div>
+        </div>
+        
+        <div class="col-md-3">
+	         <div class="row">
+	      	 <div class="col-md-10">
+	          <div class="card-box-d">
+	            <div class="card-img-d">
+	              <img th:src="@{/images/key.png}" alt="" class="img-d img-fluid">
+	            </div>
+	            <div class="card-overlay card-overlay-hover">
+	              <div class="card-header-d">
+	                <div class="card-title-d align-self-center">
+	                  <h3 class="title-d" style="font-size:20px;">
+	                  	  셰어 하우스 입주
+	                  </h3>
+	                </div>
+	              </div>
+	              <div class="card-body-d">
+	                <p class="content-d color-text-a">
+	                  계약된 입주 예정일에 맞춰 입주합니다.
+	                </p>
+	                <div class="info-agents color-a">
+	                </div>
+	              </div>
+	            </div>
+	          </div>
+	        </div>
+	    	<div class="col-md-2">
+	        	<span id='todaysWeather'></span>
+	        </div>
+	        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--/ Agents End /-->
+  
+  			
+
+ <!--  	<div class="col-md-1">
+  	<br />
+		<table>
+			<tr>
+				<td><i class=""></i>날씨</td>
+			</tr>
+			<tr>
+				<th id="weather"></th>
+			</tr>
+			<tr>
+				<td><i class="wi wi-thermometer"></i>온도</td>
+			</tr>
+			<tr>
+				<th id="temp"></th>
+			</tr>
+			<tr>
+				<td><i class="wi wi-humidity"></i>습도</td>
+			</tr>
+			<tr>
+				<th id="hum"></th>
+			</tr>
+			<tr>
+				<td><i class="wi wi-strong-wind"></i>바람</td>
+			</tr>
+			<tr>
+				<th id="wind"></th>
+			</tr>
+			<tr>
+				<td><i class="wi wi-cloud"></i>구름</td>
+			</tr>
+			<tr>
+				<th id="cloud"></th>
+			</tr>
+		</table>				 
+  	</div>     -->	
+  
+  
+  
+<script>
+
+//심플방검색 제이쿼리
+$(document).ready(function(){
+	var simpleSearch = $("a[name=simpleRoomSearch]");
+	var inputRoom = $("input[name=simpleAddress]");
+	
+	$(simpleSearch).on('click',function(){
+		simpleSearch.attr('href','/simpleRoomSearch?address=' + inputRoom.val());
+	});
+	
+	
+	if ("geolocation" in navigator) {
+		  /* 지오로케이션 사용 가능 */
+		/* navigator.geolocation.getCurrentPosition(function(pos) {
+        latitude = pos.coords.latitude;
+        longitude = pos.coords.longitude;
+        
+        console.log("현재 위치는 : " + latitude + ", "+ longitude+"입니다.");
+    
+		}); */
+		  
+		var apiURI = "http://api.openweathermap.org/data/2.5/weather?q=Seoul&appid=bb59bce923e25292bdda17937da7b0b1";
+		// var apiURI = "http://api.openweathermap.org/data/2.5/weather?lat={"+latitude+"}&lon={"+longitude+"}&appid=bb59bce923e25292bdda17937da7b0b1";
+        $.ajax({
+            url: apiURI,
+            dataType: "json",
+            type: "GET",
+            async: "false",
+            success: function(resp) {
+                console.log(resp);
+                console.log("현재온도 : "+ (resp.main.temp- 273.15) );
+                console.log("현재습도 : "+ resp.main.humidity);
+                console.log("날씨 : "+ resp.weather[0].main );
+                console.log("상세날씨설명 : "+ resp.weather[0].description );
+                console.log("날씨 이미지 : "+ resp.weather[0].icon );
+                console.log("바람   : "+ resp.wind.speed );
+                console.log("나라   : "+ resp.sys.country );
+                console.log("도시이름  : "+ resp.name );
+                console.log("구름  : "+ (resp.clouds.all) +"%" );
+                
+                
+                
+            }
+        })
+		
+		} else {
+		  /* 지오로케이션 사용 불가능 */
+		  return false;
+		}
+	
+	
+
+
+//날씨넣기
+function parseWeather(){
+	loadJSON(function(response){
+		var jsonData = JSON.parse(response);
+		document.getElementById("todaysWeather").innerHTML = jsonData["list"][0]["weather"][0]["main"];
+	});
+}
+
+function loadJSON(callback){
+	var url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Seoul,KR&cnt=7&APPID=1f9f6bc4d3ac889918ace992cc44252c";
+	var request = new XMLHttpRequest();
+	request.overrideMimeType("application/json");
+	request.open('GET', url, true);
+	
+	request.onreadystatechange = function()
+	{
+		if(request.readyState == 4 && request.status == "200")
+		{
+			callback(request.responseText);
+		}
+	};
+	request.send(null);
+}
+
+window.onload = function(){
+	parseWeather();
+}
+
+});
+</script>
+</div>
+</body>
+</html>

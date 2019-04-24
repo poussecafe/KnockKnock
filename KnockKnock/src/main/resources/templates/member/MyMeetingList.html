@@ -1,0 +1,797 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<title>내 모임 리스트</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+<style>
+
+/* Style tab links */
+.tablink {
+  background-color: #555;
+  border-radius: 1rem;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 25px;
+  width: 50%;
+}
+
+.tablink:hover {
+  background-color: #777;
+}
+
+#checkedDelete {
+	border-radius: 3px;
+	font-weight: 100;
+	border-color: transparent;
+	background: #2eca6a;
+	color: #fff;
+	cursor: pointer;
+}
+
+/* Style the tab content (and add height:100% for full page content) */
+.tabcontent {
+  display: none;
+  padding: 100px 20px;
+  height: 500px;
+}
+
+#News {background-color: white;}
+#About {background-color: white;}
+
+p {
+	font-size: 25px;
+}
+
+.btn {
+	border-radius: 3px;
+	font-weight: 100;
+	border-color: transparent;
+	background: #2eca6a;
+	color: #fff;
+	cursor: pointer;
+}
+
+.btn:hover {
+	background-color:white;
+	color:#2eca6a;
+	border: 2px solid #2eca6a;
+}
+
+.title {
+	text-decoration: underline;
+	font-color: ; 
+}
+
+#Process,#Culture{
+	text-align:center;
+}
+
+#imgParty,#imgCulture1,#imgCulture2{
+	width:400px;
+}
+
+
+/* Style the tab content */
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+	border-top: none;
+}
+
+/* Fade in tabs */
+@
+-webkit-keyframes fadeEffect {
+	from {opacity: 0;
+}
+
+to {
+	opacity: 1;
+}
+
+}
+@
+keyframes fadeEffect {
+	from {opacity: 0;
+}
+
+to {
+	opacity: 1;
+}
+}
+
+#container{
+	font-family: 'Jua', sans-serif;
+}
+
+#nowFindingRoom{
+	font-family: 'Jua', sans-serif;
+	font-size:50px;
+	text-align:center;
+	color:#2eca6a;
+}
+
+#nowFindingRoom:hover {
+	color:orange;
+} 
+
+body {
+  font-family: "Lato", sans-serif;
+  text-align:center;
+}
+
+.sidenav {
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 130px;
+  left: 60px;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+  margin-right: 40px;
+}
+
+.sidenav a {
+  padding: 10px 10px 10px 16px;
+  text-decoration: none;
+  font-size: 30px;
+  color: #2eca6a;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+
+.main {
+  margin-left: 30px;
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 30px;}
+}
+
+#sidenav{
+	background-color:white;
+	border: 1px solid #2eca6a;
+	color:#2eca6a;
+	font-weight:bolder;
+	border-radius: 1rem;
+
+}
+
+#title{
+	color:#2eca6a;
+	font-size:30px;
+	font-weight:bolder;
+}
+
+
+th {
+	font-size: 20px;
+}
+
+.table{
+	text-align:center;
+}
+</style>
+</head>
+<body>
+
+<div layout:fragment="content" class="container" id='container'>
+
+<br /><br /><br /><br />
+<div class="row" id='categoryBar'>
+			<div class="col-md-1">
+<div class="sidenav" id='sidenav'>
+  <a th:href="@{/profileMain}">내 프로필</a><br>
+  <a th:href="@{/MyMeetingList}">내 모임</a><br>
+  <a th:href="@{/MyEventList}">내 이벤트</a><br>
+  <a th:href="@{/MyVisitList}">내 방문 신청</a><br>
+  <a th:href="@{/MyLikeBranch}">내 관심 지점</a>
+</div>
+</div>
+<div class="col-md-11">
+<div class="main">
+<h2 id='title'>내 모임</h2>
+			<br /><br />
+	<button class="tablink" onclick="openPage('News', this, '#2eca6a')" id="defaultOpen">신청한 모임</button>
+
+		<button class="tablink" onclick="openPage('About', this, 'orange')">개설한 모임</button>
+		
+		<div id="News" class="tabcontent">
+		<br /><br /><br />
+			<div class="w3-container">
+					<table class="table table-striped">
+						<tr>
+							<th><input type='checkbox' id='checkAll' /></th>
+							<th>모임 주최자</th>
+							<th>제목</th>
+							<th>신청 마감일</th>
+							<th>모임 시작일</th>
+							<th>모임 종료일</th>
+							<th></th>
+						</tr>
+						<tr th:each="MMLJ:${MMLJ}">
+							<td><input th:if="${MMLJ.cancelReason}==null" type='checkbox' name='checkRow' th:value="${MMLJ.writingNumber}"/>
+							<a th:unless="${MMLJ.cancelReason}==null" th:href="@{'/deleteJM/?writingNumber='+${MMLJ.writingNumber}}" data-toggle="tooltip" data-placement="left" title="목록에서 제거" ><img id="trash" src="/images/trash.png" width="35" height="35" style="cursor: pointer;" alt="submit" /></a></td>
+							<td th:text="${MMLJ.nickname}"></td>
+							<td><a th:href="@{'/meetingView/?writingNumber='+${MMLJ.writingNumber}}" th:text="${MMLJ.title}"></a></td>
+							<td><div th:if="${MMLJ.cancelReason}==null" th:text="${MMLJ.acceptEndTime}"></div><div th:unless="${MMLJ.cancelReason}==null">-</div></td>
+							<td><div th:if="${MMLJ.cancelReason}==null" th:text="${MMLJ.meetingStartTime}"></div><div th:unless="${MMLJ.cancelReason}==null">-</div></td>
+							<td><div th:if="${MMLJ.cancelReason}==null" th:text="${MMLJ.meetingEndTime}"></div><div th:unless="${MMLJ.cancelReason}==null">-</div></td>
+							<!-- 타임리프의 href는 a 태그에서만 동작한다 -->
+							<!-- <td><a th:if="${MMLJ.cancelReason}==null" id="DJBtn" role="button" class="btn btn-default" th:href="@{'/deleteJM/?writingNumber='+${MMLJ.writingNumber}}">신청 취소</a><a th:unless="${MMLJ.cancelReason}==null" id="confirmReason" role="button" class="btn btn-default" th:href="@{'/confirmReason/?writingNumber='+${MMLJ.writingNumber}}">취소 사유 확인</a></td> -->
+							<td><a th:if="${MMLJ.cancelReason}==null" id="DJBtn" role="button" class="btn btn-default" th:href="@{'/deleteJM/?writingNumber='+${MMLJ.writingNumber}}">신청 취소</a><a th:unless="${MMLJ.cancelReason}==null" data-toggle="tooltip" data-placement="right" title="모임 취소 사유 확인" name="confirmReason" role="button" data-dismiss="modal" th:href="@{'/confirmReason/?writingNumber='+${MMLJ.writingNumber}}"><img id="cryingImage" src="/images/crying.png" width="35" height="35" style="cursor: pointer;" alt="submit" /></a></td>
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+						</tr>
+
+					</table>
+						<h4>선택된 모임&nbsp;<button id="checkedDelete" class="btn btn-default">신청 취소</button></h4>
+				</div>
+		</div>
+		
+		<div id="About" class="tabcontent">
+		<br /><br /><br />
+			<div class="w3-container">
+					<table class="table table-striped">
+						<tr>
+							<th></th>
+							<th>제목</th>
+							<th>모집 마감일</th>
+							<th>모임 시작일</th>
+							<th>모임 종료일</th>
+							<th>개설 상태</th>
+						</tr>
+						<tr th:each="MMLM:${MMLM}">
+							<td><div th:unless="${MMLM.cancelReason}==null"><a id="hideRow" th:href="@{'/deleteMM/?writingNumber='+${MMLM.writingNumber}}" data-toggle="tooltip" data-placement="left" title="목록에서 제거"><img id="trash" src="/images/trash.png" width="35" height="35" style="cursor: pointer;" alt="submit" /></a></div></td>
+							<td><a th:href="@{'/meetingView/?writingNumber='+${MMLM.writingNumber}}" th:text="${MMLM.title}"></a></td>
+							<td th:text="${MMLM.acceptEndTime}"></td>
+							<td th:text="${MMLM.meetingStartTime}"></td>
+							<td th:text="${MMLM.meetingEndTime}"></td>
+							<td th:if="${MMLM.cancelReason}==null"></td>
+							<td th:unless="${MMLM.cancelReason}==null">취소됨</td>
+						</tr>
+					</table>
+				</div>
+		</div>
+
+</div>
+
+
+<div id="myModal" class="modal">
+				<div class="modal-content" th:each="confirmReason:${confirmReason}">
+					<span class="close">&times;</span>
+					<h3>모임 취소 사유</h3><br />
+					<p th:text="|*{confirmReason.title}, 모임의 주최자인 *{confirmReason.nickname}님이 남기신 메모입니다.|"></p><br />
+					<h2 th:text="${confirmReason.cancelReason}"></h2>
+					<button type="button" class="btn btn-default" id="closeModal"
+					data-dismiss="modal">확인 완료</button>
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+				</div>
+			</div> 
+</div>
+</div>
+
+
+
+		<script th:inline="javascript">
+			$(document).ready(function(){
+				
+				$("#checkAll").click(function(){
+					if($("#checkAll").prop("checked")){
+				        $("input[name=checkRow]").prop("checked", true);
+					} else {
+				        $("input[name=checkRow]").prop("checked", false);
+
+					}
+				})
+				
+					
+
+				$('#checkedDelete').click(function(){
+		        if(confirm("선택된 모임 신청을 취소하시겠습니까?")){
+		            
+		        	var checkBoxArr=[];
+		        	
+		            $("input[name=checkRow]:checked").each(function(i){
+						checkBoxArr.push($(this).val());
+		            })
+		            
+		            $.ajax({
+							type:'post',  
+							url:'/checkedDeleteJM',
+			 				data: JSON.stringify(checkBoxArr), 
+			                dataType:"text", 
+							contentType: "application/json",
+							 success:function(response){
+					            swal("선택한 모임 신청이 취소되었습니다.");
+					            
+					            $(location).attr('href', '/MyMeetingList');
+
+							 },
+							 error:function(response){
+								 swal("에러 발생");
+							 }
+						})
+		        }else{
+		            return false;
+		        }
+		    
+			}) 
+				
+			$("#hideRow").onclick = function(){
+				$("#hideRow").text="";
+			}
+				
+			$('[data-toggle="tooltip"]').tooltip();
+				
+			var modal = document.getElementById('myModal');				
+			var span = document.getElementsByClassName("close")[0];
+						
+			var closeModal = document.getElementById("closeModal");
+					
+			span.onclick = function() {
+				modal.style.display = "none";
+			}
+			
+			window.onclick = function(event) {
+				if (event.target == modal) {
+						modal.style.display = "none";
+				}
+			}
+				
+			closeModal.onclick = function(){
+				modal.style.display = "none";
+			} 	
+				
+			var confirmReason = [[${confirmReason}]];
+			
+			console.log(confirmReason);
+
+			if(confirmReason!=null){
+				modal.style.display = "block";
+			}
+		
+			
+			
+			})
+
+		
+			function openPage(pageName,elmnt,color) {
+				  var i, tabcontent, tablinks;
+				  tabcontent = document.getElementsByClassName("tabcontent");
+				  for (i = 0; i < tabcontent.length; i++) {
+				    tabcontent[i].style.display = "none";
+				  }
+				  tablinks = document.getElementsByClassName("tablink");
+				  for (i = 0; i < tablinks.length; i++) {
+				    tablinks[i].style.backgroundColor = "";
+				  }
+				  document.getElementById(pageName).style.display = "block";
+				  elmnt.style.backgroundColor = color;
+				}
+
+				// Get the element with id="defaultOpen" and click on it
+				document.getElementById("defaultOpen").click();
+			
+		</script>
+
+	</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- body {
+	font-family: 'Jua', sans-serif;
+} 
+
+.sidenav {
+	width: 200px;
+	position: fixed;
+	z-index: 1;
+	top: 130px;
+	left: 60px;
+	background: #eee;
+	overflow-x: hidden;
+	padding: 8px 0;
+	margin-right: 40px;
+}
+
+.sidenav a {
+	padding:10px 10px 10px 16px;
+	text-decoration: none;
+	font-size: 30px;
+	color: #2eca6a;
+	display: block;
+}
+
+.sidenav a:hover {
+	color: #064579;
+}
+
+.main {
+	position:relative;
+	margin-left: 30px;
+	padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+	.sidenav {
+		padding-top: 15px;
+	}
+	.sidenav a {
+		font-size: 30px;
+	}
+}
+
+/* /* Style the tab */
+.tab {
+	overflow: hidden;
+	background-color: #2eca6a;
+	border-radius: 1rem;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+	background-color: #2eca6a;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	transition: 0.3s;
+	font-size: 20px;
+	border-radius: 1rem;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+	background-color: white;
+	color : #2eca6a;
+	border-radius: 1rem;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+	background-color: white;
+	color : #2eca6a;
+	border-radius: 1rem;
+}
+
+/* Style the tab content */
+.tabcontent {
+	display: none;
+	padding: 6px 12px;
+	/*border: 1px solid #ccc; */
+	border-top: none;
+}
+
+/* Fade in tabs */
+@
+-webkit-keyframes fadeEffect {
+	from {opacity: 0;
+}
+
+to {
+	opacity: 1;
+}
+
+}
+@
+keyframes fadeEffect {
+	from {opacity: 0;
+}
+
+to {
+	opacity: 1;
+}
+} */
+
+/* 모달창  */
+/* The Modal (background) */
+.modal {
+display: none; /* Hidden by default */
+position: fixed; /* Stay in place */
+z-index: 1; /* Sit on top */
+left: 0;
+top: 0;
+width: 100%; /* Full width */
+height: 100%; /* Full height */
+overflow: auto; /* Enable scroll if needed */
+background-color: rgb(0,0,0); /* Fallback color */
+background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+    
+/* Modal Content/Box */
+.modal-content {
+background-color: #fefefe;
+margin: 15% auto; /* 15% from the top and centered */
+padding: 20px;
+border: 1px solid #888;
+width: 50%; /* Could be more or less, depending on screen size */                          
+}
+/* The Close Button */
+.close {
+color: #aaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+}
+.close:hover,
+.close:focus {
+color: black;
+text-decoration: none;
+cursor: pointer;
+}
+
+#sidenav{
+	background-color:white;
+	border: 2px solid #2eca6a;
+	color:#2eca6a;
+	font-weight:bolder;
+	border-radius: 1rem;
+
+}
+
+#title{
+	color:#2eca6a;
+	font-size:30px;
+	font-weight:bolder;
+}
+
+#checkedDelete, #myBtn{
+	background-color:#2eca6a;
+	color:white;
+}
+
+th {
+	font-size: 20px;
+}
+
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="container">
+		<br />
+		<br />
+		<br /> <br />
+
+		<div class="row" id='categoryBar'>
+			<div class="col-md-1">
+				<div class="sidenav" id='sidenav'>
+					<a th:href="@{/profileMain}">내 프로필</a><br>
+					<a th:href="@{/MyMeetingList}">내 모임</a><br>
+					<a th:href="@{/MyEventList}">내 이벤트</a><br>
+					<a th:href="@{/MyVisitList}">내 방문 신청</a><br>
+					<a th:href="@{/MyLikeBranch}">내 관심 지점</a>
+				</div>
+			</div>
+			<div class="col-md-11">
+			
+		<div class="main">
+			<h2 id='title'>내 모임</h2>
+			<br /><br />
+			<div class="tab">
+				<button class="tablinks" onclick="openCity(event, 'Join')"
+					id="defaultOpen">신청한 모임</button>
+				<button class="tablinks" onclick="openCity(event, 'Make')">개설한
+					모임</button>
+			</div>
+
+			<div id="Join" class="tabcontent">
+				<h3 class="font-weight-bold">신청한 모임</h3>
+				<br />
+				<div class="w3-container">
+					<table class="table table-striped">
+						<tr>
+							<th><input type='checkbox' id='checkAll' /></th>
+							<th>모임 주최자</th>
+							<th>제목</th>
+							<th>신청 마감일</th>
+							<th>모임 시작일</th>
+							<th>모임 종료일</th>
+							<th></th>
+						</tr>
+						<tr th:each="MMLJ:${MMLJ}">
+							<td><input th:if="${MMLJ.cancelReason}==null" type='checkbox' name='checkRow' th:value="${MMLJ.writingNumber}"/>
+							<a th:unless="${MMLJ.cancelReason}==null" th:href="@{'/deleteJM/?writingNumber='+${MMLJ.writingNumber}}" data-toggle="tooltip" data-placement="left" title="목록에서 제거" ><img id="trash" src="/images/trash.png" width="35" height="35" style="cursor: pointer;" alt="submit" /></a></td>
+							<td th:text="${MMLJ.nickname}"></td>
+							<td><a th:href="@{'/meetingView/?writingNumber='+${MMLJ.writingNumber}}" th:text="${MMLJ.title}"></a></td>
+							<td><div th:if="${MMLJ.cancelReason}==null" th:text="${MMLJ.acceptEndTime}"></div><div th:unless="${MMLJ.cancelReason}==null">-</div></td>
+							<td><div th:if="${MMLJ.cancelReason}==null" th:text="${MMLJ.meetingStartTime}"></div><div th:unless="${MMLJ.cancelReason}==null">-</div></td>
+							<td><div th:if="${MMLJ.cancelReason}==null" th:text="${MMLJ.meetingEndTime}"></div><div th:unless="${MMLJ.cancelReason}==null">-</div></td>
+							타임리프의 href는 a 태그에서만 동작한다
+							<td><a th:if="${MMLJ.cancelReason}==null" id="DJBtn" role="button" class="btn btn-default" th:href="@{'/deleteJM/?writingNumber='+${MMLJ.writingNumber}}">신청 취소</a><a th:unless="${MMLJ.cancelReason}==null" id="confirmReason" role="button" class="btn btn-default" th:href="@{'/confirmReason/?writingNumber='+${MMLJ.writingNumber}}">취소 사유 확인</a></td>
+							<td><a th:if="${MMLJ.cancelReason}==null" id="DJBtn" role="button" class="btn btn-default" th:href="@{'/deleteJM/?writingNumber='+${MMLJ.writingNumber}}">신청 취소</a><a th:unless="${MMLJ.cancelReason}==null" data-toggle="tooltip" data-placement="right" title="모임 취소 사유 확인" name="confirmReason" role="button" data-dismiss="modal" class="btn btn-default" th:href="@{'/confirmReason/?writingNumber='+${MMLJ.writingNumber}}"><img id="cryingImage" src="/images/crying.png" width="35" height="35" style="cursor: pointer;" alt="submit" /></a></td>
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+						</tr>
+					</table>
+						<h4>선택된 모임&nbsp;<button id="checkedDelete" class="btn btn-default">신청 취소</button></h4>
+				</div>
+				<br />
+			</div>
+			
+			
+			<div id="myModal" class="modal">
+				<div class="modal-content" th:each="confirmReason:${confirmReason}">
+					<span class="close">&times;</span>
+					<h3>모임 취소 사유</h3><br />
+					<p th:text="|*{confirmReason.title}, 모임의 주최자인 *{confirmReason.nickname}님이 남기신 메모입니다.|"></p><br />
+					<h2 th:text="${confirmReason.cancelReason}"></h2>
+					<button type="button" class="btn btn-default" id="closeModal"
+					data-dismiss="modal">확인 완료</button>
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> 
+				</div>
+			</div> 
+			
+			<div id="Make" class="tabcontent">
+				<h3 class="font-weight-bold">개설한 모임</h3>
+				<br /> 
+				<div class="w3-container">
+					<table class="table table-striped">
+						<tr>
+							<th></th>
+							<th>제목</th>
+							<th>모집 마감일</th>
+							<th>모임 시작일</th>
+							<th>모임 종료일</th>
+							<th>개설 상태</th>
+						</tr>
+						<tr th:each="MMLM:${MMLM}">
+							<td><div th:unless="${MMLM.cancelReason}==null"><a id="hideRow" data-toggle="tooltip" data-placement="left" title="목록에서 제거"><img id="trash" src="/images/trash.png" width="35" height="35" style="cursor: pointer;" alt="submit" /></a></div></td>
+							<td><a th:href="@{'/meetingView/?writingNumber='+${MMLM.writingNumber}}" th:text="${MMLM.title}"></a></td>
+							<td th:text="${MMLM.acceptEndTime}"></td>
+							<td th:text="${MMLM.meetingStartTime}"></td>
+							<td th:text="${MMLM.meetingEndTime}"></td>
+							<td th:unless="${MMLM.cancelReason}==null">취소됨</td>
+						</tr>
+					</table>
+				</div>
+				
+				<br />
+			</div>
+			</div>
+			</div>
+			
+		</div>
+
+			
+			<script th:inline="javascript">
+			$(document).ready(function(){
+				
+			$("#hideRow").onclick = function(){
+				$("#hideRow").text="";
+			}
+				
+			$('[data-toggle="tooltip"]').tooltip();
+				
+			var modal = document.getElementById('myModal');				
+			var span = document.getElementsByClassName("close")[0];
+						
+			var closeModal = document.getElementById("closeModal");
+					
+			span.onclick = function() {
+				modal.style.display = "none";
+			}
+			
+			window.onclick = function(event) {
+				if (event.target == modal) {
+						modal.style.display = "none";
+				}
+			}
+				
+			closeModal.onclick = function(){
+				modal.style.display = "none";
+			} 	
+				
+			var confirmReason = [[${confirmReason}]];
+			
+			console.log(confirmReason);
+
+			if(confirmReason!=null){
+				modal.style.display = "block";
+			}
+		
+				$("#checkAll").click(function(){
+					if($("#checkAll").prop("checked")){
+				        $("input[name=checkRow]").prop("checked", true);
+					} else {
+				        $("input[name=checkRow]").prop("checked", false);
+
+					}
+				})
+
+				$('#checkedDelete').click(function(){
+		        if(confirm("선택된 모임 신청을 취소하시겠습니까?")){
+		            
+		        	var checkBoxArr=[];
+		        	
+		            $("input[name=checkRow]:checked").each(function(i){
+						checkBoxArr.push($(this).val());
+		            })
+		            
+		            $.ajax({
+							type:'post',  
+							url:'/checkedDeleteJM',
+			 				data: JSON.stringify(checkBoxArr), 
+			                dataType:"text", 
+							contentType: "application/json",
+							 success:function(response){
+					            alert("선택한 모임 신청이 취소되었습니다.");
+					            
+					            $(location).attr('href', '/MyMeetingList');
+
+							 },
+							 error:function(response){
+								 alert("에러 발생");
+							 }
+						})
+		        }else{
+		            return false;
+		        }
+		    
+			}) 
+			
+			})
+			
+				function openCity(evt, cityName) {
+					var i, tabcontent, tablinks;
+					tabcontent = document.getElementsByClassName("tabcontent");
+					for (i = 0; i < tabcontent.length; i++) {
+						tabcontent[i].style.display = "none";
+					}
+					tablinks = document.getElementsByClassName("tablinks");
+					for (i = 0; i < tablinks.length; i++) {
+						tablinks[i].className = tablinks[i].className.replace(
+								" active", "");
+					}
+					document.getElementById(cityName).style.display = "block";
+					evt.currentTarget.className += " active";
+				}
+
+				document.getElementById("defaultOpen").click();
+			</script>
+		
+	</div>
+</body>
+</html> -->

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" 
+layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<style type="text/css">
+
+body{
+	font-family: 'Jua', sans-serif;
+}
+
+#jumbotronId{
+    background-color: white;
+}
+/* The Modal (background) */
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 3; /* Sit on top */
+	padding-top: 100px; /* Location of the box */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 30px;
+	border: 1px solid #888;
+	width: 30%;
+	border-top-width: 0px;
+}
+.center{
+  text-align:center;
+}
+.formHeight{
+	height:100px;
+}
+.info{
+	
+}
+#title{
+	color:#2eca6a;
+	
+	
+}
+
+#titleLine{
+	border-bottom:2px solid #2eca6a;
+}
+
+#maker{
+	padding:7px;
+	background-color: #2eca6a;
+	color:white;
+	border-radius:1rem;
+}
+
+#myBtn{
+	background-color:#2eca6a;
+	border:2px solid #2eca6a;
+}
+
+#content{
+	border:2px solid #2eca6a;
+}
+
+#cancelIntro{
+	padding:7px;
+	background-color: #2eca6a;
+	color:white;
+	border-radius:1rem;
+}
+#replyModify,#replyCancel{
+	padding:7px;
+	background-color: #2eca6a;
+	color:white;
+	border-radius:1rem;
+}
+#backIndex{
+	background-color:#2eca6a;
+	border:2px solid #2eca6a;
+	color:white;
+}
+</style>
+</head>
+<body>
+<div layout:fragment="content" class="container">
+		<div class="jumbotron" id="jumbotronId">
+			<h3><span style="color:#2eca6a">이벤트</span> 게시판</h3>
+			<div>
+			<img class="d-block img-reponsive" width="1050" height="350" id="foo" th:src="@{'/images/event/'+${EventView.writingNumber}+'/'+${EventView.image}+''}" onerror="this.src='/images/event/knockLogo2.png';"/>
+			</div>
+			<br/>
+			<h1 id='titleLine'><span id="title" th:text="${EventView.title}">제목</span></h1>
+			<span th:text="${EventView.writeTime} + ' | '">작성일</span>
+			<span th:text="'조회수 : ' + ${EventView.hit}"></span><br/>
+				<form>
+					<div>
+						<span>이벤트정보</span>
+						<ul>
+							<li th:text="'접수 기간 : '+
+							${#dates.format(EventView.acceptStartTime, 'yyyy-MM-dd HH:mm')} + ' ~ ' +
+							${#dates.format(EventView.acceptEndTime, 'yyyy-MM-dd HH:mm')}"></li>
+							<li th:text="'이벤트 기간 : '+
+							${#dates.format(EventView.eventStartTime, 'yyyy-MM-dd HH:mm')} + ' ~ ' +
+							${#dates.format(EventView.eventEndTime, 'yyyy-MM-dd HH:mm')}"></li>						
+							<li th:text="'모집 인원 : 총'+${EventView.recruitMaxNumber}+'명 | '+${EventView.recruitNumber}+'명 신청'"></li>
+						</ul>
+					</div>
+					<h1 id="titleLine"></h1>
+					<div>
+						<br/>
+						<span th:text="'이벤트소개'"></span>
+						<p th:utext="${EventView.content}"></p>
+					</div>
+				</form>
+<!-- 			</div> -->
+		<!-- from 성현 시큐리티 적용 -->
+		<input type='hidden' th:value="${session.nickname}" id='sessionNickname'>
+		<button class="btn btn-success" id="myBtn" th:text="'참가하기'"></button>
+		<!-- 참가하기 모달창-------------------------------------------------------------=-->
+				  <div id="myModal" class="modal">
+					<div class="modal-content">
+						<form action="/eparticipate" method="post" id="eparticipateForm" >
+							<div class="modal-header">
+								<span class="close">&times;</span>
+							</div>
+							<div class="modal-body">
+								<h5 class="modal-title" id="myModalLable" th:text="'이벤트에 참가하시겠습니까?'"></h5>
+								<p th:text="'닉네임: '+${session.nickname}"></p>
+								<input type="hidden" name="writingNumber" th:value="${EventView.writingNumber}">
+<!-- 								<input type="text" name="memberNumber" th:value="${session.memberNumber}"> -->
+							</div>
+							<div class="modal-footer">
+									<button type="button" class="btn btn-success" id="eparticipate" data-dismiss="modal" th:text="'참가'"></button>
+									<button type="button" class="btn btn-default" name="closeModal" id="closeModal" th:text="취소"></button>
+									<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> 
+							</div>
+						</form>
+					</div>
+				</div>
+				  
+			<a class="btn" id='backIndex' role="button" th:href="@{/eventList}" th:text="'목록'"></a>
+			
+			<!-- ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★댓글 ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★-->
+			<div id="reply">
+				<br/>
+				<strong>문의/기대평</strong>
+					<div class="form-group">
+						<div class="input-group">
+							<input type="hidden" name="replyNumber">
+							<input type="hidden" name="writingNumber" th:value="${EventView.writingNumber}">
+							<input type="text" class="form-control formHeight" id="content" name="replyContent" placeholder="내용을 입력하세요.">
+							<button class="btn btn-success formHeight" type="button" name="replyInsertBtn" id="myBtn">등록</button> 
+						</div>
+					</div>
+						
+					<!-- from 성현 시큐리티 적용 -->
+					<input type='hidden' th:value="${session.nickname}" id='sessionNickname'>
+					
+					<div class="container">
+						<div id="eventReplyList">
+						</div>
+						<!-- <input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}"> -->
+					</div>
+			</div>
+			<span id='cancelIntro'>참여신청 / 취소 안내</span>
+				<div class="info">
+				<br/>
+					<ul>
+						<li>모임 및 이벤트 참여는 로그인 후에 가능합니다.</li>
+						<li>참여하기 후 마이페이지에서 참여한 모임 및 이벤트를 확인 할 수 있습니다.</li>
+						<li>모임이 취소되면 더 이상 참가할 수 없습니다.</li>
+						<li>성별 조건이 있는 경우, 참여가 제한됩니다.</li>
+						<li>모집정원이 가득 차면 더 이상 신청할 수 없습니다.</li>
+						<li>모집정원이 가득 차 있는 경우, 신청기간 내에 다른 신청자가 모임취소를 하면 다시 신청이 가능합니다.</li>
+					</ul>
+					<br/>
+				</div>
+			</div>
+		<!-- 댓글 Ajax -->
+<script>
+<!-- 시큐리티 + 에이젝스 에러 방지 설정222 -->
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+$(function() {
+	$(document).ajaxSend(function(e, xhr, options) {
+		xhr.setRequestHeader(header, token);
+	});
+});
+//from 성현 :로그인한 사람의 닉네임 가져오기
+var nick =$("#sessionNickname").val();
+/* var writingNumber= $("input[name='writingNumber']").val(); */
+
+function showReplyList(){
+var writingNumber1= $("input[name='writingNumber']").val();
+inner="";
+
+//본인글만 수정,삭제버튼이 활성화되게 해야 한다.
+//하우스인포를 띄울 때, 작성자의 이름은 가져와진다.
+//로그인 한 사람의 이름과, 실제 뜨는 닉네임을 if로 처리한다.
+//if내용이 맞다면, 수정삭제를 활성화한다.
+
+//from 성현 : 시큐리티 적용중
+
+	$.ajax({
+			type:'post',  
+		url:'/eventReplyList',
+			data: writingNumber1, // 값 하나만 받아오기
+	       dataType:"text", // ajax 호출후 리턴받는 결과에 대한 데이터 타입
+		contentType: "application/json",
+		// async:false, async는 deprecated 되었음
+		 success:function(result){
+			$.each(JSON.parse(result), function(key, value) {
+				inner += '<div class="replyArea" style="border-bottom:1px solid darkgray; margin-bottom: 15px;">';
+				inner += '<div class="replyInfo'+value.replyNumber+'">'
+						+ '작성일자 : '
+						+ value.writeTime
+						+ ' / 작성자 : '
+						+ value.nickname;
+				
+				if(value.nickname==nick){
+				inner += '&nbsp<button id="replyModify" name="aboutReply" class="btn btn-default" onclick="replyUpdate('
+						+ value.replyNumber
+						+ ',\''
+						+ value.content
+						+ '\');"> 수정 </button>';
+				inner += '&nbsp<button id="replyCancel" name="aboutReply" class="btn btn-default" onclick="deleteConfirm('
+						+ value.replyNumber
+						+ ');"> 삭제 </button> </div>';
+				}else{
+				inner += '</div>';	
+					
+				}
+				inner += '<div class="replyContent'+value.replyNumber+'"> <p> 내용 : '
+						+ value.content
+						+ '</p>';
+				inner += '</div></div>'; 
+			});
+			
+			$("#eventReplyList").html(inner);
+			},
+			error:function(result){
+				inner+="<br /><h3>에러 발생</h3><br />"
+				$("#eventReplyList").html(inner);
+			}
+		});
+	}; 	
+
+	//엔터키 클릭시 댓글등록
+	$('input[type="text"]').keydown(function() {
+	    if (event.keyCode === 13) {
+	    	$('[name=replyInsertBtn]').click()
+	    }
+	});
+	
+	// 댓글 등록
+	$('[name=replyInsertBtn]').click(function() { // 댓글 등록 버튼 클릭시 
+		var writingNumber= $("input[name='writingNumber']").val();
+		var content = $("input[name='replyContent']").val();
+	// var insertData = $('[name=replyInsertForm]').serialize(); // replyInsertForm의 내용을 가져옴
+	
+		$.ajax({
+			url : '/eventReplyInsert',
+			type : 'post',
+			data : JSON.stringify({
+					"writingNumber":writingNumber,
+					"content":content
+			}),
+			dataType : 'text',
+			contentType: "application/json",
+			success : function(data) {
+				if (data == 1) {
+					showReplyList(); // 댓글 작성 후 댓글 목록 reload
+					$('[name=replyContent]').val(''); 
+				}
+			}
+		});
+	})
+
+// 댓글 수정 - 댓글 내용 출력을 input 폼으로 변경 
+	function replyUpdate(replyNumber, content) {
+		var a = '';
+	
+		a += '<div class="input-group">';
+		a += '<input type="text" class="form-control" name="content_'+replyNumber+'" value="'+content+'"/>';
+		a += '<span class="input-group-btn"><button class="btn btn-default" name="aboutReply" type="button" onclick="eventReplyUpdate('
+				+ replyNumber + ');">수정 완료</button> </span>';
+		a += '</div>';
+	
+		$('.replyContent' + replyNumber).html(a);
+	} 
+
+	// 댓글 수정
+	function eventReplyUpdate(replyNumber) {
+		var updateContent = $('[name=content_' + replyNumber + ']').val();
+	
+		$.ajax({
+			url : '/eventReplyUpdate',
+			type : 'post',
+			data : JSON.stringify({
+				'content' : updateContent,
+				'replyNumber' : replyNumber
+			}),
+			dataType : 'json',
+			contentType: "application/json",
+			success : function(data) {
+				if (data == 1)
+					showReplyList(); //댓글 수정후 목록 출력 
+			}
+		});
+	}
+
+	// 댓글 삭제 
+	function deleteConfirm(replyNumber){
+		var msg = confirm("댓글를 삭제하시겠습니까?");
+		if(msg==true){ // 확인 버튼 클릭 시
+			eventReplyDelete(replyNumber);
+		} else { // 취소 버튼 클릭 시
+			return false;
+		}
+	}
+
+	function eventReplyDelete(replyNumber) {
+		$.ajax({
+			url : '/eventReplyDelete'+replyNumber,
+			type : 'post',
+			data : replyNumber,
+			dataType : 'text',
+			success : function(data) {
+				if (data == 1)
+					showReplyList(); //댓글 삭제 후 목록 출력 
+			}
+		});
+	} 
+
+	$(document).ready(function() {
+		showReplyList(); //페이지 로딩시 댓글 목록 출력 
+	}); 
+</script><!-- end reply -->
+<!-- 참가하기 모달 -->
+<script>
+	//from 성현 :로그인한 사람의 닉네임 가져오기
+	var nick =$("#sessionNickname").val();
+	
+	// Get the modal
+	var modal = document.getElementById('myModal');
+	var modal1 = document.getElementById('myModal1');
+
+	// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+	var span = document.getElementsByClassName("close")[1];
+	
+	var closeModal = document.getElementsByName("closeModal")[0];
+	var closeModal = document.getElementsByName("closeModal")[1];
+	
+	$("#cancelBtn").click(function(){
+		modal1.style.display = "block";
+	})
+	
+	// When the user clicks the button, open the modal 
+	$("#myBtn").click(function() {
+		//from 성현 : 시큐리티 적용(세션닉이 없을 때 action을 로긴으로 바꾼 후 서브밋)
+		if(nick===""){
+			alert('먼저 로그인을 해주세요');
+			var	form =$("#eparticipateForm");
+			form.action = "/login";
+			form.submit();
+			return false;
+		}
+		modal.style.display = "block";
+	});
+	
+ 	// When the user clicks on <span> (x), close the modal
+ 	$("span").click(function(){
+ 		modal.style.display = "none";
+ 	});
+ 	
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+		
+		if (event.target == modal1) {
+			modal1.style.display = "none";
+		}
+	}
+
+	$("#closeModal").click(function(){
+		modal.style.display = "none";
+	})
+	
+	//참가하기 처리
+	$("#eparticipate").click(function() {
+			
+		var writingNumber= $("input[name='writingNumber']").val();
+// 		memberNumber= $("input[name='memberNumber']").val();
+		// var ss = $("#visitBookingForm").serialize();
+		 inner ="";
+		$.ajax({
+			method:'post',
+			url: '/eparticipate',
+			data:
+				JSON.stringify({ // form에서 받아온 값들을 json 형식의 데이터로 처리
+				"writingNumber":writingNumber,
+// 				"memberNumber":memberNumber
+			}),
+			dataType: "text", // 리턴 타입이 void일 경우에는 "json"이 아니라 "text"로
+			contentType:"application/json", // 정확한 이유는 모르겠으나 이거 없으면 415 에러 발생
+			success:function(data){
+				inner+="<div class='modal-content'><span id='modalx' class='close'>&times;</span><br /><h4>이벤트 참여신청이 완료되었습니다</h4><br /><a class='btn btn-default pull-rigth' href='/MyEventList'>신청확인하기</a><br /></div>"
+
+				$("#myModal").html(inner);
+			} ,
+			error:function(data){  
+				inner+="<div class='modal-content'><span id='modalx' class='close'>&times;</span><br /><h4>이미 신청한 이벤트입니다.</h4><br /></div>"
+				$("#myModal").html(inner);
+			}
+		});
+	});
+	// 동적으로 생성된 태그에 이벤트 걸기
+	$(document).on("click", "#modalx", function(){
+		modal.style.display = "none";
+	});
+</script>
+</div>
+</body>
+</html>

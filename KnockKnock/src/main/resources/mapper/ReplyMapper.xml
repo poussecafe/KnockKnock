@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.knockknock.mapper.ReplyMapper">
+	<!-- ********************** 댓글 관련 쿼리 ********************* -->
+	<!-- 모임 댓글 -->
+	<select id="meetingReplyList" resultType="replyDTO">
+		SELECT 
+			MB.NICKNAME,
+			MR.CONTENT,
+			MR.WRITE_TIME writeTime,
+			MR.REPLY_NUMBER replyNumber
+		FROM MEETING_REPLY MR, MEMBER MB
+		WHERE MR.WRITING_NUMBER = #{writingNumber}
+		AND MR.MEMBER_NUMBER = MB.MEMBER_NUMBER
+		ORDER BY REPLY_NUMBER ASC
+	</select>
+	<insert id="meetingReplyInsert">
+		INSERT INTO MEETING_REPLY SET
+		MEMBER_NUMBER
+		= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email}), 
+		WRITING_NUMBER=#{replyDTO.writingNumber}, 
+		CONTENT=#{replyDTO.content}, 
+		WRITE_TIME = NOW()
+	</insert>
+
+	<update id="meetingReplyUpdate">
+		UPDATE
+			MEETING_REPLY
+		SET
+		CONTENT=#{content}
+		WHERE REPLY_NUMBER = #{replyNumber}
+	</update>
+	<delete id="meetingReplyDelete" parameterType="int">
+		DELETE
+		FROM MEETING_REPLY
+		WHERE REPLY_NUMBER = #{replyNumber}
+	</delete>
+	<!-- 이벤트 댓글 -->
+	<select id="eventReplyList" resultType="replyDTO">
+		SELECT 
+			MB.NICKNAME,
+			ER.CONTENT,
+			ER.WRITE_TIME writeTime,
+			ER.REPLY_NUMBER replyNumber
+		FROM EVENT_REPLY ER, MEMBER MB
+		WHERE ER.WRITING_NUMBER = #{writingNumber}
+		AND ER.MEMBER_NUMBER = MB.MEMBER_NUMBER
+		ORDER BY REPLY_NUMBER ASC
+	</select>
+	<insert id="eventReplyInsert">
+		INSERT INTO EVENT_REPLY SET
+		MEMBER_NUMBER
+		= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email}), 
+		WRITING_NUMBER=#{replyDTO.writingNumber}, 
+		CONTENT=#{replyDTO.content}, 
+		WRITE_TIME = NOW()
+	</insert>
+	<update id="eventReplyUpdate">
+		UPDATE
+			EVENT_REPLY
+		SET
+		CONTENT=#{content}
+		WHERE REPLY_NUMBER = #{replyNumber}
+	</update>
+	<delete id="eventReplyDelete" parameterType="int">
+		DELETE
+		FROM EVENT_REPLY
+		WHERE REPLY_NUMBER = #{replyNumber}
+	</delete>
+	
+	<!-- *****************댓글 쿼리 end******************** -->
+</mapper>

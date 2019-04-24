@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" 
+xmlns:th="http://www.w3.org/1999/xhtml"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<meta charset="utf-8">
+
+<div th:replace="etc/fragments/Config :: Config"></div>
+
+<body>
+<!-- / header replace / -->
+<div th:replace="etc/fragments/Header :: Header"></div>
+
+<!-- / content replace start -->
+<div layout:fragment="content"></div>
+  
+<!-- / footer replace / -->
+<div th:replace="etc/fragments/Footer :: Footer"></div>
+
+ <!-- JavaScript Libraries -->
+<div layout:fragment="script">
+	  <script th:src="@{/lib/jquery/jquery.min.js}"></script>
+	  <script th:src="@{/lib/jquery/jquery-migrate.min.js}"></script>
+	  <script th:src="@{/lib/popper/popper.min.js}"></script>
+	  <script th:src="@{/lib/bootstrap/js/bootstrap.min.js}"></script>
+	  <script th:src="@{/lib/easing/easing.min.js}"></script>
+	  <script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+	  <script th:src="@{/lib/scrollreveal/scrollreveal.min.js}"></script>
+	  <!-- Contact Form JavaScript File -->
+	  <script th:src="@{/contactform/contactform.js}"></script>
+	  <!-- Template Main Javascript File -->
+	  <script th:src="@{/js/main.js}"></script>
+	  <!-- about gallery script -->
+	  <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+      <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+      <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d4bcec44279a03821440e0f867851605&libraries=services"></script>
+</div>
+
+<script>
+//시큐리티 관련 설정
+$(document).ready(function(){
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr("content");
+	$(function() {
+	    $(document).ajaxSend(function(e, xhr, options) {
+	        xhr.setRequestHeader(header, token);
+	    });
+	});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.knockknock.mapper.MemberMapper">
+    <insert id="register">
+		INSERT INTO MEMBER
+		(MEMBER_NUMBER, GRADE, EMAIL, PASSWORD, PHONE_NUMBER, NICKNAME, NAME, BIRTH, GENDER,
+		JOIN_TIME, ADDRESS, ADDRESS_DETAIL, FAVORITE1, FAVORITE2, FAVORITE3, IMAGE_PROFILE)
+		VALUES
+		(0, 'NORMAL', #{email}, #{password}, #{phoneNumber}, #{nickname}, #{name}, #{birth}, #{gender},
+		now(), #{address}, #{addressDetail}, #{favorite1}, #{favorite2}, #{favorite3}, 'images/profiles/default.gif')
+    </insert>
+
+	<update id="suvRegister">
+		UPDATE MEMBER
+		SET PHONE_NUMBER=#{phoneNumber}, NICKNAME=#{nickname}, 
+		GENDER=#{gender}, ADDRESS=#{address}, ADDRESS_DETAIL=#{addressDetail}, 
+		INTRODUCE=#{introduce}, FAVORITE1=#{favorite1}, FAVORITE2=#{favorite2}, FAVORITE3=#{favorite3},IMAGE_PROFILE = 'images/profiles/default.gif'
+		WHERE MEMBER_NUMBER = #{memberNumber}
+	</update>
+
+	<insert id="petRegister">
+			INSERT INTO PET
+			(PET_NUMBER, MEMBER_NUMBER, ANIMAL,AMOUNT)
+			VALUES
+			(0, #{memberDTO.memberNumber}, #{petDTO.animal},1)
+	</insert>
+    
+    <select id="getMemberNumber" resultType="Integer">
+		SELECT MEMBER_NUMBER
+		memberNumber
+		FROM MEMBER
+	</select>
+    
+	<select id="checkEmail" resultType="MemberDTO">
+		SELECT
+		EMAIL
+		FROM MEMBER
+		WHERE EMAIL = #{email}
+	</select>
+	
+    <select id="findById" resultType="MemberDTO">
+    	SELECT EMAIL, PASSWORD, GRADE, NAME FROM MEMBER 
+    	WHERE EMAIL = #{id}
+    </select>
+    
+    <select id="findByEmail" resultType="MemberDTO">
+    	SELECT EMAIL, PASSWORD, GRADE, NAME, NICKNAME,MEMBER_NUMBER memberNumber,FAVORITE1, GENDER FROM MEMBER 
+    	WHERE EMAIL = #{email}
+    </select>
+    
+    <select id="findByName" resultType="MemberDTO">
+    	select 
+    	M.EMAIL email,
+    	M.NAME name 	
+    	from MEMBER M
+    	where 
+    	M.NAME = #{name}
+    	AND M.PHONE_NUMBER = #{phoneNumber}
+    </select>
+    
+
+    <select id="getMMLJ" resultType="MeetingVDTO">
+    	SELECT
+    	(SELECT M.NICKNAME FROM MEMBER M WHERE MT.MEMBER_NUMBER=M.MEMBER_NUMBER) AS NICKNAME,
+    	MT.TITLE,
+    	JM.MEMBER_NUMBER memberNumber,
+    	MT.WRITING_NUMBER writingNumber,
+		MT.ACCEPT_END_TIME acceptEndTime,
+    	MT.MEETING_START_TIME meetingStartTime,
+    	MT.MEETING_END_TIME meetingEndTime,
+    	JM.MEETING_STATUS meetingStatus,
+    	MT.CANCEL_REASON cancelReason
+    	FROM MEMBER M, MEETING MT, JOIN_MEETING JM 
+    	WHERE JM.MEMBER_NUMBER 
+    	= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL = #{email})
+    	AND M.MEMBER_NUMBER = JM.MEMBER_NUMBER
+    	AND JM.WRITING_NUMBER = MT.WRITING_NUMBER
+    	ORDER BY MEETING_STATUS ASC, ACCEPT_END_TIME DESC
+    </select>
+    
+    <select id="getMMLM" resultType="MeetingVDTO">
+    	SELECT
+    	MT.TITLE,
+    	MT.WRITING_NUMBER writingNumber,
+    	MT.ACCEPT_END_TIME acceptEndTime,
+    	MT.MEETING_START_TIME meetingStartTime,
+    	MT.MEETING_END_TIME meetingEndTime,
+    	MT.CANCEL_REASON cancelReason
+    	FROM MEETING MT
+    	WHERE MT.MEMBER_NUMBER 
+    	= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL = #{email})
+    	ORDER BY ACCEPT_END_TIME DESC
+    </select>
+
+    <update id="changePassword">
+    	UPDATE three.MEMBER
+		SET PASSWORD=#{password}
+		WHERE EMAIL=#{email}
+	</update>    
+    
+    <select id="getPet" resultType="ProfileVDTO">
+    	SELECT
+    	P.ANIMAL animal,
+    	P.AMOUNT amount
+    	FROM MEMBER M,PET P
+    	WHERE M.EMAIL = #{username}
+    	AND M.MEMBER_NUMBER = P.MEMBER_NUMBER
+    </select>
+    
+    <select id='petCheck' resultType="ProfileVDTO">
+    	SELECT
+    	P.ANIMAL animal
+    	FROM PET P
+    	WHERE P.MEMBER_NUMBER = #{memberNumber}
+    </select>
+    
+    <select id="getProfile" resultType="memberDTO">
+    	SELECT
+    	M.MEMBER_NUMBER memberNumber,
+    	M.NAME,
+    	M.GRADE grade,
+    	M.FAVORITE1 favorite1,
+    	M.FAVORITE1 favorite2,
+    	M.FAVORITE1 favorite3,
+    	M.EMAIL email,
+    	M.NICKNAME nickname,
+    	M.INTRODUCE introduce,
+    	M.IMAGE_PROFILE imageProfile,
+    	M.PHONE_NUMBER phoneNumber
+    	FROM MEMBER M
+    	WHERE M.EMAIL = #{username}
+    </select>
+    
+    <update id="profileUpdate">
+			   UPDATE MEMBER m,PET p
+			   SET m.NICKNAME=#{nickname}, m.INTRODUCE= #{introduce}, m.PHONE_NUMBER = #{phoneNumber}, p.ANIMAL=#{animal}
+			   WEHRE m.MEMBER_NUMBER = p.MEMBER_NUMBER
+			   AND m.MEMBER_NUMBER = #{memberNumber}
+    </update>
+    
+    <update id="profileUpdate2">
+	   		   UPDATE MEMBER m
+			   SET m.NICKNAME = #{nickname}, m.INTRODUCE= #{introduce}, m.PHONE_NUMBER = #{phoneNumber}
+			   WHERE m.MEMBER_NUMBER = #{memberNumber}
+    </update>
+    
+    <insert id='firstMyPetUpdate'>
+    	INSERT INTO PET
+    	(MEMBER_NUMBER, ANIMAL,AMOUNT)
+    	VALUES
+    	(#{memberNumber},#{animal},1)
+    </insert>
+    
+    <delete id='deletePet'>
+    	DELETE FROM PET
+    	WHERE MEMBER_NUMBER = #{memberNumber} 
+    </delete>
+    
+    <update id="saveImageDir">
+	   		   UPDATE MEMBER
+			   SET IMAGE_PROFILE = #{finalImage}
+			   WHERE EMAIL = #{username}
+    </update>
+    
+    <select id="getImageDir" resultType="MemberDTO">
+	   		   SELECT IMAGE_PROFILE imageProfile
+			   FROM MEMBER
+			   WHERE EMAIL = #{username}
+    </select>
+
+    <select id="getMEL" resultType="EventVDTO">
+    	SELECT
+    	E.TITLE,
+    	E.WRITING_NUMBER writingNumber,
+    	E.ACCEPT_END_TIME acceptEndTime,
+    	E.EVENT_START_TIME eventStartTime,
+    	E.EVENT_END_TIME eventEndTime,
+    	E.CANCEL_REASON cancelReason
+    	FROM JOIN_EVENT JE, EVENT E
+    	WHERE JE.MEMBER_NUMBER 
+    	= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL = #{email})
+   		AND JE.WRITING_NUMBER = E.WRITING_NUMBER
+   		ORDER BY E.WRITING_NUMBER DESC
+    </select>
+    
+  <!--   <select id="myVisitList" resultType="VisitVDTO">
+    	SELECT
+    	M.NICKNAME nickname,
+    	V.WRITING_NUMBER writingNumber,
+    	V.BRANCH_NUMBER branchNumber
+    	FROM MEMBER M, VISIT V
+    	WHERE M.MEMBER_NUMBER = #{memberNumber}
+    	AND M.MEMBER_NUMBER = V.MEMBER_NUMBER
+    </select> -->
+    
+    <select id="getMVL" resultType="VisitDTO">
+    	SELECT
+    	BRANCH_NUMBER branchNumber,
+    	WRITING_NUMBER writingNumber,
+    	MEMO,
+    	RESERVATION_TIME reservationTime,
+    	ISCHECK ischeck
+    	FROM VISIT
+    	WHERE
+    	MEMBER_NUMBER
+    	= (SELECT MEMBER_NUMBER FROM MEMBER WHERE EMAIL = #{email})
+    	ORDER BY RESERVATION_TIME DESC, WRITING_NUMBER ASC
+    </select>
+
+	<delete id="deleteJM">
+		DELETE FROM JOIN_MEETING
+		WHERE
+		MEMBER_NUMBER
+		= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL = #{email})
+		AND WRITING_NUMBER=#{writingNumber}
+	</delete>
+	
+	<delete id="deleteMM">
+		DELETE FROM MEETING
+		WHERE
+		MEMBER_NUMBER
+		= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+		AND WRITING_NUMBER=#{writingNumber}
+	</delete>
+	
+	<delete id="deleteJE">
+		DELETE FROM JOIN_EVENT
+		WHERE
+		MEMBER_NUMBER
+		= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+		AND WRITING_NUMBER=#{writingNumber}
+	</delete>
+	
+	<delete id="checkedDeleteJE">
+		DELETE FROM JOIN_EVENT
+		WHERE
+		MEMBER_NUMBER
+		= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+		AND WRITING_NUMBER=#{writingNumber}
+	</delete>
+	
+	<delete id="deleteV">
+		DELETE FROM VISIT
+		WHERE
+		MEMBER_NUMBER
+		= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+		AND WRITING_NUMBER=#{writingNumber}
+	</delete>
+	
+	<update id="cancelMM">
+		UPDATE MEETING 
+		SET 
+		CANCEL_REASON=#{meetingVDTO.cancelReason}
+		WHERE WRITING_NUMBER=#{meetingVDTO.writingNumber};
+	</update>
+	
+	<update id="cancelMM2">
+		UPDATE JOIN_MEETING 
+		SET MEETING_STATUS='취소됨'
+		WHERE WRITING_NUMBER=#{meetingVDTO.writingNumber};
+	</update>
+	
+	<select id="getMLBL" resultType="BranchDetailVDTO">
+		SELECT 
+		B.BRANCH_NUMBER branchNumber,
+		B.ADDRESS,
+		B.THEME,
+		B.BRANCH_TYPE branchType,
+		B.MAXIMUM_RESIDENT maximumResident,
+		B.PET,
+		B.ISPARKING,
+		B.ISELEVATOR
+		FROM BRANCH B 
+		WHERE B.BRANCH_NUMBER 
+		IN (SELECT LB.BRANCH_NUMBER FROM LIKE_BRANCH LB
+		WHERE LB.MEMBER_NUMBER=(SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email}))
+	</select>
+	
+	<delete id="deleteLB">
+		DELETE FROM LIKE_BRANCH
+		WHERE
+		MEMBER_NUMBER
+		= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+		AND BRANCH_NUMBER=#{branchNumber}
+	</delete>
+
+	
+	<select id="confirmReason" resultType="MeetingVDTO">
+		SELECT 
+		TITLE,
+		(SELECT NICKNAME
+		FROM MEMBER M
+		WHERE M. MEMBER_NUMBER = (SELECT MEMBER_NUMBER FROM MEETING MT WHERE MT.WRITING_NUMBER=#{writingNumber})) NICKNAME,
+		MT.CANCEL_REASON cancelReason
+		FROM MEETING MT
+		WHERE MT.WRITING_NUMBER=#{writingNumber}
+	</select>
+	
+	<select id="confirmReasonEvent" resultType="EventVDTO">
+		SELECT
+		TITLE,
+		CANCEL_REASON cancelReason
+		FROM EVENT
+		WHERE WRITING_NUMBER=#{writingNumber}
+	</select>
+	
+</mapper>

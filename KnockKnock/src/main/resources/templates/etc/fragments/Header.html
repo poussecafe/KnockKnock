@@ -1,0 +1,85 @@
+<header th:fragment="Header" 
+xmlns:th="http://www.w3.org/1999/xhtml"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+  <!--/ Nav Star /-->
+  <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top" >
+    <div class="container" id='navAll'>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
+        aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <a class="navbar-brand text-brand" href="/" id='knockknock'>KnockKnock<span class="color-b">樂樂</span></a>
+      
+      <!-- 제목 -->
+      <button type="button" class="btn btn-link nav-search navbar-toggle-box-collapse d-md-none" data-toggle="collapse"
+        data-target="#navbarTogglerDemo01" aria-expanded="false">
+        <span class="fa fa-search" aria-hidden="true"></span>
+      </button>
+      
+      <!-- 카테고리바 -->
+      <div class="navbar-collapse collapse justify-content-center" id="navbarDefault" style="padding-top:1%;">
+        <ul class="navbar-nav" id="navbar-nav" style="font-size: 15px">
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/findingRoom}" id='findingRoomNav'>방찾기</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/findingCategoryRoom}" id='categoryFindingRoomNav'>관심사로 방찾기</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/toSharingGuide}" id='toSharingGuideNav'>입주안내</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/meetingAndEventMain}" id='meetingAndEventMainNav'>모임 및 이벤트</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/toFAQ}" id='toFAQNav'>고객센터</a>
+          </li>
+        </ul>
+      </div>
+      
+       <!-- 로긴, 권한 등 버튼 관련 -->
+      <div id='suvNav' style="text-align: right;">
+      	<span sec:authorize="isAuthenticated()">
+			<th:block class="nav-item" id='nick'>
+	      		<img th:src="${session.profileImage}" id="profileImage" style="width:22%; height:22%; border-radius: 100%" onerror="this.style.display='none'"/>
+		    	<span th:text="${session.nickname}+'님'"></span><br>
+			</th:block>
+	    </span>
+      
+      	<span sec:authorize="isAuthenticated()">
+			<th:block class="nav-item">
+				<a class="nav-log" id="nav-log" th:href="@{/logout}" style="font-size: 17px">Logout&nbsp;&nbsp;</a>
+	  		</th:block>
+	  	</span>
+		
+		<span sec:authorize = "hasAuthority('ADMIN')">
+			<th:block class="nav-item">
+		    	<a class="nav-log" id="nav-log" th:href="@{/adminEventListView}" style="font-size: 17px">&nbsp;&nbsp;&nbsp;AdminPage</a>
+			</th:block>
+	    </span>
+				
+		<span sec:authorize = "hasAuthority('NORMAL')">
+			<th:block class="nav-item">
+		    	<a class="nav-log" id="nav-log" th:href="@{/profileMain}" style="font-size: 17px">&nbsp;&nbsp;MyPage</a>
+			</th:block>
+		</span>
+				
+		<span sec:authorize="isAnonymous()">	   
+			<th:block class="nav-item">
+				<a class="nav-log" id="nav-log" th:href="@{/login}" style="font-size: 17px">Login&nbsp;&nbsp;&nbsp;</a>
+			</th:block>
+	    </span>
+	    
+		<span sec:authorize="isAnonymous()">	   
+			<th:block class="nav-item" >
+				<a class="nav-log" id="nav-log" th:href="@{/register}" style="font-size: 17px">&nbsp;&nbsp;&nbsp;Join</a>
+			</th:block>
+		</span>
+      </div>
+   	</div>
+  </nav>
+  <!--/ Nav End /-->
+ </header>

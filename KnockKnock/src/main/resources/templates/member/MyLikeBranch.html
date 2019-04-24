@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" 
+layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+    <title>내 관심 지점</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  font-family: "Lato", sans-serif;
+}
+
+.sidenav {
+  width: 200px;
+  position: fixed;
+  z-index: 1;
+  top: 130px;
+  left: 60px;
+  background: #eee;
+  overflow-x: hidden;
+  padding: 8px 0;
+  margin-right: 40px;
+}
+
+.sidenav a {
+  padding: 10px 10px 10px 16px;
+  text-decoration: none;
+  font-size: 30px;
+  color: #2eca6a;
+  display: block;
+}
+
+.sidenav a:hover {
+  color: #064579;
+}
+
+.main {
+  margin-left: 30px; /* Same width as the sidebar + left position in px */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 30px;}
+}
+
+#sidenav{
+	background-color:white;
+	border: 2px solid #2eca6a;
+	color:#2eca6a;
+	font-weight:bolder;
+	border-radius: 1rem;
+
+}
+
+#title{
+	color:#2eca6a;
+	font-size:30px;
+	font-weight:bolder;
+}
+td {
+	font-size: 20px;
+}
+
+#MyEventList{
+	font-family: 'Jua', sans-serif;
+}
+
+.img-fluid img-thumbnail{
+  	position: relative;
+    height: 100px;
+    border: 1px solid #2eca6a;
+}
+
+#img{
+border: 1px solid #2eca6a;
+width:350px;
+height:250px;
+}
+
+#theme{
+    position: absolute;
+    top:60%;
+    left:82%;
+    transform: translate(-50%, -50%);                                                                   
+    font-size:17px;
+    font-family: 'Jua', sans-serif;
+    font-weight:bolder;
+    color: white;
+    z-index: 2;
+    text-align: center;
+    background-color:#2eca6a;
+    padding:2%;
+    color:white;
+}
+
+#branchNumber{
+font-weight: bolder;
+}
+
+#addressList{
+	font-family: 'Jua', sans-serif;
+}
+
+.table{
+	text-align:center;
+}
+
+#getOut {
+	border-radius: 3px;
+	font-weight: 100;
+	border-color: transparent;
+	background: #2eca6a;
+	color: #fff;
+	cursor: pointer;
+
+}
+</style>
+</head>
+<body>
+<div layout:fragment="content" class="container" id='MyEventList'>
+<br /><br /><br /> <br /> 
+
+<div class="row" id='categoryBar'>
+			<div class="col-md-1">
+<div class="sidenav" id='sidenav'>
+  <a th:href="@{/profileMain}">내 프로필</a><br>
+  <a th:href="@{/MyMeetingList}">내 모임</a><br>
+  <a th:href="@{/MyEventList}">내 이벤트</a><br>
+  <a th:href="@{/MyVisitList}">내 방문 신청</a><br>
+  <a th:href="@{/MyLikeBranch}">내 관심 지점</a>
+</div>
+</div>
+<div class="col-md-11">
+<div class="main">
+<div id="Join" class="tabcontent">
+	<h1 class="font-weight-bold" id='title'>내 관심 지점</h1>
+	<br /><br />
+		<div th:each="MLBL:${MLBL}">
+			<div class="row">
+			<div class='col-md-4' name='list' id='list'>
+				<a th:href="@{'/roomDetailView/?branchNumber='+${MLBL.branchNumber}}" class='d-block mb-4 h-100' id='gallery'>
+					<img class='img-fluid img-thumbnail' th:src="'/images/branch/'+${MLBL.branchNumber}+'/mainImage.jpg'" alt='' id='img'> 
+				<span name='branchNumber' id='branchNumber' th:text="|*{MLBL.branchNumber}호점|"></span><br />
+				<span name='addressList' id='addressList' th:text="${MLBL.address}"><br></span>
+				<span name='theme' id='theme' th:text="${MLBL.theme}"></span>
+				</a>
+			</div>
+			<div class="col-md-8">
+			<br /> <br />
+				<table class="table table-striped">
+					<tr>
+						<td>최대 <br />거주 인원</td>
+						<td>거주 <br />유형</td>
+						<td>반려동물 <br />동반입주</td>
+						<td>주차장<br /> 유무</td>
+						<td>엘리베이터 <br />유무</td>
+					</tr>
+					<tr>
+						<th th:text="${MLBL.maximumResident}"></th>
+						<th th:text="${MLBL.branchType}"></th>
+						<th th:text="${MLBL.pet}"></th>
+						<th th:text="${MLBL.isParking}"></th>
+						<th th:text="${MLBL.isElevator}"></th>
+					</tr>	
+				</table>
+				<button style="float:right" id="getOut" class="btn btn-default" th:value="${MLBL.branchNumber}">삭제</button>
+			</div>
+			</div>
+		</div>
+	<br />
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+<script>
+$(document).ready(function(){
+	
+	$("[id^=getOut]").on('click', function(event){ 
+		
+		if(confirm("해당 지점을 관심 지점에서 삭제하시겠습니까?")){
+        	var branchNumber1= $(this).val();
+        	
+        	$.ajax({
+        		type:'post',  
+				url:'/deleteLB',
+				data: branchNumber1,
+		        dataType:"text", 
+				contentType: "application/json",
+				success:function(data){
+					swal("관심 지점이 삭제되었습니다.");
+					$(location).attr('href', '/MyLikeBranch');
+
+				},
+				error:function(data){
+					swal("에러 발생");
+				}
+			})
+        	
+        } else {
+        	return false;
+        }
+		
+	})
+
+})
+</script>
+ 
+</div>
+</body>
+</html>
+
+

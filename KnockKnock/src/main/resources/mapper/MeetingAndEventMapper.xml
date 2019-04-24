@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.knockknock.mapper.MeetingAndEventMapper">
+	<!-- 모임글 갯수 -->
+    <select id="meetingCount" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM MEETING
+        WHERE CANCEL_REASON IS NULL
+    </select>
+    <!-- 이벤트글 갯수 -->
+    <select id="eventCount" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM EVENT
+        WHERE CANCEL_REASON IS NULL
+    </select>
+   	<!-- 메인페이지 모임글 리스트 -->
+    <select id="mMainList" resultType="MeetingVDTO">
+    		SELECT
+			    WRITING_NUMBER writingNumber, TITLE, WRITE_TIME writeTime
+			FROM
+			    MEETING
+			WHERE WRITING_NUMBER > 0  AND CANCEL_REASON IS NULL
+			ORDER BY WRITING_NUMBER DESC, WRITE_TIME DESC
+			LIMIT 5;
+    </select>
+    <!-- 메인페이지 이벤트글 리스트 -->
+    <select id="eMainList" resultType="EventVDTO">
+    		SELECT
+			    WRITING_NUMBER writingNumber, TITLE, WRITE_TIME writeTime
+			FROM
+			    EVENT
+			WHERE WRITING_NUMBER > 0
+			ORDER BY WRITING_NUMBER DESC, WRITE_TIME DESC
+			LIMIT 5;
+    </select>    
+    <!-- 모임글 리스트 -->
+    <select id="meetingList" resultType="MeetingVDTO">
+    	<![CDATA[
+			SELECT
+			    MT.WRITING_NUMBER writingNumber, MT.TITLE, MT.WRITE_TIME writeTime, MT.HIT, MT.FAVORITE, MB.NICKNAME
+			FROM
+			    MEETING MT, MEMBER MB
+			WHERE WRITING_NUMBER > 0
+			AND MT.MEMBER_NUMBER = MB.MEMBER_NUMBER
+			AND CANCEL_REASON IS NULL
+			ORDER BY WRITING_NUMBER DESC, WRITE_TIME DESC
+			LIMIT #{pageStart}, #{perPageNum}
+    	]]>
+    </select>
+    <!-- 이벤트글 리스트 -->
+    <select id="eventList" resultType="EventVDTO">
+    	<![CDATA[
+			SELECT
+			    WRITING_NUMBER writingNumber, TITLE, WRITE_TIME writeTime, HIT 
+			FROM
+			    EVENT
+			WHERE WRITING_NUMBER > 0
+			ORDER BY WRITING_NUMBER DESC, WRITE_TIME DESC
+			LIMIT #{pageStart}, #{perPageNum}
+    	]]>
+    </select>
+    <!-- 모임글 뷰 -->
+    <select id="meetingView" resultType="MeetingVDTO">
+        SELECT
+            MT.WRITING_NUMBER writingNumber, MT.TITLE, MT.HIT, MT.IMAGE, MT.PLACE, 
+            MT.PLACE_DETAIL placeDetail, MT.WRITE_TIME writeTime, MT.MEMBER_NUMBER memberNumber,
+            MT.ACCEPT_START_TIME acceptStartTime, MT.ACCEPT_END_TIME acceptEndTime,
+            MT.MEETING_START_TIME meetingStartTime, MT.MEETING_END_TIME meetingEndTime,
+            MT.RECRUIT_NUMBER recruitNumber, MT.RECRUIT_MAX_NUMBER recruitMaxNumber,
+            MT.DETAIL_INTRODUCE detailIntroduce, MT.FAVORITE, MT.GENDER, MB.NICKNAME
+        FROM MEETING MT, MEMBER MB
+        WHERE MT.MEMBER_NUMBER=MB.MEMBER_NUMBER AND WRITING_NUMBER = #{writingNumber}
+    </select>
+    <!-- 이벤트글 뷰 -->
+    <select id="eventView" resultType="EventVDTO">
+        SELECT
+            E.WRITING_NUMBER writingNumber, E.TITLE, E.HIT, E.IMAGE, E.WRITE_TIME writeTime,
+            E.ACCEPT_START_TIME acceptStartTime, E.ACCEPT_END_TIME acceptEndTime,
+            E.EVENT_START_TIME eventStartTime, E.EVENT_END_TIME eventEndTime,
+            E.RECRUIT_NUMBER recruitNumber, E.RECRUIT_MAX_NUMBER recruitMaxNumber,
+            E.CONTENT content, E.IMAGE image
+        FROM EVENT E
+        WHERE WRITING_NUMBER = #{writingNumber}
+    </select>
+    <!-- 모임글 작성 -->
+    <insert id="meetingInsert">
+    	INSERT INTO MEETING
+	    	(MEMBER_NUMBER, TITLE, MEETING_START_TIME, MEETING_END_TIME,
+	    	ACCEPT_START_TIME, ACCEPT_END_TIME, PLACE, PLACE_DETAIL, RECRUIT_MAX_NUMBER,
+	    	DETAIL_INTRODUCE, GENDER, HIT, WRITE_TIME, FAVORITE)
+    	VALUES
+	    	(#{memberNumber},#{title},#{meetingStartTime},#{meetingEndTime},
+	    	#{acceptStartTime},#{acceptEndTime},#{place},#{placeDetail},
+	    	#{recruitMaxNumber},#{detailIntroduce},#{gender},0,NOW(),#{favorite})
+    </insert>
+    <!-- 이미지 컬럼에 이미지name저장 -->
+   	<update id="setMeetingImageName">
+		UPDATE MEETING
+		SET IMAGE = #{imageName}
+		WHERE WRITING_NUMBER = #{writingNumber}
+	</update>
+    <!-- 모임 글 넘버가져오기 -->
+    <select id="getWritingNumber" resultType="Integer">
+		SELECT WRITING_NUMBER
+		writinghNumber
+		FROM MEETING
+	</select>
+	 <!-- 모임참여자 넘버가져오기 -->
+    <select id="patyMemberNum" resultType="MeetingVDTO">
+		SELECT JM.MEMBER_NUMBER memberNumber
+		FROM JOIN_MEETING JM, MEETING M
+		WHERE JM.WRITING_NUMBER=M.WRITING_NUMBER AND M.WRITING_NUMBER = #{writingNumber}
+	</select>
+	 <!-- 이벤트참여자 넘버가져오기 -->
+    <select id="getEMemberNum" resultType="Integer">
+		SELECT MEMBER_NUMBER memberNumber
+		FROM JOIN_EVENT
+	</select>
+   	<!-- 모임글 조회수 증가 -->
+	<update id="meetingViewHit">
+		UPDATE MEETING SET HIT = HIT + 1 WHERE WRITING_NUMBER =
+		#{param1}
+	</update>
+	<!-- 모임글 수정폼 -->
+	<select id="meetingModifyForm" resultType="MeetingVDTO">
+		SELECT
+		WRITING_NUMBER writingNumber, MEMBER_NUMBER memberNumber, TITLE, MEETING_START_TIME meetingStartTime, IMAGE image,
+		MEETING_END_TIME meetingEndTime, ACCEPT_START_TIME acceptStartTime, ACCEPT_END_TIME acceptEndTime, GENDER,
+		PLACE, PLACE_DETAIL placeDetail, RECRUIT_MAX_NUMBER recruitMaxNumber, DETAIL_INTRODUCE detailIntroduce, FAVORITE
+		FROM MEETING
+		WHERE WRITING_NUMBER = #{writingNumber}
+	</select>
+	<!-- 모임글 수정 -->
+    <update id="meetingModify">
+    	UPDATE MEETING
+    	SET
+    		TITLE = #{title}, MEETING_START_TIME = #{meetingStartTime}, MEETING_END_TIME = #{meetingEndTime},
+    		ACCEPT_START_TIME = #{acceptStartTime}, ACCEPT_END_TIME = #{acceptEndTime},
+    		PLACE = #{place}, PLACE_DETAIL = #{placeDetail}, RECRUIT_MAX_NUMBER = #{recruitMaxNumber},
+	    	DETAIL_INTRODUCE = #{detailIntroduce}, FAVORITE = #{favorite}, GENDER = #{gender}
+	    WHERE WRITING_NUMBER = #{writingNumber}
+    </update>
+    <!-- 모임 참가하기 -->
+	<insert id="mparticipate"> 
+		INSERT INTO JOIN_MEETING SET 
+		WRITING_NUMBER= #{meetingVDTO.writingNumber},
+		MEMBER_NUMBER= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+	</insert>
+	<!-- 모임 참가인원 갱신 -->
+	<update id="mpartNumUp">
+   	<![CDATA[		
+		UPDATE MEETING M INNER JOIN JOIN_MEETING JM
+		SET M.RECRUIT_NUMBER = (SELECT COUNT(*) FROM JOIN_MEETING WHERE WRITING_NUMBER=#{writingNumber})
+		WHERE M.WRITING_NUMBER = JM.WRITING_NUMBER AND M.WRITING_NUMBER=#{writingNumber}
+		AND M.RECRUIT_MAX_NUMBER >= M.RECRUIT_NUMBER;
+   	]]> 
+	</update>
+	<!-- 이벤트 참가하기 -->
+	<insert id="eparticipate"> 
+		INSERT INTO JOIN_EVENT SET 
+		WRITING_NUMBER= #{eventVDTO.writingNumber},
+		MEMBER_NUMBER= (SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+	</insert>
+	<!-- 이벤트 참가인원 갱신 -->
+	<update id="epartNumUp">
+   	<![CDATA[		
+		UPDATE EVENT E INNER JOIN JOIN_EVENT JE
+		SET E.RECRUIT_NUMBER = (SELECT COUNT(*) FROM JOIN_EVENT WHERE WRITING_NUMBER=#{writingNumber})
+		WHERE E.WRITING_NUMBER = JE.WRITING_NUMBER AND E.WRITING_NUMBER=#{writingNumber}
+		AND E.RECRUIT_MAX_NUMBER >= E.RECRUIT_NUMBER;
+   	]]> 
+	</update>
+   	<!-- 이벤트 조회수 증가 -->
+	<update id="eventViewHit">
+		UPDATE EVENT SET HIT = HIT + 1 WHERE WRITING_NUMBER =
+		#{param1}
+	</update>
+</mapper>

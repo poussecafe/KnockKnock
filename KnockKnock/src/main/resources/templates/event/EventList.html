@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" 
+layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<meta charset="UTF-8">
+<title>이벤트 게시판</title>
+<style type="text/css">
+
+body{
+	font-family: 'Jua', sans-serif;
+	text-align:center;
+}
+
+#jumbotronId{
+    background-color: white;
+}
+#moim {
+border-radius: 3px;
+	font-weight: 100;
+	border-color: transparent;
+	background: #2eca6a;
+	color: #fff;
+	cursor: pointer;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="content" class="container">
+
+	    <div class="jumbotron" id="jumbotronId">
+	        <h1><span style="color:#2eca6a">이벤트</span>게시판</h1>
+	        <!-- 베너 -->
+			<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+				<ol class="carousel-indicators">
+					<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+					<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+					<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+					<li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="carousel-item active">
+						<a href="/eventView?writingNumber=1" id="atag"><img class="d-block w-100" th:src="@{/images/event/banner/knockBanner1.jpg}" alt="첫번째 슬라이드"></a>
+					</div>
+					<div class="carousel-item">
+						<img class="d-block w-100" th:src="@{/images/event/banner/knockBanner2.jpg}" alt="두번째 슬라이드">
+					</div>
+					<div class="carousel-item">
+						<img class="d-block w-100" th:src="@{/images/event/banner/knockBanner3.jpg}" alt="세번째 슬라이드">
+					</div>
+					<div class="carousel-item">
+						<img class="d-block w-100" th:src="@{/images/event/banner/knockBanner4.jpg}" alt="네번째 슬라이드">
+					</div>
+				</div>
+				<a class="carousel-control-prev" href="#carouselExampleIndicators"
+					role="button" data-slide="prev"> <span
+					class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+					class="sr-only">이전</span>
+				</a> <a class="carousel-control-next" href="#carouselExampleIndicators"
+					role="button" data-slide="next"> <span
+					class="carousel-control-next-icon" aria-hidden="true"></span> <span
+					class="sr-only">다음</span>
+				</a>
+			</div>
+		        <table class="table table-hover">
+					<thead>
+						<tr>
+							<th>번호</th>
+							<th>제목</th>
+							<th>조회수</th>
+							<th>작성일</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="et : ${EventList}">
+							<td th:text="${et.writingNumber}">번호</td>
+							<td><a th:href="@{/eventView(writingNumber=${et.writingNumber},page=${pageMaker.cri.page},perPageNum=${pageMaker.cri.perPageNum})}" th:text="${et.title}">제목</a></td>
+							<td th:text="${et.hit}">조회수</td>
+							<td th:text="${et.writeTime}">작성일</td>
+						</tr>
+					</tbody>
+				</table>
+	 			<!-- 게시판 하단의 페이징 버튼 -->
+ 			<nav aria-label="Page navigation example">
+	            <ul class="pagination justify-content-center">
+	            
+	            <li class="page-item" th:if="${pageMaker.prev} == true">
+	            	<a class="page-link" th:href="@{/event/eventList(page=${pageMaker.startPage}-1,perPageNum=${pageMaker.cri.perPageNum})}">&laquo;</a>
+	            </li>
+	            
+	            <li class="page-item" th:each="idx,iterStat : ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}"  th:classappend="${pageMaker.cri.page} == ${idx} ? active : null">
+	              <a class="page-link" th:href="@{/eventList(page=${idx},perPageNum=${pageMaker.cri.perPageNum})}" th:text="${idx}"></a>
+	            </li>
+	            
+	            <li class="page-item" th:if="${pageMaker.next} == true and ${pageMaker.endPage > 0}">
+	            	<a class="page-link" th:href="@{/eventList(page=${pageMaker.endPage}+1,perPageNum=${pageMaker.cri.perPageNum})}">&raquo;</a>
+	            </li>
+	            </ul>
+	          </nav>
+	          <a th:href="@{/meetingList}" class="btn btn-default font-weight-bold pull-left" id="moim" role="button">모임 게시판</a>
+	    </div>
+	</div>
+</body>
+</html>

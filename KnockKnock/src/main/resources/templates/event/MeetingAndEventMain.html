@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" 
+layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<meta charset="UTF-8">
+<title>모임 및 이벤트</title>
+<style type="text/css">
+
+body{
+	font-family: 'Jua', sans-serif;
+	text-align:center;
+}
+
+#carouselExampleIndicators{
+	background-color:black;
+}
+
+#jumbotronId{
+    background-color: white;
+}
+#option_wrap{
+	border:1px solid  #2eca6a;
+	border-radius: 1rem;
+	width: 50%;
+}
+.center{
+text-align:center;
+}
+
+#moimTitle{
+	padding:10px;
+	color:#2eca6a;
+	border-radius:0.5rem;
+	font-size:40px;
+}
+
+#eventTitle{
+	padding:10px;
+	color:#2eca6a;
+	border-radius:0.5rem;
+	font-size:40px;
+}
+
+#more1,#more2{
+	background-color:#2eca6a;
+	color:white;
+	padding:5px;
+	font-size:20px;
+	border-radius:0.5rem;
+}
+
+#head1{
+	font-size:20px;
+}
+
+#head2{
+	font-size:20px;
+}
+
+</style>
+</head>
+<body id="body">
+	<div layout:fragment="content" class="container">
+		<div class="jumbotron" id="jumbotronId">
+		<br />
+		<h1>
+			<a th:href="@{/meetingAndEventMain}">
+				<span style="color:#2eca6a">모임</span> 및 <span style="color:#2eca6a">이벤트</span>
+				<br />
+				<h5>"서로 취미를 공유하고 즐거움을 공유해요"</h5>				
+			</a>
+			<br />
+		</h1>
+		<!-- 베너 -->
+			<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+				<ol class="carousel-indicators">
+					<li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+					<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+					<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+					<li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+				</ol>
+				<div class="carousel-inner">
+					<div class="carousel-item active">
+						<a href="/eventView?writingNumber=1" id="atag"><img class="d-block w-100" th:src="@{/images/event/banner/knockBanner1.jpg}" alt="첫번째 슬라이드"></a>
+					</div>
+					<div class="carousel-item">
+						<a href="/eventView?writingNumber=2" id="atag"><img class="d-block w-100" th:src="@{/images/event/banner/knockBanner2.jpg}" alt="두번째 슬라이드"></a>
+					</div>
+					<div class="carousel-item">
+						<a href="/eventView?writingNumber=3" id="atag"><img class="d-block w-100" th:src="@{/images/event/banner/knockBanner3.jpg}" alt="세번째 슬라이드"></a>
+					</div>
+					<div class="carousel-item">
+						<a href="/eventView?writingNumber=4" id="atag"><img class="d-block w-100" th:src="@{/images/event/banner/knockBanner4.jpg}" alt="네번째 슬라이드"></a>
+					</div>
+				</div>
+				<a class="carousel-control-prev" href="#carouselExampleIndicators"
+					role="button" data-slide="prev"> <span
+					class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+					class="sr-only">이전</span>
+				</a> <a class="carousel-control-next" href="#carouselExampleIndicators"
+					role="button" data-slide="next"> <span
+					class="carousel-control-next-icon" aria-hidden="true"></span> <span
+					class="sr-only">다음</span>
+				</a>
+			</div>
+			<br />
+		    <div class="row">
+			    <div class="col">
+				    <!-- 미니 글 리스트 -->
+				    <br/>
+   					<h3 class="center">
+						<span class="font-weight-bold">
+							<a class="font-style-success" role="button" th:href="@{/meetingList}" id='moimTitle'>모임글</a>
+						</span>
+					</h3>
+					<a class="font-weight pull-right" role="button" th:href="@{/meetingList}" id='more1'>More</a>
+					<table class="table table-hover">
+						<thead id='head1'>
+							<tr>
+								<th>번호</th>
+								<th>제목</th>
+								<th>작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="mt : ${mMainList}">
+								<td th:text="${mt.writingNumber}">번호</td>
+								<td><a th:href="@{/meetingView(writingNumber=${mt.writingNumber})}" th:text="${mt.title}">제목</a></td>
+								<td th:text="${mt.writeTime}">작성일</td>
+							</tr>
+						</tbody>
+					</table>
+			    </div>
+				<div class="col">
+				<br/>
+					<h3 class="center">
+						<span class="font-weight-bold">
+							<a class="font-style-success" role="button" th:href="@{/eventList}" id='eventTitle'>이벤트글</a>
+						</span>
+					</h3>
+					<a class="font-weight pull-right" role="button" th:href="@{/eventList}" id='more2'>More</a>
+					<table class="table table-hover">		
+						<thead id='head2'>
+							<tr>
+								<th>번호</th>
+								<th>제목</th>
+								<th>작성일</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="et : ${eMainList}">
+								<td th:text="${et.writingNumber}">번호</td>
+								<td><a th:href="@{/eventView(writingNumber=${et.writingNumber})}" th:text="${et.title}">제목</a></td>
+								<td th:text="${et.writeTime}">작성일</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div> 
+
+		</div>
+	<script>
+	//카테고리바 체크디자인용
+	window.onload = function(){
+		$('#meetingAndEventMainNav').addClass('active').css('color','#2eca6a');
+	}
+	</script>
+	</div>
+</body>
+</html>

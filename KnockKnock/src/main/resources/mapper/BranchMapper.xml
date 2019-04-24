@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.knockknock.mapper.BranchMapper">
+	<select id="findingRoomList" resultType="BranchDetailVDTO">
+		SELECT
+		B.BRANCH_NUMBER branchNumber, 
+		B.BRANCH_COMMENT branchComment,
+		B.ADDRESS,
+		B.ADDRESS_DETAIL addressDetail,
+		B.MAXIMUM_RESIDENT maximumResident,
+		B.BRANCH_TYPE branchType,
+		B.PET,
+		B.ISPARKING isParking,
+		B.ISELEVATOR isElevator,
+		B.FACILITY,
+		B.RULE,
+		B.THEME theme,
+		R.MONTHLY_RENT monthlyRent
+		FROM BRANCH B,ROOM R
+		WHERE B.BRANCH_NUMBER = R.BRANCH_NUMBER
+		<if test="address!=null">
+			AND B.ADDRESS LIKE CONCAT('%',#{address},'%')
+		</if>
+		GROUP BY R.BRANCH_NUMBER
+		ORDER BY B.BRANCH_NUMBER ASC
+	</select>
+
+	<select id="categoryCount" resultType="int">
+		SELECT
+		COUNT(BRANCH_NUMBER)
+		FROM BRANCH WHERE BRANCH_NUMBER > 0
+	</select>
+
+	<select id="findingCategoryRoomList" resultType="BranchDetailVDTO">
+		SELECT
+		B.BRANCH_NUMBER branchNumber,
+		B.ADDRESS, B.THEME, B.GENDER,
+		B.BRANCH_TYPE branchType,
+		B.ISPARKING, B.ISELEVATOR, B.PET,
+		B.BRANCH_TYPE branchType
+		FROM BRANCH B
+		WHERE BRANCH_NUMBER
+	</select>
+
+	<select id="categoryRoomSearch2" resultType="BranchDetailVDTO">
+		SELECT
+		B.BRANCH_NUMBER branchNumber,
+		B.ADDRESS, B.THEME, B.GENDER,
+		B.BRANCH_TYPE branchType,
+		B.ISPARKING, B.ISELEVATOR, B.PET,
+		B.BRANCH_TYPE branchType
+		FROM BRANCH B
+		<trim prefix="where" prefixOverrides="AND|OR">
+		<if test="address!=null">			
+			AND ADDRESS like CONCAT('%',#{address},'%')
+		</if>
+		<if test="searchKeyWord.size!=0">
+			and THEME in
+			<foreach collection="searchKeyWord" item="theme1" open="(" close=")" separator=",">
+			#{theme1}
+			</foreach>
+		</if>
+		<if test="genderCategory.size!=0">
+			and GENDER in
+			<foreach collection="genderCategory" item="Gender" open="(" close=")" separator=",">
+			#{Gender}
+			</foreach>
+		</if>		
+		<if test="petCategory.size!=0">
+			and PET in
+			<foreach collection="petCategory" item="isPet" open="(" close=")" separator=",">
+			#{isPet}
+			</foreach>
+		</if>
+		<if test="branchTypeCategory.size!=0">
+			and BRANCH_TYPE in
+			<foreach collection="branchTypeCategory" item="branchType" open="(" close=")" separator=",">
+			#{branchType}
+			</foreach>
+		</if>	
+		</trim>
+	</select>
+	
+	<select id="roomList" resultType="BranchDetailVDTO" parameterType="java.util.List">
+		SELECT
+		B.BRANCH_NUMBER branchNumber,
+		B.BRANCH_COMMENT branchComment,
+		B.ADDRESS address,
+		B.ADDRESS_DETAIL addressDetail,
+		B.MAXIMUM_RESIDENT maximumResident,
+		B.BRANCH_TYPE branchType,
+		B.PET pet,
+		B.ISPARKING isParking,
+		B.ISELEVATOR isElevator,
+		B.FACILITY,
+		B.RULE,
+		B.THEME theme,
+		B.GENDER gender,
+		R.MONTHLY_RENT monthlyRent
+		FROM BRANCH B,ROOM R
+		<trim prefix="WHERE" prefixOverrides="AND">
+			B.BRANCH_NUMBER = R.BRANCH_NUMBER
+			<if test="address!=null">
+				AND B.ADDRESS like CONCAT('%',#{address},'%')
+			</if>
+			<if test="genderList.size!=0">
+				AND B.GENDER IN
+				<foreach collection="genderList" item="gender" open="("
+					close=")" separator="," index="index">
+					#{gender}
+				</foreach>
+			</if>
+			<if test="petList.size!=0">
+				AND PET IN
+				<foreach collection="petList" item="pet" open="(" close=")"
+					separator="," index="index">
+					#{pet}
+				</foreach>
+			</if>
+			<if test="themeList.size==1">
+				<choose>
+					<when test='themeList.get(0) eq "없음"'>
+						AND THEME IN
+						<foreach collection="themeList" item="item" open="("
+							close=")" separator="," index="index">
+							 #{item}
+						</foreach>
+					</when>
+					<when test='themeList.get(0) neq "없음"'>
+						and theme in
+						<foreach collection="themeList" item="item" open="("
+							close=")" separator="," index="index">
+							'IT', '음악', '쿠킹', '전시/공연', '커피', '드로잉', '영화', '어학', '패션', '운동', '게임', '독서', '와인', '스터디' 
+						</foreach>
+					</when>
+				</choose>
+			</if>
+			<if test="minRent gt 0 and minRent lte maxRent">
+				AND R.MONTHLY_RENT BETWEEN #{minRent} AND #{maxRent}
+			</if>
+		</trim>
+		GROUP BY B.BRANCH_NUMBER
+		ORDER BY branchNumber ASC
+	</select>
+
+	<select id="getDetail" resultType="BranchDetailVDTO">
+		SELECT
+		B.BRANCH_NUMBER branchNumber,
+		B.BRANCH_COMMENT branchComment,
+		B.ADDRESS,
+		B.ADDRESS_DETAIL addressDetail,
+		B.MAXIMUM_RESIDENT maximumResident,
+		B.BRANCH_TYPE branchType,
+		B.PET,
+		B.ISPARKING isParking,
+		B.ISELEVATOR isElevator,
+		B.FACILITY,
+		B.RULE
+		<!-- R.ROOM_NUMBER roomNumber, R.GENDER gender, R.ALLOW_NUMBER allowNumber, 
+			R.SPACE space, R.DEPOSIT deposit, R.MONTHLY_RENT monthlyRent, R.RENTABLE_DATE 
+			rentableDate -->
+		FROM BRANCH B
+		WHERE B.BRANCH_NUMBER = #{brancnNumber}
+	</select>
+
+	<select id="getRoomInfo" resultType="RoomVDTO">
+		SELECT
+		ROOM_NUMBER roomNumber,
+		GENDER,
+		ALLOW_NUMBER allowNumber,
+		SPACE,
+		DEPOSIT,
+		MONTHLY_RENT monthlyRent,
+		RENTABLE_DATE rentableDate,
+		FACILITY
+		FROM ROOM
+		WHERE BRANCH_NUMBER = #{branchNumber}
+	</select>
+
+	<select id="getMemberInfo" resultType="BranchDetailVDTO">
+		SELECT
+		<!-- C.MEMBER_NUMBER memberNumber, C.BRANCH_NUMBER branchNumber, -->
+		C.ROOM_NUMBER roomNumber,
+		M.FAVORITE1,
+		M.FAVORITE2,
+		M.FAVORITE3,
+		M.NICKNAME,
+		M.BIRTH,
+		M.GENDER memberGender,
+		M.INTRODUCE,
+		M.IMAGE_PROFILE imageProfile
+		FROM CONTRACT C, MEMBER M
+		WHERE C.BRANCH_NUMBER = #{branchNumber}
+		AND C.MEMBER_NUMBER = M.MEMBER_NUMBER
+	</select>
+	
+	<select id="getPetInfo" resultType="PetDTO">
+		SELECT
+		P.ANIMAL,
+		P.AMOUNT
+		FROM PET P, CONTRACT C
+		WHERE C.BRANCH_NUMBER = #{branchNumber}
+		AND C.MEMBER_NUMBER=P.MEMBER_NUMBER
+	</select>
+
+	<insert id="visitBooking">
+		INSERT INTO VISIT SET
+		BRANCH_NUMBER=#{visitDTO.branchNumber},
+		MEMBER_NUMBER=(SELECT
+		M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email}),
+		RESERVATION_TIME=#{visitDTO.reservationTime},
+		MEMO=#{visitDTO.memo}
+	</insert>
+	
+	<insert id="likeBranch">
+		INSERT INTO LIKE_BRANCH SET
+		BRANCH_NUMBER=#{branchNumber},
+		MEMBER_NUMBER=(SELECT
+		M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+	</insert>
+   
+	<!-- 테마 체크박스 -->
+	<select id="getThemeLists" resultType="String">
+		SELECT DISTINCT THEME FROM BRANCH
+	</select>
+	<!-- 주택유형 체크박스 -->
+	<select id="getIsGender" resultType="String">
+		select distinct GENDER FROM BRANCH
+	</select>
+	<!-- 펫 유무 체크박스 -->
+	<select id="getIspet" resultType="String">
+		SELECT DISTINCT PET FROM BRANCH
+	</select>
+	<!-- 주택유형 체크박스 -->
+	<select id="getBranchType" resultType="String">
+		SELECT DISTINCT BRANCH_TYPE FROM BRANCH
+	</select>
+	
+	<select id="getHeartStatus" resultType="LikeBranchDTO">
+		SELECT
+		BRANCH_NUMBER branchNumber, 
+		MEMBER_NUMBER memberNumber
+		FROM LIKE_BRANCH
+		WHERE BRANCH_NUMBER=#{branchNumber}
+		AND MEMBER_NUMBER=(SELECT M.MEMBER_NUMBER FROM MEMBER M WHERE M.EMAIL =#{email})
+	</select>
+</mapper>

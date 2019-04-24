@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<style>
+
+.fa-address:before {
+    content: "\f015";
+}
+
+.address1{
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 1rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+#addressSearch{
+	 background-color: #2eca6a;
+	 color: white;
+}
+
+#card-header{
+	 background-color: #2eca6a;
+	 color: white;
+}
+
+#rjcc{
+	margin-top:50px;
+	margin-bottom:50px;
+	border-radius: 1rem;
+	font-size:25px;
+}
+
+#signUp{
+	 color: white;
+	 border-radius: 1rem;
+}
+
+#checkEmail{
+ 	 background-color: #2eca6a;
+	 color: white;
+	 border-radius: 1rem;
+	 border: 1px solid #2eca6a;
+}
+
+#allRegister{
+	font-family: 'Jua', sans-serif;
+}
+
+#addressSearch{
+	font-size:25px;
+}
+
+</style>
+	  <!-- sign up form -->
+	  <script th:src="@{//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js}"></script>
+	  <script th:src="@{//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js}"></script>
+	  <!-- sign up -->
+  	  <link th:href="@{//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css}" rel="stylesheet" id="bootstrap-css">
+</head>
+<body>
+
+<!-- / content replace start -->
+<div layout:fragment="content" id='allRegister'>
+<div class="container">
+	<div class="row justify-content-center" id="rjcc">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header" id="card-header"><strong>KnockKnock 추가정보등록</strong></div>
+                            <div class="card-body">
+                                <form class="form-horizontal" id="form" method="post" action="suvCreate">
+                                <div class="form-group">
+                                        <label for="name" class="cols-sm-2 control-label">이름</label>
+                                        <div class="cols-sm-10">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fas fa-signature"></i></span>
+                                                <span class="form-control" name="name" id="name" th:text="${session.name}" th:value="${session.name}" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username" class="cols-sm-2 control-label">페이스북 계정</label>
+                                        <div class="cols-sm-10">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                                <span class="form-control" name="email" id="email" th:text="${session.email}" th:value="${session.email}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nickname" class="cols-sm-2 control-label">닉네임</label>
+                                        <div class="cols-sm-10">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                                <input type="text" class="form-control" name="nickname" id="nickname" placeholder="Enter your Username" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phoneNumber" class="cols-sm-2 control-label">휴대폰번호</label>
+                                        <div class="cols-sm-10">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fas fa-mobile-alt"></i></span>
+                                                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="Enter your phoneNumber" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">	
+                                     	<label for="confirm" class="cols-sm-2 control-label">주소</label>
+                                     	<div class="cols-sm-10">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-address fa" aria-hidden="true"></i></span>
+												<input class='address1' type="text" id="sample4_postcode" placeholder="우편번호">
+											</div>
+											<div class="input-group">
+												<input class='address1' type="text" id="sample4_roadAddress" name="address" placeholder="도로명주소">
+												<input class='address1' type="text" id="sample4_detailAddress" name="addressDetail" placeholder="상세주소">
+												<input class='address1' type="text" id="sample4_extraAddress" placeholder="참고항목">
+												<input class='address1' id='addressSearch' type="button" onclick="sample4_execDaumPostcode()" value="주소찾기">
+												<span id="guide" style="color:#999;display:none"></span>
+										 	</div>
+                                        </div>
+									</div>
+						            <div class="form-group">	
+                                     	<label for="confirm" class="cols-sm-2 control-label">자기소개</label>
+                                     	<div class="cols-sm-10">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="far fa-user"></i></i></span>
+												<input class='introduce' type="text" id="introduce" name="introduce" placeholder="introduce">
+											 </div>
+                                        </div><br>
+                                        <label for="confirm" class="cols-sm-2 control-label">성별</label>
+                                     	<div class="cols-sm-10">
+											<div class="input-group">
+											    <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+												<select name="gender">
+													<option class='introduce' type="text" id="male" name="male" placeholder="male">남자</option>
+													<option class='introduce' type="text" id="female" name="female" placeholder="female">여자</option>
+										 		</select>
+										 	</div>
+                                        </div><br>
+                                        <label for="confirm" class="cols-sm-2 control-label">반려동물</label>
+                                     	<div class="cols-sm-10">
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fas fa-dog"></i></span>
+												<input class='pet' type="text" id="animal" name="animal" placeholder="animal">
+											 </div>
+                                        </div><br>
+                                        <label for="confirm" class="cols-sm-2 control-label">관심사(최대 3개 선택 가능)</label>
+                                     	<div class="cols-sm-10">
+											<div class="input-group">
+											    <span class="input-group-addon"><i class="far fa-star"></i></span>
+												<select name="favorite1">
+													<option class='favorite1' type="text" id="male" name="favorite1" placeholder="male">IT</option>
+													<option class='favorite1' type="text" id="female" name="favorite1" placeholder="female">여자</option>
+										 		</select>
+										 	</div>
+										 	<div class="input-group">
+											    <span class="input-group-addon"><i class="far fa-star"></i></i></span>
+												<select name="favorite2">
+													<option class='favorite2' type="text" id="male" name="favorite2" placeholder="male">IT</option>
+													<option class='favorite2' type="text" id="female" name="favorite2" placeholder="female">여자</option>
+										 		</select>
+										 	</div>
+										 	<div class="input-group">
+											    <span class="input-group-addon"><i class="far fa-star"></i></span>
+												<select name="favorite3">
+													<option class='favorite3' type="text" id="male" name="favorite3" placeholder="male">IT</option>
+													<option class='favorite3' type="text" id="female" name="favorite3" placeholder="female">여자</option>
+										 		</select>
+										 	</div>
+                                        </div>
+									</div>
+                                    <div class="form-group ">
+                                    	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> 
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block login-button" id='signUp'>회원가입</button>
+                                    </div>
+                                    <div class="login-register">
+                                        <a href="/login">로그인</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<script>
+
+    var roadAddress = $("#sample4_roadAddress").val();
+    var detailAddress = $("#sample4_detailAddress").val();
+	
+    //주소API-------------------------------------------------------------
+    function sample4_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var extraRoadAddr = ''; // 참고 항목 변수
+
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                   extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('sample4_postcode').value = data.zonecode;
+                document.getElementById("sample4_roadAddress").value = roadAddr;
+                
+                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                if(roadAddr !== ''){
+                    document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                } else {
+                    document.getElementById("sample4_extraAddress").value = '';
+                }
+
+                var guideTextBox = document.getElementById("guide");
+                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                if(data.autoRoadAddress) {
+                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                    guideTextBox.style.display = 'block';
+
+                } else {
+                    guideTextBox.innerHTML = '';
+                    guideTextBox.style.display = 'block';
+                }
+            }
+        }).open();
+    }
+  	//주소API-------------------------------------------------------------
+  	window.onload = function(){
+  		swal($("#email").val());
+  	}
+  	
+ 	
+  	
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<title>이벤트 작성</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script type="text/javascript" src="../texteditor/ckeditor.js"></script>
+<style>
+h1, h2, h3, h4, h5, h6{
+	font-family: 'Jua', sans-serif;
+}
+
+body{
+	font-family: 'Jua', sans-serif;
+	margin-top:80px;
+}
+
+
+.sidenav {
+	width: 200px;
+	position: fixed;
+	z-index: 1;
+	top: 130px;
+	left: 60px;
+	background: #eee;
+	overflow-x: hidden;
+	padding: 8px 0;
+	margin-right: 40px;
+}
+
+#sidenav{
+	background-color:white;
+	border: 1px solid #2eca6a;
+	color:#2eca6a;
+	font-weight:bolder;
+	border-radius: 1rem;
+
+}
+
+.sidenav a {
+	padding: 10px 10px 10px 16px;
+	text-decoration: none;
+	font-size: 30px;
+	color: #2eca6a;
+	display: block;
+}
+
+.sidenav a:hover {
+	color: #064579;
+}
+
+#title{
+	color:#2eca6a;
+	font-size:larger;
+	font-weight:bolder;
+	margin-bottom:30px;
+}
+</style>
+
+
+
+</head>
+<body>
+	<div layout:fragment="content" class="container">
+		<div class="row">
+			<div class="col-md-2">
+				<div class="sidenav" id="sidenav">
+					<a th:href="@{adminEventListView}">이벤트관리</a><br> <a
+						th:href="@{adminMemberSearchView}">회원관리</a><br> <a
+						th:href="@{adminVisitList}">방문문의관리</a><br> <a
+						th:href="@{adminBranchRegistView}">지점등록</a><br>
+				</div>
+			</div>
+			<div class="col-md-10">
+				<h1 id='title'>이벤트 등록</h1>
+				<form action="adminEventWrite" method="post" enctype="multipart/form-data" id="form">
+					<label style="width: 100px;">제목</label><input type=text name="title" required><br />
+					<label style="width: 100px;">모집 시작 시간</label><input type="date" name="acceptStartTime"><br />
+					<label style="width: 100px;">모집 종료 시간</label><input type="date" name="acceptEndTime"><br />
+					<label style="width: 100px;">이벤트 시작 시간</label><input type="date" name="eventStartTime"><br />
+					<label style="width: 100px;">이벤트 종료 시간</label><input type="date" name="eventEndTime"><br />
+					<label style="width: 100px;">모집 인원</label><input class="form-control col-3" type="number" name="recruitMaxNumber"><br />
+					<label style="width: 100px;">이미지</label><input class="form-control" type="file" name="eventImage" id="imgInp"><br />
+					<div><textarea class="form-control col-5" name="content" id="content" cols="50" rows="15"></textarea>
+						<script>
+							CKEDITOR.replace('content');
+						</script></div>
+					<input type="submit" class="btn btn-success" name="eventWrite" id="eventWrite" value="작성" style="float: right;">
+					<input type="hidden" th:name="${_csrf.parameterName}"
+					th:value="${_csrf.token}">
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

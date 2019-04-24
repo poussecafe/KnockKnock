@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+	layout:decorate="~{etc/fragments/Main_layout}">
+<head>
+<title>회원 정보</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+h1, h2, h3, h4, h5, h6{
+	font-family: 'Jua', sans-serif;
+}
+
+body{
+	font-family: 'Jua', sans-serif;
+	margin-top:80px;
+}
+
+.sidenav {
+	width: 200px;
+	position: fixed;
+	z-index: 1;
+	top: 130px;
+	left: 60px;
+	background: #eee;
+	overflow-x: hidden;
+	padding: 8px 0;
+	margin-right: 40px;
+}
+
+#sidenav{
+	background-color:white;
+	border: 2px solid #2eca6a;
+	color:#2eca6a;
+	font-weight:bolder;
+	border-radius: 1rem;
+
+}
+
+.btn {
+	border-radius: 3px;
+	font-weight: 100;
+	border-color: transparent;
+	background: #2eca6a;
+	color: #fff;
+	cursor: pointer;
+}
+
+.sidenav a {
+	padding: 10px 10px 10px 16px;
+	text-decoration: none;
+	font-size: 30px;
+	color: #2eca6a;
+	display: block;
+}
+
+.sidenav a:hover {
+	color: #064579;
+}
+
+#title{
+	color:#2eca6a;
+	font-size:30px;
+	font-weight:bolder;
+	margin-bottom:30px;
+}
+label{
+	width: 120px;
+}
+.main {
+  margin-left: 30px;
+  padding: 0px 10px;
+}
+</style>
+
+</head>
+<body>
+	<div layout:fragment="content" class="container">
+		<div class="row">
+			<div class="col-md-1">
+				<div class="sidenav" id='sidenav'>
+					<a th:href="@{adminEventListView}">이벤트 관리</a><br>
+					<a th:href="@{adminMemberSearchView}">회원 관리</a><br>
+					<a th:href="@{adminVisitList}">방문 문의 관리</a><br>
+					<a th:href="@{adminBranchRegistView}">지점 등록</a><br>
+				</div>
+			</div>
+			<div class="col-md-11">
+			<div class="main">
+				<div class="w3-container">
+					<h1 id='title'>회원 정보</h1>
+					<label>회원번호</label><span th:text="${memberView.memberNumber}"></span><br />
+					<label>권한</label><span th:text="${memberView.grade}"></span><br />
+					<label>이메일</label><span th:text="${memberView.email}"></span><br />
+					<label>닉네임</label><span th:text="${memberView.nickname}"></span><br />
+					<label>이름</label><span th:text="${memberView.name}"></span><br />
+					<label>가입일</label><span th:text="${memberView.joinTime}"></span><br />
+					<label>생일</label><span th:text="${memberView.birth}"></span><br />
+					<label>성별</label><span th:text="${memberView.gender}"></span><br />
+					<label>주소</label><span th:text="${memberView.address}"></span><br />
+					<label>상세주소</label><span th:text="${memberView.addressDetail}"></span><br />
+					<!-- <label>주소지이름</label><span th:text="${memberView.addressName}"></span><br /> -->
+					<label>휴대폰번호</label><span th:text="${memberView.phoneNumber}"></span><br />
+					
+					
+					<br /><br />
+					<div th:if="${memberView.contractNumber}!=0">
+					<h1 id='title'>계약 정보</h1>
+					<label>계약번호</label><span th:text="${memberView.contractNumber}"></span><br />
+					<label>거주중인 지점번호</label><span th:text="${memberView.branchNumber}"></span><br />
+					<label>거주중인 방 호수</label><span th:text="${memberView.roomNumber}"></span><br />
+					<label>반려동물 보유여부</label><span th:text="${memberView.isPet}"></span><br />
+					<label>비상연락번호</label><span th:text="${memberView.emergencyNumber}"></span><br />
+					<label>회원 은행명</label><span th:text="${memberView.bankName}"></span><br />
+					<label>회원 예금주</label><span th:text="${memberView.depositor}"></span><br />
+					<label>회원 계좌번호</label><span th:text="${memberView.memberAccount}"></span><br />
+					<label>계약일</label><span th:text="${memberView.contractDate}"></span><br />
+					<label>계약기간(개월)</label><span th:text="${memberView.period}"></span><br />
+					<label>주민등록번호</label><span th:text="${memberView.idNumber}"></span><br />
+					<!-- <label>체납금액</label><span th:text="${memberView.payDelayAmount}"></span><br />
+					<label>패널티금액</label><span th:text="${memberView.paneltyAmount}"></span><br /> -->
+					<label>메모</label><span th:text="${memberView.memo}"></span><br /></div>
+					<div th:if="${memberView.contractNumber}==0"><form action="adminContractRegistView" style="display: inline; float: right;">
+						<input type="hidden" name="memberNumber" th:value="${memberView.memberNumber}">
+						<input type="submit" class="btn btn-default" value="계약 정보 등록">
+					</form></div>
+					<div th:if="${memberView.contractNumber}!=0"><form action="adminContractModifyView" style="display: inline; float: right;">
+						<input type="hidden" name="contractNumber" th:value="${memberView.contractNumber}">
+						<input type="submit" class="btn btn-default" value="계약 정보 수정">
+					</form></div>
+					
+					<form action="adminVisitListOfMember" style="display: inline; float: right;">
+						<input type="hidden" name="memberNumber" th:value="${memberView.memberNumber}">
+						<input type="submit" class="btn btn-default" value="방문 문의 내역">&nbsp;
+					</form>
+					
+					<form action="/" style="display: inline; float: right;">
+						<input type="submit" class="btn btn-default" value="메인으로">&nbsp;
+					</form>
+								
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

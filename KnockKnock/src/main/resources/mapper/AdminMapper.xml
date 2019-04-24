@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.knockknock.mapper.AdminMapper">
+
+	<!-- event -->
+
+	<select id="eventListView" resultType="EventVDTO">
+		SELECT E.WRITING_NUMBER
+		writingNumber,
+		E.MEMBER_NUMBER memberNumber, E.TITLE, E.HIT,
+		E.WRITE_TIME writeTime,
+		E.CONTENT,
+		E.ACCEPT_START_TIME acceptStartTime,
+		E.ACCEPT_END_TIME acceptEndTime, E.CANCEL_REASON cancelReason,
+		E.RECRUIT_NUMBER recruitNumber, E.EVENT_START_TIME eventStartTime,
+		E.EVENT_END_TIME eventEndTime, E.IMAGE,
+		E.LIKE, M.NICKNAME
+		FROM EVENT E,
+		MEMBER M
+		WHERE E.MEMBER_NUMBER =
+		M.MEMBER_NUMBER
+		ORDER BY writingNumber
+		DESC
+	</select>
+	<select id="eventView" resultType="EventVDTO">
+		SELECT E.WRITING_NUMBER
+		writingNumber,
+		E.MEMBER_NUMBER memberNumber, E.TITLE, E.HIT,
+		E.WRITE_TIME writeTime, E.CONTENT, E.CANCEL_REASON cancelReason,
+		E.ACCEPT_START_TIME acceptStartTime,
+		E.ACCEPT_END_TIME acceptEndTime, E.EVENT_START_TIME eventStartTime,
+		E.EVENT_END_TIME eventEndTime, E.RECRUIT_NUMBER recruitNumber, E.RECRUIT_MAX_NUMBER recruitMaxNumber, E.LIKE,
+		M.NICKNAME
+		FROM EVENT E,
+		MEMBER M
+		WHERE E.MEMBER_NUMBER = M.MEMBER_NUMBER
+		AND
+		E.WRITING_NUMBER = #{param1}
+	</select>
+	<update id="eventViewHit">
+		UPDATE EVENT SET HIT = HIT + 1 WHERE WRITING_NUMBER =
+		#{param1}
+	</update>
+	<select id="getMemberNumber" resultType="Integer">
+		SELECT MEMBER_NUMBER memberNumber
+		FROM MEMBER
+		WHERE EMAIL = #{param1}
+	</select>
+	<select id="getEventJoinMember" resultType="EventJoinMemberVDTO">
+		SELECT J.WRITING_NUMBER writingNumber,
+		J.MEMBER_NUMBER memberNumber,
+		M.NAME,
+		M.NICKNAME,
+		M.GENDER,
+		M.PHONE_NUMBER phoneNumber
+		FROM JOIN_EVENT J,
+		MEMBER M
+		WHERE J.MEMBER_NUMBER = M.MEMBER_NUMBER AND
+		J.WRITING_NUMBER = #{param1}
+	</select>
+	<insert id="eventWrite">
+		INSERT INTO EVENT(MEMBER_NUMBER, TITLE,
+		CONTENT,
+		EVENT_START_TIME, EVENT_END_TIME,
+		ACCEPT_START_TIME, ACCEPT_END_TIME,
+		RECRUIT_MAX_NUMBER, HIT, WRITE_TIME)
+		VALUES
+		(#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8},0,NOW())
+	</insert>
+	<update id="setEventImageName">
+		UPDATE EVENT
+		SET IMAGE = #{param2}
+		WHERE WRITING_NUMBER = #{param1}
+	</update>
+	<select id="getEventImageName" resultType="String">
+		SELECT IMAGE
+		FROM EVENT
+		WHERE WRITING_NUMBER = #{param1}
+	</select>
+	<select id="getWritingNumber" resultType="Integer">
+		SELECT WRITING_NUMBER writingNumber
+		FROM EVENT
+	</select>
+	<select id="eventWriteNumber" resultType="Integer">
+		SELECT WRITING_NUMBER
+		writingNumber
+		FROM EVENT
+		WHERE
+		MEMBER_NUMBER = #{param1}, TITLE =
+		#{param2}, CONTENT = #{param3},
+		ACCEPT_START_TIME = #{param4},
+		ACCEPT_END_TIME = #{param5},
+		EVENT_START_TIME = #{param6},
+		EVENT_END_TIME = #{param7},
+		RECRUIT_NUMBER = #{param8}
+	</select>
+	<select id="eventModifyView" resultType="EventDTO">
+		SELECT WRITING_NUMBER
+		writingNumber,
+		TITLE, CONTENT, ACCEPT_START_TIME
+		acceptStartTime,
+		ACCEPT_END_TIME acceptEndTime, EVENT_START_TIME
+		eventStartTime,
+		EVENT_END_TIME eventEndTime, RECRUIT_MAX_NUMBER
+		recruitMaxNumber
+		FROM EVENT
+		WHERE WRITING_NUMBER = #{param1}
+	</select>
+	<update id="eventModify">
+		UPDATE EVENT
+		SET TITLE = #{param3},
+		CONTENT =
+		#{param4},
+		EVENT_START_TIME = #{param5},
+		EVENT_END_TIME = #{param6},
+		ACCEPT_START_TIME = #{param7},
+		ACCEPT_END_TIME = #{param8},
+		RECRUIT_MAX_NUMBER = #{param9}
+		WHERE WRITING_NUMBER = #{param1}
+	</update>
+	<update id="eventCancel">
+		UPDATE EVENT
+		SET CANCEL_REASON = #{param2}
+		WHERE WRITING_NUMBER = #{param1}
+	</update>
+	<delete id="eventJoinDelete">
+		DELETE FROM JOIN_EVENT
+		WHERE WRITING_NUMBER = #{param1}
+	</delete>
+	<delete id="eventDelete">
+		DELETE FROM EVENT
+		WHERE WRITING_NUMBER = #{param1}
+	</delete>
+
+	<!-- member -->
+
+	<select id="memberListView" resultType="MemberDTO">
+		SELECT M.MEMBER_NUMBER
+		memberNumber,
+		M.EMAIL,
+		M.NAME,
+		M.NICKNAME,
+		M.JOIN_TIME joinTime,
+		C.BRANCH_NUMBER contractBranchNumber
+		FROM MEMBER M
+		LEFT OUTER JOIN CONTRACT C
+		ON M.MEMBER_NUMBER = C.MEMBER_NUMBER
+		WHERE
+		M.EMAIL LIKE CONCAT('%', #{param1}, '%') OR
+		M.NAME LIKE CONCAT('%',
+		#{param1}, '%') OR
+		M.NICKNAME LIKE CONCAT('%', #{param1}, '%')
+		ORDER BY
+		memberNumber ASC
+	</select>
+	<select id="memberView" resultType="MemberContractVDTO">
+		SELECT M.MEMBER_NUMBER
+		memberNumber,
+		M.GRADE,
+		M.FAVORITE1,
+		M.FAVORITE2,
+		M.FAVORITE3,
+		M.EMAIL,
+		M.NAME,
+		M.NICKNAME,
+		M.BIRTH,
+		M.GENDER,
+		M.ADDRESS,
+		M.ADDRESS_DETAIL
+		addressDetail,
+		M.ADDRESS_NAME addressName,
+		M.PHONE_NUMBER phoneNumber,
+		M.JOIN_TIME joinTime,
+		C.CONTRACT_NUMBER contractNumber,
+		C.BRANCH_NUMBER
+		branchNumber,
+		C.ROOM_NUMBER roomNumber,
+		C.ISPET,
+		C.EMERGENCY_NUMBER
+		emergencyNumber,
+		C.BANK_NAME bankName,
+		C.DEPOSITOR,
+		C.MEMBER_ACCOUNT
+		memberAccount,
+		C.CONTRACT_DATE contractDate,
+		C.PERIOD,
+		C.ID_NUMBER
+		idNumber,
+		C.PAY_DELAY_AMOUNT payDelayAmount,
+		C.PANELTY_AMOUNT
+		paneltyAmount,
+		C.RETURN_AMOUNT returnAmount,
+		C.MEMO
+		FROM MEMBER M
+		LEFT
+		OUTER JOIN CONTRACT C ON M.MEMBER_NUMBER = C.MEMBER_NUMBER
+		WHERE
+		M.MEMBER_NUMBER = #{param1}
+	</select>
+	<insert id="contractRegist">
+		INSERT INTO CONTRACT (
+		MEMBER_NUMBER, BRANCH_NUMBER,
+		ROOM_NUMBER, PERIOD, ISPET, EMERGENCY_NUMBER, BANK_NAME, DEPOSITOR,
+		MEMBER_ACCOUNT,
+		CONTRACT_DATE, ID_NUMBER, PAY_DELAY_AMOUNT,
+		PANELTY_AMOUNT, RETURN_AMOUNT, MEMO)
+		VALUES
+		(#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8},#{param9},#{param10},#{param11},#{param12},#{param13},#{param14},#{param15})
+	</insert>
+	<select id="contractModifyView" resultType="ContractDTO">
+		SELECT CONTRACT_NUMBER contractNumber,
+		MEMBER_NUMBER memberNumber,
+		BRANCH_NUMBER branchNumber,
+		ROOM_NUMBER roomNumber,
+		PERIOD, ISPET,
+		EMERGENCY_NUMBER emergencyNumber,
+		BANK_NAME bankName,
+		DEPOSITOR,
+		MEMBER_ACCOUNT memberAccount,
+		CONTRACT_DATE contractDate,
+		ID_NUMBER idNumber,
+		MEMO
+		FROM CONTRACT
+		WHERE CONTRACT_NUMBER = #{param1}
+	</select>
+	<update id="contractModify">
+		UPDATE CONTRACT
+		SET MEMBER_NUMBER = #{contractDTO.memberNumber},
+		BRANCH_NUMBER = #{contractDTO.branchNumber},
+		ROOM_NUMBER = #{contractDTO.roomNumber},
+		PERIOD = #{contractDTO.period},
+		ISPET = #{contractDTO.isPet},
+		EMERGENCY_NUMBER = #{contractDTO.emergencyNumber},
+		BANK_NAME = #{contractDTO.bankName},
+		DEPOSITOR = #{contractDTO.depositor},
+		MEMBER_ACCOUNT = #{contractDTO.memberAccount},
+		CONTRACT_DATE = #{contractDTO.contractDate},
+		ID_NUMBER = #{contractDTO.idNumber},
+		MEMO = #{contractDTO.memo}
+		WHERE CONTRACT_NUMBER = #{contractDTO.contractNumber}
+	</update>
+	<select id="getContractNumber" resultType="Integer">
+		SELECT CONTRACT_NUMBER
+		contractNumber
+		FROM CONTRACT
+	</select>
+	<select id="getDeposit" resultType="Integer">
+		SELECT DEPOSIT
+		FROM ROOM
+		WHERE
+		ROOM_NUMBER = #{param1} AND BRANCH_NUMBER = #{param2}
+	</select>
+	<update id="setReturnAmount">
+		UPDATE CONTRACT
+		SET RETURN_AMOUNT = #{param2}
+		WHERE
+		CONTRACT_NUMBER = #{param1}
+	</update>
+
+	<!-- visit -->
+
+	<select id="visitListView" resultType="VisitVDTO">
+		SELECT V.WRITING_NUMBER
+		writingNumber,
+		V.MEMBER_NUMBER memberNumber,
+		V.BRANCH_NUMBER
+		branchNumber,
+		V.WRITE_TIME writeTime,
+		V.RESERVATION_TIME
+		reservationTime,
+		V.MEMO,
+		V.ISCHECK,
+		M.NICKNAME,
+		M.NAME,
+		M.PHONE_NUMBER
+		phoneNumber
+		FROM VISIT V, MEMBER M
+		WHERE V.MEMBER_NUMBER =
+		M.MEMBER_NUMBER
+		ORDER BY writingNumber DESC
+	</select>
+	<select id="visitListViewOfMember" resultType="VisitVDTO">
+		SELECT V.WRITING_NUMBER
+		writingNumber,
+		V.MEMBER_NUMBER memberNumber,
+		V.BRANCH_NUMBER
+		branchNumber,
+		V.WRITE_TIME writeTime,
+		V.RESERVATION_TIME
+		reservationTime,
+		V.MEMO,
+		V.ISCHECK,
+		M.NICKNAME,
+		M.NAME,
+		M.PHONE_NUMBER
+		phoneNumber
+		FROM VISIT V, MEMBER M
+		WHERE V.MEMBER_NUMBER =
+		M.MEMBER_NUMBER AND V.MEMBER_NUMBER = #{param1}
+		ORDER BY writingNumber DESC
+	</select>
+	<select id="visitView" resultType="VisitVDTO">
+		SELECT V.WRITING_NUMBER
+		writingNumber,
+		V.MEMBER_NUMBER memberNumber,
+		V.BRANCH_NUMBER
+		branchNumber,
+		V.WRITE_TIME writeTime,
+		V.RESERVATION_TIME
+		reservationTime,
+		V.MEMO,
+		V.ISCHECK,
+		M.NICKNAME,
+		M.NAME,
+		M.PHONE_NUMBER
+		phoneNumber
+		FROM VISIT V, MEMBER M
+		WHERE V.MEMBER_NUMBER =
+		M.MEMBER_NUMBER
+		AND V.WRITING_NUMBER = #{param1}
+	</select>
+
+	<update id="visitCheck">
+		UPDATE VISIT
+		SET ISCHECK = '완료'
+		WHERE WRITING_NUMBER =
+		#{param1}
+	</update>
+
+	<!-- branch -->
+
+	<insert id="branchRegist">
+		INSERT INTO BRANCH (THEME, BANK_NAME, DEPOSITOR,
+		BRANCH_ACCOUNT, GENDER,
+		BRANCH_COMMENT,
+		BRANCH_TYPE, ISPARKING,
+		ISELEVATOR, PET, ADDRESS, ADDRESS_DETAIL, FACILITY, MAXIMUM_RESIDENT,
+		RULE)
+		VALUES
+		(#{branchDTO.theme},#{branchDTO.bankName},#{branchDTO.depositor},#{branchDTO.branchAccount},
+		#{branchDTO.gender},#{branchDTO.branchComment},#{branchDTO.branchType},#{branchDTO.isParking},
+		#{branchDTO.isElevator},#{branchDTO.pet},#{branchDTO.address},#{branchDTO.addressDetail},
+		#{branchDTO.facility},#{branchDTO.maximumResident},#{branchDTO.rule})
+	</insert>
+	<select id="getBranchNumber" resultType="Integer">
+		SELECT BRANCH_NUMBER
+		branchNumber
+		FROM BRANCH
+	</select>
+	<insert id="roomRegist">
+		INSERT INTO ROOM(BRANCH_NUMBER, ROOM_NUMBER, GENDER,
+		ALLOW_NUMBER, SPACE, DEPOSIT, MONTHLY_RENT, RENTABLE_DATE, FACILITY)
+		VALUES(#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7},#{param8},#{param9})
+	</insert>
+	<select id="branchModifyView" resultType="BranchDTO">
+		SELECT THEME,
+		BANK_NAME
+		bankName, DEPOSITOR, BRANCH_ACCOUNT branchAccount, GENDER,
+		BRANCH_COMMENT branchComment, ADDRESS,
+		ADDRESS_DETAIL addressDetail,
+		BRANCH_TYPE branchType, ISPARKING,
+		ISELEVATOR,
+		FACILITY, PET, MAXIMUM_RESIDENT maximumResident, RULE
+		FROM
+		BRANCH
+		WHERE BRANCH_NUMBER =
+		#{param1}
+	</select>
+	<select id="roomModifyView" resultType="roomVDTO">
+		SELECT ROOM_NUMBER roomNumber,
+		GENDER, ALLOW_NUMBER allowNumber, SPACE, DEPOSIT, MONTHLY_RENT
+		monthlyRent, RENTABLE_DATE rentableDate,
+		FACILITY
+		FROM ROOM
+		WHERE
+		BRANCH_NUMBER = #{param1}
+	</select>
+	<update id="branchModify">
+		UPDATE BRANCH
+		SET THEME = #{branchDTO.theme},
+		BANK_NAME = #{branchDTO.bankName},
+		DEPOSITOR = #{branchDTO.depositor},
+		BRANCH_ACCOUNT = #{branchDTO.branchAccount},
+		GENDER = #{branchDTO.gender},
+		BRANCH_COMMENT = #{branchDTO.branchComment},
+		BRANCH_TYPE = #{branchDTO.branchType},
+		ISPARKING = #{branchDTO.isParking},
+		ISELEVATOR = #{branchDTO.isElevator},
+		PET = #{branchDTO.pet},
+		ADDRESS = #{branchDTO.address},
+		ADDRESS_DETAIL = #{branchDTO.addressDetail},
+		FACILITY = #{branchDTO.facility},
+		MAXIMUM_RESIDENT = #{branchDTO.maximumResident},
+		RULE = #{branchDTO.rule}
+		WHERE BRANCH_NUMBER = #{branchDTO.branchNumber}
+	</update>
+	<delete id="roomModifyReady">
+		DELETE FROM ROOM
+		WHERE BRANCH_NUMBER = #{param1}
+	</delete>
+	<insert id="roomModify">
+		INSERT INTO ROOM(BRANCH_NUMBER, ROOM_NUMBER, GENDER,
+		ALLOW_NUMBER, SPACE, DEPOSIT, MONTHLY_RENT, RENTABLE_DATE, FACILITY)
+		VALUES(#{roomVDTO.branchNumber}, #{roomVDTO.roomNumber}, #{roomVDTO.gender}, #{roomVDTO.allowNumber},
+		#{roomVDTO.space}, #{roomVDTO.deposit}, #{roomVDTO.monthlyRent}, #{roomVDTO.rentableDate}, #{roomVDTO.facility})
+	</insert>
+	<insert id="addRoomModify">
+		INSERT INTO ROOM(BRANCH_NUMBER, ROOM_NUMBER, GENDER,
+		ALLOW_NUMBER, SPACE, DEPOSIT, MONTHLY_RENT, RENTABLE_DATE, FACILITY)
+		VALUES(#{addRoomDTO.newbranchNumber}, #{addRoomDTO.newroomNumber}, #{addRoomDTO.newgender},
+		#{addRoomDTO.newallowNumber}, #{addRoomDTO.newspace}, #{addRoomDTO.newdeposit},
+		#{addRoomDTO.newmonthlyRent}, #{addRoomDTO.newrentableDate}, #{addRoomDTO.newfacility})
+	</insert>
+
+
+
+
+
+
+
+	<insert id='testBranchRegist'>
+		INSERT INTO BRANCH
+		(THEME, BANK_NAME, DEPOSITOR,
+		BRANCH_ACCOUNT, GENDER,
+		BRANCH_COMMENT,
+		BRANCH_TYPE, ISPARKING,
+		ISELEVATOR, PET, ADDRESS,
+		ADDRESS_DETAIL,
+		FACILITY,
+		MAXIMUM_RESIDENT,RULE)
+		VALUES
+		(#{theme},#{bankName},#{depositor},#{branchAccount},#{gender},#{branchComment},#{branchType},#{isParking},#{isElevator},#{pet},#{address},#{addressDetail},#{facility},#{maximumResident},#{rule})
+	</insert>
+
+	<!-- <insert id="testRoomRegist" useGeneratedKeys="true" keyProperty="branchNumber" 
+		parameterType="java.util.List"> INSERT INTO ROOM (BRANCH_NUMBER, ROOM_NUMBER, 
+		GENDER, ALLOW_NUMBER, SPACE, DEPOSIT, MONTHLY_RENT, RENTABLE_DATE, FACILITY) 
+		VALUES <foreach collection="roomDTO2" item="roomDTO2" separator=", "> (#{branchNumber},#{roomDTO2.roomNumber2}, 
+		#{roomDTO2.gender2},#{roomDTO2.allowNumber2}, #{roomDTO2.space2},#{roomDTO2.deposit2}, 
+		#{roomDTO2.monthlyRent2},#{roomDTO2.rentableDate2}, #{roomDTO2.facility2}) 
+		</foreach> </insert> -->
+
+
+	<insert id="testRoomRegist" parameterType="java.util.List">
+		INSERT INTO
+		ROOM(BRANCH_NUMBER, ROOM_NUMBER, GENDER, ALLOW_NUMBER, SPACE,
+		DEPOSIT,
+		MONTHLY_RENT, RENTABLE_DATE)
+		VALUES(#{branchNumber},#{roomNumber2},#{gender2},#{allowNumber2},#{space2},#{deposit2},#{monthlyRent2},#{rentableDate2})
+	</insert>
+
+
+
+
+
+	<!-- <foreach collection="roomNumber2" item="roomNumber2" index="index"> 
+		#{roomNumber2.roomNumber2} </foreach> , <foreach collection="gender2" item="gender2" 
+		index="index"> #{gender2} </foreach> , <foreach collection="allowNumber2" 
+		item="allowNumber2" index="index"> #{allowNumber2} </foreach> , <foreach 
+		collection="space2" item="space2" index="index"> #{space2} </foreach> , <foreach 
+		collection="deposit2" item="deposit2" index="index"> #{deposit2} </foreach> 
+		, <foreach collection="monthlyRent2" item="monthlyRent2" index="index"> #{mothlyRent2} 
+		</foreach> , <foreach collection="rentableDate2" item="rentableDate2" index="index"> 
+		#{rentableDate2} </foreach> , <foreach collection="facility2" item="facility2" 
+		index="index"> #{facility2} </foreach> -->
+</mapper>
